@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { ShieldCheckIcon, SparklesIcon, UsersIcon } from "./icons";
+import { SparklesIcon, UsersIcon } from "./icons";
 
 // ── Escenas de video del hero ────────────────────────────────────────
 // Los archivos van en /public/videos/ (actualmente: 1.mp4, 2.mp4 y 3.mp4).
@@ -39,7 +40,6 @@ type ConnectionLike = { saveData?: boolean; effectiveType?: string };
 
 const BENEFITS = [
   { icon: UsersIcon, label: "Guías locales expertos" },
-  { icon: ShieldCheckIcon, label: "Viaje seguro" },
   { icon: SparklesIcon, label: "Experiencias auténticas" },
 ];
 
@@ -305,14 +305,14 @@ export default function Hero() {
       {/* El padding inferior reserva espacio para el buscador superpuesto */}
       <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-4 pb-48 pt-20 sm:px-6 sm:pb-52 lg:min-h-[640px] lg:pb-56 lg:pt-24">
         <div className="max-w-2xl">
-          <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
             Los mejores tours en{" "}
             <span className="font-extrabold">
               {" "}
               <br />
               El Salvador</span>
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg lg:text-xl">
+          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/85 sm:text-lg lg:text-xl">
             Aventuras únicas y experiencias que se quedan para siempre.
           </p>
           <ul className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 sm:mt-10">
@@ -321,14 +321,14 @@ export default function Hero() {
                 <span className="grid size-10 place-items-center rounded-full bg-white/10 text-white backdrop-blur-sm ring-1 ring-white/20 sm:size-11">
                   <BenefitIcon className="size-4.5 sm:size-5" />
                 </span>
-                <span className="text-sm font-semibold text-white/90">{label}</span>
+                <span className="text-xs font-semibold text-white/90 sm:text-sm">{label}</span>
               </li>
             ))}
           </ul>
 
           {/* Frase manuscrita (móvil y tablets) */}
           <div className="mt-12 xl:hidden">
-            <p className="font-script text-3xl text-white/90">El Salvador te espera</p>
+            <p className="font-script text-2xl text-white/90 sm:text-3xl">El Salvador te espera</p>
             <svg
               viewBox="0 0 220 12"
               preserveAspectRatio="none"

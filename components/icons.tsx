@@ -133,6 +133,25 @@ export function ArrowRightIcon(props: IconProps) {
   );
 }
 
+export function ArrowUpIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M12 19V5" />
+      <path d="m5 12 7-7 7 7" />
+    </Icon>
+  );
+}
+
+export function CartIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </Icon>
+  );
+}
+
 export function CheckIcon(props: IconProps) {
   return (
     <Icon {...props}>

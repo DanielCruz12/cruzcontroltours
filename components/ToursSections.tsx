@@ -30,24 +30,26 @@ export default function ToursSections({
       <TourSearch destinations={destinations} onSearch={setFilters} />
 
       {/* ── Tours más populares ─────────────────────────────────────── */}
-      <section id="tours" className="scroll-mt-24 bg-surface py-40">
+      {/* El padding superior en móvil despeja el buscador superpuesto;
+          el resto de secciones comparte el mismo padding vertical. */}
+      <section id="tours" className="scroll-mt-24 bg-surface pt-36 pb-12 sm:pt-24 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-10">
             <div>
               <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-primary">
                 Top en El Salvador
               </p>
-              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-charcoal sm:text-4xl">
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-charcoal sm:text-4xl">
                 Tours más populares
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink-soft sm:text-base">
+              <p className="mt-3 max-w-xl text-xs leading-relaxed text-ink-soft sm:text-base">
                 Vive las experiencias que todos quieren. Descubre nuestros
                 tours mejor valorados.
               </p>
             </div>
             <Link
               href="/tours"
-              className="group inline-flex items-center gap-2 rounded-full border border-primary/30 px-5 py-2.5 text-sm font-bold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
+              className="group inline-flex items-center gap-2 rounded-full border border-primary/30 px-4 py-2 text-xs font-bold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white sm:px-5 sm:py-2.5 sm:text-sm"
             >
               Ver todos los tours
               <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-0.5" />
@@ -57,7 +59,7 @@ export default function ToursSections({
           {/* Resultado de la búsqueda */}
           {filters && filtered.length > 0 && (
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white px-4 py-3 ring-1 ring-charcoal/5">
-              <p className="text-sm font-semibold text-ink">
+              <p className="text-xs font-semibold text-ink sm:text-sm">
                 <span className="font-extrabold text-primary">{filtered.length}</span>{" "}
                 {filtered.length === 1 ? "tour encontrado" : "tours encontrados"}{" "}
                 en <span className="text-charcoal">{filters.destination}</span>
@@ -70,7 +72,7 @@ export default function ToursSections({
               <button
                 type="button"
                 onClick={clearFilters}
-                className="text-sm font-bold text-primary hover:underline"
+                className="text-xs font-bold text-primary hover:underline sm:text-sm"
               >
                 Limpiar filtros
               </button>
@@ -90,17 +92,17 @@ export default function ToursSections({
             </ul>
           ) : (
             <div className="rounded-2xl border border-dashed border-charcoal/15 bg-white px-6 py-14 text-center">
-              <p className="text-lg font-extrabold text-charcoal">
+              <p className="text-base font-extrabold text-charcoal sm:text-lg">
                 No encontramos tours en “{filters?.destination}”
               </p>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-soft">
+              <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-ink-soft sm:text-sm">
                 Prueba con otro destino o explora todos los tours disponibles
                 en El Salvador.
               </p>
               <button
                 type="button"
                 onClick={clearFilters}
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-dark"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-primary-dark sm:text-sm"
               >
                 Ver todos los destinos
               </button>
@@ -110,17 +112,17 @@ export default function ToursSections({
       </section>
 
       {/* ── Otras opciones más accesibles ───────────────────────────── */}
-      <section id="opciones" className="pb-20">
+      <section id="opciones" className="py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-10">
             <div>
               <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-primary">
                 Otras opciones
               </p>
-              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-charcoal sm:text-4xl">
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-charcoal sm:text-4xl">
                 Encuentra tu próxima aventura
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink-soft sm:text-base">
+              <p className="mt-3 max-w-xl text-xs leading-relaxed text-ink-soft sm:text-base">
                 Si buscas algo diferente, también tenemos estas opciones con{" "}
                 <span className="font-bold text-primary">
                   precios más accesibles
@@ -130,7 +132,7 @@ export default function ToursSections({
             </div>
             <Link
               href="/tours"
-              className="group inline-flex items-center gap-2 rounded-full border border-primary/30 px-5 py-2.5 text-sm font-bold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white"
+              className="group inline-flex items-center gap-2 rounded-full border border-primary/30 px-4 py-2 text-xs font-bold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white sm:px-5 sm:py-2.5 sm:text-sm"
             >
               Ver más tours
               <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-0.5" />

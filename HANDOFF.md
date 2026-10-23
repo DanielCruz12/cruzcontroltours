@@ -57,6 +57,20 @@ npm run lint    # eslint
 
 ## Historial de sesiones
 
+### 2026-10-23 (11) — paddings uniformes, sidebar móvil glassmorphism y carrito
+
+1. **Paddings uniformes y más chicos**: `ToursSections` popular `py-40` → `pt-36 pb-12 sm:pt-24 sm:pb-16` (el `pt` de móvil despeja el buscador superpuesto), "otras opciones" `pb-20` → `py-12 sm:py-16`, `CtaSection` `py-16 sm:py-20` → `py-12 sm:py-16`, encabezado de `/tours` `py-14 sm:py-20` → `py-12 sm:py-16` (el catálogo ya tenía `py-12 sm:py-16`). `TourSearch` ligeramente más compacto en móvil (`p-3`, `gap-2.5`, campos `py-2`, botón `py-2.5`; sm+ intacto).
+2. `components/Header.tsx`: el menú móvil dejó de ser un desplegable instantáneo y ahora es un **sidebar glassmorphism** (`bg-white/70` + `backdrop-blur-2xl` + `backdrop-saturate-150`) que se desliza desde la derecha (300ms) con velo `bg-charcoal/40 backdrop-blur-sm` que se funde. ⚠️ El sidebar vive **FUERA del `<header>`** (hermano, en un fragmento): el `backdrop-filter` del header crea un containing block y los `fixed` de adentro no cubrirían la pantalla. Siempre montado con `inert={!menuOpen}` (React 19) para animar entrada/salida; scroll del body bloqueado mientras está abierto. Nota: el velo está en z-40 y el header en z-50, así el header queda brillante sobre el fondo oscurecido.
+3. `components/icons.tsx` + `Header`: icono de **carrito de compras** (`CartIcon`) junto al botón de búsqueda — **temporal, sin funcionalidad** ("solo por ahorita").
+4. Build de producción verificado sin errores.
+
+### 2026-10-23 (10) — móvil más compacto: tipografías, footer y flecha arriba
+
+1. **Tipografía móvil un escalón más chica** en todo el sitio: `Hero` (h1 `text-3xl`, párrafo `text-sm`, beneficios `text-xs`, frase manuscrita `text-2xl`), `ToursSections` (h2 `text-2xl`, párrafos `text-xs`, botones `text-xs`), `TourSearch` (campos `text-xs`), `TourCard` (nombre `text-sm`, precio `text-base`), `CtaSection` (h2 `text-xl`, texto `text-xs`), `app/tours/page.tsx` (h1 `text-2xl`) y menú móvil del `Header` (`text-sm`). Desktop (`sm:`/`lg:`) intacto.
+2. `components/Footer.tsx`: reestructurado — logo **sin panel blanco** (`h-14 sm:h-20 lg:h-24` con `drop-shadow`; el logo es mayormente claro así que contrasta sobre el fondo oscuro), destinos **junto al logo en móvil** en grid 2×2 (`grid-cols-[auto_1fr]`), se quitó el h3 "Cruz Tours", paddings y textos más chicos (`py-8`, `text-xs`). En `lg` vuelve a 3 columnas (marca / destinos / contacto) con grid placement explícito.
+3. Nuevo `components/ScrollToTop.tsx`: flecha fija bottom-right que aparece tras 480px de scroll y sube con `window.scrollTo({ behavior: "smooth" })` (respeta `prefers-reduced-motion`). Montado en `app/layout.tsx` para que esté en todas las páginas. Icono `ArrowUpIcon` agregado en `components/icons.tsx`.
+4. ⚠️ `npm run lint` reporta 2 errores **pre-existentes** (`react-hooks/set-state-in-effect` en `Hero.tsx:70` y `TourCard.tsx:25` — no son de esta sesión). Build de producción verificado sin errores.
+
 ### 2026-10-23 — buscador con glassmorphism y más subido
 
 1. `components/TourSearch.tsx`: buscador más superpuesto al hero (`-mt-28 md:-mt-36`) y con estilo glassmorphism oscuro (`bg-charcoal/55 móvil / 40 desktop` + `backdrop-blur-2xl`, bordes blancos, campos `bg-white/10` con texto blanco, `[color-scheme:dark]` para el input de fecha, botón blanco que pasa a azul de marca en hover). Iconos de etiquetas en `brand-blue`.

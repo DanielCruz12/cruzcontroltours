@@ -19,15 +19,15 @@ export default function ToursPage() {
       <Header />
       <main className="flex-1">
         {/* Encabezado de la página */}
-        <section className="bg-charcoal py-14 sm:py-20">
+        <section className="bg-charcoal py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-white/80">
               Cruz Control Tours
             </p>
-            <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-4xl">
               Explora todos los tours
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
+            <p className="mt-3 max-w-xl text-xs leading-relaxed text-white/70 sm:text-base">
               Volcanes, playas, pueblos coloniales y aventuras para todos los
               gustos. Encuentra tu próxima experiencia en El Salvador.
             </p>

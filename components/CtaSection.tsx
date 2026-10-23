@@ -25,15 +25,15 @@ export default function CtaSection() {
       {/* Overlay negro degradado para mantener la legibilidad del texto */}
       <div className="absolute inset-0 bg-gradient-to-r from-brand/90 via-brand/60 to-charcoal/70" />
 
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-16 sm:px-6 sm:py-20 lg:flex-row lg:items-center">
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-12 sm:px-6 sm:py-16 lg:flex-row lg:items-center">
         <div>
           <h2
             id="cta-titulo"
-            className="text-2xl font-extrabold tracking-tight text-white drop-shadow-sm sm:text-3xl"
+            className="text-xl font-extrabold tracking-tight text-white drop-shadow-sm sm:text-3xl"
           >
             ¿Listo para viajar?
           </h2>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/90 sm:text-base">
+          <p className="mt-3 max-w-xl text-xs leading-relaxed text-white/90 sm:text-base">
             Escríbenos y armamos tu itinerario según tu fecha, presupuesto y
             estilo de viaje.
           </p>
@@ -42,7 +42,7 @@ export default function CtaSection() {
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-brand shadow-lg transition-colors hover:bg-charcoal hover:text-white"
+          className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold text-brand shadow-lg transition-colors hover:bg-charcoal hover:text-white sm:px-6 sm:py-3 sm:text-sm"
         >
           <PhoneIcon className="size-4" />
           Escríbenos por WhatsApp

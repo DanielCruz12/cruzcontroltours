@@ -81,7 +81,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
             <span className="truncate">{tour.location}</span>
           </p>
           {/* Altura fija de dos líneas para que todas las cards midan igual */}
-          <h3 className="mt-1 line-clamp-2 min-h-[2.75em] text-base font-bold leading-snug sm:text-lg">
+          <h3 className="mt-1 line-clamp-2 min-h-[2.75em] text-sm font-bold leading-snug sm:text-lg">
             {tour.name}
           </h3>
         </div>
@@ -95,7 +95,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
         </p>
         <p className="shrink-0 text-right leading-none">
           <span className="text-[11px] font-medium text-ink-faint">Desde </span>
-          <span className="text-lg font-extrabold text-primary-dark">
+          <span className="text-base font-extrabold text-primary-dark sm:text-lg">
             ${tour.price}
           </span>
           <span className="mt-1 block text-[11px] font-medium text-ink-faint">

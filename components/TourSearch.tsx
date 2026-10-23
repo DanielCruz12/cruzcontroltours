@@ -18,7 +18,7 @@ export type SearchFilters = {
 // Velo blanco sutil y borde oscuro tenue: los campos conservan el tono del
 // panel de cristal, quedan un poco más claros y se delimitan sin estridencia.
 const fieldClasses =
-  "w-full rounded-lg border border-charcoal/40 bg-white/40 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition-colors placeholder:text-ink-soft focus:border-brand focus:bg-white/30";
+  "w-full rounded-lg border border-charcoal/40 bg-white/40 px-3 py-2 text-xs font-semibold text-ink outline-none transition-colors placeholder:text-ink-soft focus:border-brand focus:bg-white/30 sm:py-2.5 sm:text-sm";
 
 export default function TourSearch({
   destinations,
@@ -49,7 +49,7 @@ export default function TourSearch({
           campos casi sólidos garantizan la lectura sobre el video. */}
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 gap-3 rounded-2xl  bg-white/45 p-4 shadow-2xl shadow-charcoal/20 backdrop-blur-2xl backdrop-saturate-150 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_0.9fr_auto] lg:items-end lg:gap-0 lg:p-3"
+        className="grid grid-cols-1 gap-2.5 rounded-2xl bg-white/45 p-3 shadow-2xl shadow-charcoal/20 backdrop-blur-2xl backdrop-saturate-150 sm:grid-cols-2 sm:gap-3 sm:p-4 lg:grid-cols-[1.2fr_1fr_0.9fr_auto] lg:items-end lg:gap-0 lg:p-3"
       >
         {/* Destino */}
         <div className="sm:col-span-2 lg:col-span-1 lg:px-4">
@@ -128,7 +128,7 @@ export default function TourSearch({
         <div className="lg:pl-3">
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-charcoal px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand lg:w-auto lg:whitespace-nowrap"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-charcoal px-6 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand sm:py-3 lg:w-auto lg:whitespace-nowrap lg:text-sm"
           >
             <SearchIcon className="size-4" />
             Buscar tours

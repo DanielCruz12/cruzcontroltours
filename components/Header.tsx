@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
+  CartIcon,
   CheckIcon,
   ChevronDownIcon,
   FlagSV,
@@ -46,6 +47,14 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Bloquea el scroll del fondo mientras el sidebar está abierto.
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -69,136 +78,189 @@ export default function Header() {
   const isActive = (href: string) => href === pathname;
 
   return (
-    <header
-      className={`sticky top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 ${scrolled
-          ? "border-white/60 bg-white/75 shadow-lg shadow-charcoal/5"
-          : "border-white/25 bg-white/45"
-        }`}
-    >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:h-20">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="flex shrink-0 items-center gap-2.5"
-          aria-label="Cruz Control Tours — Inicio"
-          onClick={() => setMenuOpen(false)}
-        >
-          <img
-            className="h-10 w-auto drop-shadow-sm sm:h-12 lg:h-14"
-            src="/logocruztours.png"
-            alt="Cruz Control Tours"
-          />
-        </Link>
+    <>
+      <header
+        className={`sticky top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 ${scrolled
+            ? "border-white/60 bg-white/75 shadow-lg shadow-charcoal/5"
+            : "border-white/25 bg-white/45"
+          }`}
+      >
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:h-20">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-2.5"
+            aria-label="Cruz Control Tours — Inicio"
+            onClick={() => setMenuOpen(false)}
+          >
+            <img
+              className="h-10 w-auto drop-shadow-sm sm:h-12 lg:h-14"
+              src="/logocruztours.png"
+              alt="Cruz Control Tours"
+            />
+          </Link>
 
-        {/* Navegación desktop */}
-        <nav aria-label="Navegación principal" className="hidden lg:block">
-          <ul className="flex items-center gap-7 xl:gap-9">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  aria-current={isActive(link.href) ? "page" : undefined}
-                  className={`text-sm font-semibold transition-colors ${isActive(link.href)
-                    ? "text-primary"
-                    : "text-ink-soft hover:text-primary"
-                    }`}
+          {/* Navegación desktop */}
+          <nav aria-label="Navegación principal" className="hidden lg:block">
+            <ul className="flex items-center gap-7 xl:gap-9">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    className={`text-sm font-semibold transition-colors ${isActive(link.href)
+                      ? "text-primary"
+                      : "text-ink-soft hover:text-primary"
+                      }`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Acciones */}
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            {/* Selector de idioma */}
+            <div className="relative" ref={langRef}>
+              <button
+                type="button"
+                onClick={() => setLangOpen((open) => !open)}
+                aria-haspopup="listbox"
+                aria-expanded={langOpen}
+                aria-label="Cambiar idioma"
+                className="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:bg-surface hover:text-ink sm:px-3"
+              >
+                <FlagSV className="w-5 rounded-[3px] shadow-sm ring-1 ring-charcoal/10" />
+                <span className="hidden sm:inline">ES</span>
+                <ChevronDownIcon
+                  className={`size-3.5 transition-transform ${langOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              {langOpen && (
+                <ul
+                  role="listbox"
+                  aria-label="Idioma"
+                  className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-white/50 bg-white/90 p-1.5 shadow-xl shadow-charcoal/10"
                 >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+                  <li
+                    role="option"
+                    aria-selected="true"
+                    className="flex items-center gap-2.5 rounded-lg bg-surface px-3 py-2.5 text-sm font-semibold text-ink"
+                  >
+                    <FlagSV className="w-5 rounded-[3px]" />
+                    Español
+                    <CheckIcon className="ml-auto size-4 text-primary" />
+                  </li>
+                  <li
+                    role="option"
+                    aria-selected="false"
+                    aria-disabled="true"
+                    title="Disponible próximamente"
+                    className="mt-1 flex cursor-not-allowed items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold text-ink-faint"
+                  >
+                    <FlagUS className="w-5 rounded-[3px] opacity-60" />
+                    English
+                    <span className="ml-auto text-[10px] font-bold uppercase tracking-wide">
+                      Pronto
+                    </span>
+                  </li>
+                </ul>
+              )}
+            </div>
 
-        {/* Acciones */}
-        <div className="flex items-center gap-1 sm:gap-1.5">
-          {/* Selector de idioma */}
-          <div className="relative" ref={langRef}>
+            {/* Búsqueda */}
             <button
               type="button"
-              onClick={() => setLangOpen((open) => !open)}
-              aria-haspopup="listbox"
-              aria-expanded={langOpen}
-              aria-label="Cambiar idioma"
-              className="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:bg-surface hover:text-ink sm:px-3"
+              onClick={focusSearchBar}
+              aria-label="Buscar tours"
+              className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-surface hover:text-primary"
             >
-              <FlagSV className="w-5 rounded-[3px] shadow-sm ring-1 ring-charcoal/10" />
-              <span className="hidden sm:inline">ES</span>
-              <ChevronDownIcon
-                className={`size-3.5 transition-transform ${langOpen ? "rotate-180" : ""}`}
-              />
+              <SearchIcon className="size-5" />
             </button>
-            {langOpen && (
-              <ul
-                role="listbox"
-                aria-label="Idioma"
-                className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-white/50 bg-white/90 p-1.5 shadow-xl shadow-charcoal/10"
-              >
-                <li
-                  role="option"
-                  aria-selected="true"
-                  className="flex items-center gap-2.5 rounded-lg bg-surface px-3 py-2.5 text-sm font-semibold text-ink"
-                >
-                  <FlagSV className="w-5 rounded-[3px]" />
-                  Español
-                  <CheckIcon className="ml-auto size-4 text-primary" />
-                </li>
-                <li
-                  role="option"
-                  aria-selected="false"
-                  aria-disabled="true"
-                  title="Disponible próximamente"
-                  className="mt-1 flex cursor-not-allowed items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold text-ink-faint"
-                >
-                  <FlagUS className="w-5 rounded-[3px] opacity-60" />
-                  English
-                  <span className="ml-auto text-[10px] font-bold uppercase tracking-wide">
-                    Pronto
-                  </span>
-                </li>
-              </ul>
-            )}
+
+            {/* Carrito (temporal: solo el icono, sin funcionalidad todavía) */}
+            <button
+              type="button"
+              aria-label="Carrito de compras"
+              className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-surface hover:text-primary"
+            >
+              <CartIcon className="size-5" />
+            </button>
+
+            {/* Menú móvil */}
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-expanded={menuOpen}
+              aria-controls="menu-movil"
+              aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+              className="grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-surface lg:hidden"
+            >
+              {menuOpen ? <XIcon className="size-5" /> : <MenuIcon className="size-5" />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Sidebar móvil con glassmorphism. Vive FUERA del <header>: el
+          backdrop-filter del header crea un containing block y los
+          elementos `fixed` de adentro no cubrirían toda la pantalla.
+          Siempre está montado para animar la entrada y la salida. */}
+      <div className="lg:hidden" inert={!menuOpen}>
+        {/* Velo oscuro que se funde detrás del panel */}
+        <div
+          onClick={() => setMenuOpen(false)}
+          className={`fixed inset-0 z-40 bg-charcoal/40 backdrop-blur-sm transition-opacity duration-300 ${menuOpen ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+        />
+
+        {/* Panel lateral: se desliza desde la derecha */}
+        <aside
+          id="menu-movil"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menú de navegación"
+          className={`fixed inset-y-0 right-0 z-50 flex w-72 max-w-[85vw] flex-col border-l border-white/40 bg-white/70 shadow-2xl shadow-charcoal/25 backdrop-blur-2xl backdrop-saturate-150 transition-transform duration-300 ease-out ${menuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+        >
+          {/* Cabecera del panel: logo y cierre */}
+          <div className="flex items-center justify-between border-b border-white/40 px-5 py-4">
+            <Link
+              href="/"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Cruz Control Tours — Inicio"
+              className="flex shrink-0 items-center"
+            >
+              <img
+                className="h-9 w-auto drop-shadow-sm"
+                src="/logocruztours.png"
+                alt="Cruz Control Tours"
+              />
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Cerrar menú"
+              className="grid size-9 place-items-center rounded-full text-ink transition-colors hover:bg-surface"
+            >
+              <XIcon className="size-5" />
+            </button>
           </div>
 
-          {/* Búsqueda */}
-          <button
-            type="button"
-            onClick={focusSearchBar}
-            aria-label="Buscar tours"
-            className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-surface hover:text-primary"
-          >
-            <SearchIcon className="size-5" />
-          </button>
-
-          {/* Menú móvil */}
-          <button
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-expanded={menuOpen}
-            aria-controls="menu-movil"
-            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-            className="grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-surface lg:hidden"
-          >
-            {menuOpen ? <XIcon className="size-5" /> : <MenuIcon className="size-5" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Menú móvil */}
-      {menuOpen && (
-        <div
-          id="menu-movil"
-          className="border-t border-white/50 bg-white/85 px-4 pb-6 pt-2 shadow-lg lg:hidden"
-        >
-          <nav aria-label="Navegación móvil">
+          {/* Enlaces */}
+          <nav aria-label="Navegación móvil" className="flex-1 overflow-y-auto px-3 py-4">
             <ul>
               {NAV_LINKS.map((link) => (
-                <li key={link.href} className="border-b border-surface last:border-0">
+                <li key={link.href}>
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
                     aria-current={isActive(link.href) ? "page" : undefined}
-                    className={`flex items-center justify-between py-3.5 text-base font-semibold ${isActive(link.href) ? "text-primary" : "text-ink"
+                    className={`flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors ${isActive(link.href)
+                      ? "bg-surface text-primary"
+                      : "text-ink hover:bg-surface"
                       }`}
                   >
                     {link.label}
@@ -208,12 +270,14 @@ export default function Header() {
               ))}
             </ul>
           </nav>
-          <p className="mt-3 flex items-center gap-2 text-xs font-semibold text-ink-faint">
+
+          {/* Pie del panel */}
+          <p className="flex items-center gap-2 border-t border-white/40 px-5 py-4 text-xs font-semibold text-ink-faint">
             <FlagSV className="w-4 rounded-[2px] ring-1 ring-charcoal/10" />
             Español · El Salvador
           </p>
-        </div>
-      )}
-    </header>
+        </aside>
+      </div>
+    </>
   );
 }
