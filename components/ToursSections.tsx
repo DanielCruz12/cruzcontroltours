@@ -30,7 +30,7 @@ export default function ToursSections({
       <TourSearch destinations={destinations} onSearch={setFilters} />
 
       {/* ── Tours más populares ─────────────────────────────────────── */}
-      <section id="tours" className="scroll-mt-24 bg-surface py-14 sm:py-20">
+      <section id="tours" className="scroll-mt-24 bg-surface py-40">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-10">
             <div>
@@ -78,7 +78,7 @@ export default function ToursSections({
           )}
 
           {filtered.length > 0 ? (
-            <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0 xl:grid-cols-4 2xl:grid-cols-5">
+            <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0 xl:grid-cols-4">
               {filtered.map((tour) => (
                 <li
                   key={tour.id}
@@ -110,7 +110,7 @@ export default function ToursSections({
       </section>
 
       {/* ── Otras opciones más accesibles ───────────────────────────── */}
-      <section id="opciones" className="bg-white py-14 sm:py-20">
+      <section id="opciones" className="pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-10">
             <div>
@@ -137,7 +137,7 @@ export default function ToursSections({
             </Link>
           </div>
 
-          <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:pb-0 lg:grid-cols-4">
+          <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0 xl:grid-cols-4">
             {other.map((tour) => (
               <li
                 key={tour.id}

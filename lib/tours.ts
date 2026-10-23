@@ -86,19 +86,6 @@ export const tours: Tour[] = [
     imageAlt: "Cascada entre bosque tropical cerca de Juayúa",
     popular: true,
   },
-  {
-    id: "canon-cascada-el-salto",
-    slug: "canon-cascada-el-salto",
-    name: "Cañón de la Cascada El Salto",
-    destination: "Ruta de las Flores",
-    location: "Sonsonate",
-    duration: "6 horas",
-    price: 45,
-    category: "Aventura",
-    image: img("photo-1578249949606-334a0dd4dd8b"),
-    imageAlt: "Cañón con cascada El Salto en Sonsonate",
-    popular: true,
-  },
   // ── Otras opciones más accesibles ─────────────────────────────────
   {
     id: "suchitoto-pueblo-colonial",

@@ -78,9 +78,10 @@ export default function TourCard({ tour }: { tour: Tour }) {
         <div className="absolute inset-x-0 bottom-0 p-4 text-white">
           <p className="flex items-center gap-1 text-xs font-medium text-white/80">
             <MapPinIcon className="size-3.5 shrink-0" />
-            {tour.location}
+            <span className="truncate">{tour.location}</span>
           </p>
-          <h3 className="mt-1 line-clamp-2 text-base font-bold leading-snug sm:text-lg">
+          {/* Altura fija de dos líneas para que todas las cards midan igual */}
+          <h3 className="mt-1 line-clamp-2 min-h-[2.75em] text-base font-bold leading-snug sm:text-lg">
             {tour.name}
           </h3>
         </div>

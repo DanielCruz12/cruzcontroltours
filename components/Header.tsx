@@ -70,11 +70,10 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 ${
-        scrolled
+      className={`sticky top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 ${scrolled
           ? "border-white/60 bg-white/75 shadow-lg shadow-charcoal/5"
           : "border-white/25 bg-white/45"
-      }`}
+        }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:h-20">
         {/* Logo */}

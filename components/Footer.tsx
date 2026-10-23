@@ -1,51 +1,62 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import {
+  ClockIcon,
   FacebookIcon,
   InstagramIcon,
   MailIcon,
   MapPinIcon,
   PhoneIcon,
+  UsersIcon,
 } from "./icons";
 
-const QUICK_LINKS = [
-  { href: "/", label: "Inicio" },
-  { href: "/#destinos", label: "Destinos" },
-  { href: "/tours", label: "Tours" },
-  { href: "/#nosotros", label: "Nosotros" },
-  { href: "/#contacto", label: "Contacto" },
+const DESTINATIONS = [
+  "El Salvador",
+  "Nicaragua",
+  "Honduras",
+  "Guatemala",
 ];
 
-const POPULAR_DESTINATIONS = [
-  "Ruta de las Flores",
-  "Lago de Coatepeque",
-  "El Tunco",
-  "Volcán de Santa Ana",
-];
+const WHATSAPP_URL = "https://wa.me/50360503161";
+const MAPS_URL =
+  "https://maps.google.com/?q=114+B+calle+los+pocitos+colonia+dolores,+06015,+San+Salvador,+El+Salvador";
 
 export default function Footer() {
   return (
     <footer id="contacto" className="bg-primary-dark text-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+        <div className="grid gap-10 lg:grid-cols-[1.4fr_0.8fr_1.2fr]">
           {/* Marca */}
           <div id="nosotros">
-            <Link href="/" className="flex items-center gap-2.5" aria-label="Cruz Control Tours — Inicio">
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 text-white">
-                <MapPinIcon className="size-5" />
-              </span>
-              <span className="leading-tight">
-                <span className="block text-base font-extrabold tracking-tight text-white">
-                  Cruz Control
-                </span>
-                <span className="block text-[9px] font-bold uppercase tracking-[0.32em] text-white/80">
-                  Tours · El Salvador
-                </span>
-              </span>
+            {/* Logo grande (el mismo del header) sobre un panel claro para
+                que resalte sobre el fondo oscuro del footer */}
+            <Link
+              href="/"
+              className="inline-flex"
+              aria-label="Cruz Control Tours — Inicio"
+            >
+              <img
+                src="/logocruztours.png"
+                alt="Cruz Control Tours"
+                className="h-32 w-auto rounded-2xl bg-white p-3 shadow-lg sm:h-40"
+              />
             </Link>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">
-              Tours y experiencias por los paisajes más increíbles de El
-              Salvador, con guías locales expertos y la tranquilidad de viajar
-              con una empresa salvadoreña.
+            <h3 className="mt-5 text-lg font-extrabold tracking-tight text-white">
+              Cruz Tours
+            </h3>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-white/70">
+              Organizamos experiencias en Centroamérica con atención
+              personalizada, guías locales y rutas cuidadosamente
+              planificadas. Viaja con confianza, comodidad y el respaldo de
+              un equipo que te acompaña en todo momento.
+            </p>
+            <p className="mt-4 flex items-center gap-2.5 text-sm text-white/80">
+              <ClockIcon className="size-4 shrink-0 text-white/80" />
+              Horario: Lun–Sáb | 8:00 AM – 6:00 PM
+            </p>
+            <p className="mt-1.5 flex items-center gap-2.5 text-sm text-white/80">
+              <UsersIcon className="size-4 shrink-0 text-white/80" />
+              Atención: Tours privados y grupales
             </p>
             <div className="mt-5 flex items-center gap-2">
               <a
@@ -69,32 +80,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Enlaces rápidos */}
-          <nav aria-label="Enlaces rápidos">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white">
-              Enlaces rápidos
-            </h3>
-            <ul className="mt-4 space-y-2.5">
-              {QUICK_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/70 transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Destinos populares */}
-          <nav aria-label="Destinos populares">
+          {/* Destinos */}
+          <nav aria-label="Destinos">
             <h3 className="text-sm font-bold uppercase tracking-wider text-white">
               Destinos
             </h3>
             <ul className="mt-4 space-y-2.5">
-              {POPULAR_DESTINATIONS.map((destination) => (
+              {DESTINATIONS.map((destination) => (
                 <li key={destination}>
                   <Link
                     href="/#destinos"
@@ -112,28 +104,44 @@ export default function Footer() {
             <h3 className="text-sm font-bold uppercase tracking-wider text-white">
               Contacto
             </h3>
-            <ul className="mt-4 space-y-3 text-sm text-white/70">
-              <li>
+            <ul className="mt-4 space-y-4 text-sm text-white/70">
+              <li className="flex gap-2.5">
+                <MapPinIcon className="mt-0.5 size-4 shrink-0 text-white/80" />
                 <a
-                  href="mailto:info@cruzcontroltours.com"
-                  className="flex items-center gap-2.5 transition-colors hover:text-white"
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-white"
                 >
-                  <MailIcon className="size-4 shrink-0 text-white/80" />
-                  info@cruzcontroltours.com
+                  114 B calle los pocitos colonia dolores, 06015, San
+                  Salvador, El Salvador.
                 </a>
               </li>
-              <li className="flex items-center gap-2.5">
-                <PhoneIcon className="size-4 shrink-0 text-white/80" />
-                +503 0000 0000
+              <li className="flex gap-2.5">
+                <PhoneIcon className="mt-0.5 size-4 shrink-0 text-white/80" />
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-white"
+                >
+                  +503 6050 3161
+                </a>
               </li>
-              <li className="flex items-center gap-2.5">
-                <MapPinIcon className="size-4 shrink-0 text-white/80" />
-                El Salvador, Centroamérica
+              <li className="flex gap-2.5">
+                <MailIcon className="mt-0.5 size-4 shrink-0 text-white/80" />
+                <a
+                  href="mailto:cruzcontroltours@gmail.com"
+                  className="transition-colors hover:text-white"
+                >
+                  cruzcontroltours@gmail.com
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
+        {/* La llamada a la acción vive en CtaSection, arriba del footer */}
         <div className="mt-10 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-6 text-xs text-white/50">
           <p>
             © {new Date().getFullYear()} Cruz Control Tours. Todos los derechos

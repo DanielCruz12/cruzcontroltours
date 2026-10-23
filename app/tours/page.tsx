@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import TourCard from "@/components/TourCard";
@@ -40,7 +41,7 @@ export default function ToursPage() {
               <span className="font-extrabold text-primary">{tours.length}</span>{" "}
               tours disponibles
             </p>
-            <ul className="grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 sm:gap-6">
+            <ul className="grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 sm:gap-6">
               {tours.map((tour) => (
                 <li key={tour.id}>
                   <TourCard tour={tour} />
@@ -50,6 +51,7 @@ export default function ToursPage() {
           </div>
         </section>
       </main>
+      <CtaSection />
       <Footer />
     </>
   );
