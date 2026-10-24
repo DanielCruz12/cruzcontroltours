@@ -23,7 +23,7 @@ export default function CtaSection() {
       />
 
       {/* Overlay negro degradado para mantener la legibilidad del texto */}
-      <div className="absolute inset-0 bg-gradient-to-r from-brand/90 via-brand/60 to-charcoal/70" />
+      <div className="absolute inset-0 bg-black/70" />
 
       <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-12 sm:px-6 sm:py-16 lg:flex-row lg:items-center">
         <div>

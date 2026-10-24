@@ -130,7 +130,7 @@ export default function Header() {
                 aria-haspopup="listbox"
                 aria-expanded={langOpen}
                 aria-label="Cambiar idioma"
-                className="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:bg-surface hover:text-ink sm:px-3"
+                className="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:bg-sky-pale hover:text-ink sm:px-3"
               >
                 <FlagSV className="w-5 rounded-[3px] shadow-sm ring-1 ring-charcoal/10" />
                 <span className="hidden sm:inline">ES</span>
@@ -147,7 +147,7 @@ export default function Header() {
                   <li
                     role="option"
                     aria-selected="true"
-                    className="flex items-center gap-2.5 rounded-lg bg-surface px-3 py-2.5 text-sm font-semibold text-ink"
+                    className="flex items-center gap-2.5 rounded-lg bg-sky-pale px-3 py-2.5 text-sm font-semibold text-ink"
                   >
                     <FlagSV className="w-5 rounded-[3px]" />
                     Español
@@ -175,7 +175,7 @@ export default function Header() {
               type="button"
               onClick={focusSearchBar}
               aria-label="Buscar tours"
-              className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-surface hover:text-primary"
+              className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-sky-pale hover:text-primary"
             >
               <SearchIcon className="size-5" />
             </button>
@@ -184,7 +184,7 @@ export default function Header() {
             <button
               type="button"
               aria-label="Carrito de compras"
-              className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-surface hover:text-primary"
+              className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-sky-pale hover:text-primary"
             >
               <CartIcon className="size-5" />
             </button>
@@ -196,7 +196,7 @@ export default function Header() {
               aria-expanded={menuOpen}
               aria-controls="menu-movil"
               aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-              className="grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-surface lg:hidden"
+              className="grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-sky-pale lg:hidden"
             >
               {menuOpen ? <XIcon className="size-5" /> : <MenuIcon className="size-5" />}
             </button>
@@ -243,7 +243,7 @@ export default function Header() {
               type="button"
               onClick={() => setMenuOpen(false)}
               aria-label="Cerrar menú"
-              className="grid size-9 place-items-center rounded-full text-ink transition-colors hover:bg-surface"
+              className="grid size-9 place-items-center rounded-full text-ink transition-colors hover:bg-sky-pale"
             >
               <XIcon className="size-5" />
             </button>
@@ -259,8 +259,8 @@ export default function Header() {
                     onClick={() => setMenuOpen(false)}
                     aria-current={isActive(link.href) ? "page" : undefined}
                     className={`flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors ${isActive(link.href)
-                      ? "bg-surface text-primary"
-                      : "text-ink hover:bg-surface"
+                      ? "bg-sky-pale text-primary"
+                      : "text-ink hover:bg-sky-pale"
                       }`}
                   >
                     {link.label}

@@ -23,12 +23,12 @@ const MAPS_URL =
 
 export default function Footer() {
   return (
-    <footer id="contacto" className="bg-primary-dark text-white">
+    <footer id="contacto" className="bg-black text-white">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-12">
         {/* Móvil: logo a la izquierda y destinos a la derecha en dos filas,
             sin espacios vacíos. Desktop: tres columnas (marca / destinos /
             contacto). */}
-        <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-6 lg:grid-cols-[1.3fr_0.7fr_1fr] lg:gap-x-10 lg:gap-y-8">
+        <div className="grid grid-cols-[auto_1fr] gap-x-6 lg:grid-cols-[1.3fr_0.7fr_1fr] lg:gap-x-10">
           {/* Logo (sin panel blanco: el logo es claro y contrasta con el
               fondo oscuro del footer) */}
           <Link
@@ -48,7 +48,7 @@ export default function Footer() {
             aria-label="Destinos"
             className="lg:col-start-2 lg:row-start-1"
           >
-            <h3 className="text-[11px] font-bold uppercase tracking-wider text-white/80">
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-sky">
               Destinos
             </h3>
             <ul className="mt-2 grid grid-cols-2 gap-x-5 gap-y-1.5 lg:mt-3 lg:grid-cols-1 lg:gap-y-2.5">
@@ -77,11 +77,11 @@ export default function Footer() {
               un equipo que te acompaña en todo momento.
             </p>
             <p className="mt-3 flex items-center gap-2 text-xs text-white/70">
-              <ClockIcon className="size-3.5 shrink-0 text-white/60" />
+              <ClockIcon className="size-3.5 shrink-0 text-sky" />
               Horario: Lun–Sáb | 8:00 AM – 6:00 PM
             </p>
             <p className="mt-1 flex items-center gap-2 text-xs text-white/70">
-              <UsersIcon className="size-3.5 shrink-0 text-white/60" />
+              <UsersIcon className="size-3.5 shrink-0 text-sky" />
               Atención: Tours privados y grupales
             </p>
             <div className="mt-4 flex items-center gap-2">
@@ -90,7 +90,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram de Cruz Control Tours"
-                className="grid size-8 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25"
+                className="grid size-8 place-items-center rounded-full bg-white/10 text-sky transition-colors hover:bg-sky-light/25"
               >
                 <InstagramIcon className="size-4" />
               </a>
@@ -99,7 +99,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook de Cruz Control Tours"
-                className="grid size-8 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25"
+                className="grid size-8 place-items-center rounded-full bg-white/10 text-sky transition-colors hover:bg-sky-light/25"
               >
                 <FacebookIcon className="size-4" />
               </a>
@@ -108,12 +108,12 @@ export default function Footer() {
 
           {/* Contacto */}
           <div className="col-span-2 lg:col-span-1 lg:col-start-3 lg:row-start-1 lg:row-span-2">
-            <h3 className="text-[11px] font-bold uppercase tracking-wider text-white/80">
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-sky">
               Contacto
             </h3>
             <ul className="mt-2 space-y-3 text-xs text-white/70 lg:mt-3 lg:space-y-4 lg:text-sm">
               <li className="flex gap-2.5">
-                <MapPinIcon className="mt-0.5 size-3.5 shrink-0 text-white/60 lg:size-4" />
+                <MapPinIcon className="mt-0.5 size-3.5 shrink-0 text-sky lg:size-4" />
                 <a
                   href={MAPS_URL}
                   target="_blank"
@@ -125,7 +125,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex gap-2.5">
-                <PhoneIcon className="mt-0.5 size-3.5 shrink-0 text-white/60 lg:size-4" />
+                <PhoneIcon className="mt-0.5 size-3.5 shrink-0 text-sky lg:size-4" />
                 <a
                   href={WHATSAPP_URL}
                   target="_blank"
@@ -136,7 +136,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex gap-2.5">
-                <MailIcon className="mt-0.5 size-3.5 shrink-0 text-white/60 lg:size-4" />
+                <MailIcon className="mt-0.5 size-3.5 shrink-0 text-sky lg:size-4" />
                 <a
                   href="mailto:cruzcontroltours@gmail.com"
                   className="transition-colors hover:text-white"

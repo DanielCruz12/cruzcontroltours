@@ -128,7 +128,7 @@ export default function TourSearch({
         <div className="lg:pl-3">
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-charcoal px-6 py-2.5 text-xs font-bold text-white transition-colors hover:bg-brand sm:py-3 lg:w-auto lg:whitespace-nowrap lg:text-sm"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-sky-deep px-6 py-2.5 text-xs font-bold text-white transition-colors hover:bg-sky sm:py-3 lg:w-auto lg:whitespace-nowrap lg:text-sm"
           >
             <SearchIcon className="size-4" />
             Buscar tours

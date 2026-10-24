@@ -11,17 +11,27 @@ Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar
 - React 19.2.8, TypeScript, **Tailwind CSS v4** (config CSS-first con `@theme` en `app/globals.css`), pnpm.
 - Estructura:
   - `app/` — layout, página home (`page.tsx`) y `/tours`
-  - `components/` — Header, Hero, TourSearch, ToursSections, TourCard, Footer, icons
+  - `components/` — Header, Hero, TourSearch, PopularToursSection, OtherToursSection, TourCard, TeamSection, GallerySection, CtaSection, ScrollToTop, Footer, icons
   - `lib/tours.ts` — catálogo estático de tours (9 tours: 5 populares + 4 otros)
+  - `lib/team.ts` — equipo (⚠️ contenido ilustrativo temporal)
+  - `lib/gallery.ts` — galería "Momentos inolvidables" (⚠️ fotos temporales Unsplash, verificadas)
   - `public/` — `logocruztours.png` y `videos/1.mp4`, `2.mp4`, `3.mp4`
+- Orden de la home: Hero → Tours populares (con buscador) → **TeamSection → Otras opciones → GallerySection** → (main) → CtaSection → Footer. La galería separa a "Otras opciones" del CTA y el equipo no queda unido al CTA (el usuario pidió ambas cosas).
 
 ## Decisiones tomadas (NO volver a preguntar)
 
 - **Escala global**: `zoom: 0.8` en `html` a partir de 768px (`app/globals.css`). El usuario validó el diseño con zoom al 80% en Chrome. Para ajustar el tamaño general del sitio se cambia ese valor (p. ej. 0.85). En móvil (<768px) se mantiene 100% para legibilidad.
 - **Color `charcoal`**: no existe por defecto en Tailwind v4 — se definió `--color-charcoal: #2a2a2a` en `@theme` (antes TODAS las clases `*-charcoal*` no generaban CSS: hero sin fondo, overlays sin degradado, etc.).
-- **Color de marca** `--color-brand: #000000` — negro (el del logotipo/banner). Antes era `--color-brand-blue: #3890c8` (azul extraído del logo), pero el usuario pidió cambiarlo a negro. Se usa en: CTA, hover del botón de búsqueda, borde al enfocar los inputs y texto del botón de WhatsApp.
+- **Paleta azul oficial (solo light mode)** — ver la sección "Paleta azul oficial" más abajo. Sustituye la decisión anterior de marca negra (sesión 9): `brand` y `primary` ahora son azul profundo `#0082B6`.
 - **Cards de tours del mismo tamaño**: grids unificados a `md:3 / xl:4` columnas en todas las secciones (se eliminó `2xl:5` que hacía las cards populares más chicas que las otras) + altura fija de 2 líneas para el nombre (`min-h-[2.75em]`) y ubicación con `truncate` en `TourCard`.
 - **Buscador glassmorphism**: `TourSearch` superpuesto al hero con `-mt-32 md:-mt-40` y cristal **blanco translúcido** (`bg-white/45` + `backdrop-blur-2xl`). Los inputs son **transparentes** (solo borde `white/90`) para verse del mismo tono que el panel — el usuario pidió uniformidad total; al enfocar, borde azul + `bg-white/15` sutil. Primero se probó cristal oscuro, luego inputs con blanco propio (se veían más claros).
+
+## Paleta azul oficial (solo light mode)
+
+- Paleta: azul cielo `#3AA8DF`, azul claro `#64C4EF`, azul profundo `#0082B6`, azul pálido `#BBD8EB`, blanco, negro y gris `#444444`. **La paleta roja queda reservada para un futuro dark mode** — no implementarlo todavía.
+- Tokens en `@theme` (`app/globals.css`): `sky`, `sky-light`, `sky-deep`, `sky-pale` + tokens semánticos remapeados: `brand` y `primary` = azul profundo, `surface` = blanco, `ink` = negro, `ink-soft` = gris #444, `charcoal` = negro (hero, overlays y sombras). Se eliminaron `navy`, `azure` y `primary-dark`.
+- Reglas de uso: fondos blancos (azul pálido solo en hovers, placeholders y estados activos), botones principales/acciones en azul profundo, iconos/etiquetas/destacados en azul cielo o claro, footer negro con acentos azul cielo.
+- Contraste: blanco sobre azul profundo = 4.3:1 (pasa AA en texto grande; es el techo que permite la paleta — el azul profundo es el azul más oscuro disponible), azul cielo sobre negro = 7.9:1, gris sobre blanco = 9:1. En franjas `bg-sky-deep`/`bg-brand` el outline de foco pasa a blanco (regla en globals.css).
 
 ## Hero con videos (components/Hero.tsx)
 
@@ -36,9 +46,9 @@ Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar
 ## Estado actual del proyecto
 
 - El buscador filtra solo los tours populares de la home (por `destination`).
-- Datos de tours (`lib/tours.ts`) y todas las fotos son **temporales** (Unsplash): pendiente backend/fotos propias.
+- Datos de tours (`lib/tours.ts`), equipo (`lib/team.ts`), galería (`lib/gallery.ts`) y todas las fotos son **temporales** (Unsplash / contenido ilustrativo): pendiente backend/fotos/testimonios/equipo reales.
 - Selector de idioma: EN marcado "Pronto" (deshabilitado) en `Header.tsx`.
-- Footer usa datos de contacto ficticios (+503 0000 0000, info@cruzcontroltours.com).
+- Footer usa datos de contacto reales (sesión 2): dirección, WhatsApp +503 6050 3161 y correo.
 
 ## Pendientes / recomendaciones
 
@@ -56,6 +66,38 @@ npm run lint    # eslint
 ```
 
 ## Historial de sesiones
+
+### 2026-10-23 (15) — "Otras opciones" debajo del equipo
+
+1. `ToursSections.tsx` se dividió en dos componentes: **`PopularToursSection.tsx`** (buscador superpuesto + sección "Tours más populares" con el estado de filtros) y **`OtherToursSection.tsx`** ("Otras opciones", server component sin estado).
+2. Nuevo orden de la home: Hero → Populares → Equipo → **Otras opciones** → Galería → CTA. El usuario pidió que "Otras opciones" quede debajo de "Nuestro equipo".
+3. Build y lint verificados.
+
+### 2026-10-23 (14) — "Nuestro equipo" y galería Masonry animada
+
+1. `TestimonialsSection` → **`TeamSection`** (`lib/testimonials.ts` → `lib/team.ts`): misma mecánica de fundidos (slider con autoplay 6 s, flechas, indicadores), ahora con miembros del equipo (⚠️ datos ilustrativos: nombre, cargo y frase personal por miembro; soporta `image?`). Orden de la home: Hero → Tours → **Equipo → Galería** → CTA — el usuario pidió que el equipo NO quede unido al CTA (la galería los separa).
+2. Nuevo `lib/gallery.ts` + `components/GallerySection.tsx` — galería editorial Masonry sobre fondo negro:
+   - **Movimiento por scroll**: 4 filas flex (md+) que se desplazan en direcciones alternas (pares ←, impares →) con `translate3d` vinculado al progreso de la sección en el viewport (0 al entrar → 1 al salir, reversible). Un solo listener pasivo de scroll agenda un rAF; **sin estado de React durante el scroll**. Recorrido por fila = `min(travel configurado, mitad del desbordamiento medido)` — nunca deja huecos. La clase `md:min-w-[calc(100%_+_300px)]` garantiza ≥150 px de recorrido por lado con cualquier pantalla/zoom. Estático en <768 px y con `prefers-reduced-motion`. Medición en montaje + resize; listeners y rAF limpiados al desmontar.
+   - **Hover**: borde azul cielo (`hover:ring-sky`), overlay oscuro + título + icono `ExpandIcon` (también con foco), escala 1.04 en un contenedor **interno** (nunca se pisa con el translate de la fila). El destino se muestra siempre (táctil sin hover).
+   - **Lightbox**: diálogo `fixed` con fondo negro, cierre (X + clic en el fondo + Escape), flechas anterior/siguiente (botones + teclado), trampa de foco, `aria-modal`, devolución de foco a la tarjeta que abrió, bloqueo de scroll del body y contador. No provoca saltos de página.
+   - Responsive: móvil = grid 2 columnas con alturas variables (una tarjeta panorámica `col-span-2` por fila) y estático; md+ = filas con altura fija por fila (300/380/320/400 px) y anchos variables de tarjeta (260–420 px).
+   - Fotos: 24 instancias de 19 URLs Unsplash (las 9 del proyecto + 10 nuevas **verificadas con HTTP 200**), configurables en `lib/gallery.ts` (título, destino, alt, aspect, ancho, object-position). Reemplazar por fotografía real.
+3. `app/globals.css`: outline de foco azul cielo dentro de `bg-black` (galería y footer).
+4. Build de producción y lint verificados (lint 100 % limpio: el usuario añadió el `eslint-disable` de `react-hooks/set-state-in-effect` en `TourCard.tsx`, mismo patrón que `Hero.tsx`).
+
+### 2026-10-23 (12) — sección de testimonios con fundidos
+
+1. Nuevo `components/TestimonialsSection.tsx`: franja de ancho completo con testimonios en **fundido cruzado, no carrusel** — los slides se apilan en la misma celda de un grid (`col-start-1 row-start-1`), así el más largo define la altura (sin saltos) y el cambio es solo de opacidad (500 ms, misma posición). Autoplay de 6 s (se reinicia con la navegación manual y se pausa con hover/foco dentro de la sección); con `prefers-reduced-motion` no hay autoplay (el CSS global ya hace el cambio instantáneo). Flechas circulares en los extremos en `lg+` y junto a los indicadores en móvil/tablet (no se pisan con el texto). A11y: `aria-live="polite"`, slides inactivos con `inert` + `aria-hidden`, indicadores con `aria-current` y `aria-label`.
+2. Datos en `lib/testimonials.ts` — ⚠️ contenido ilustrativo temporal (marcado en el archivo), reemplazar por testimonios reales antes de producción.
+3. Montada en la home entre `ToursSections` y `CtaSection`. Iconos `ChevronLeftIcon`/`ChevronRightIcon` agregados a `icons.tsx`.
+4. Build verificado. Lint: sin errores nuevos (sigue el pre-existente de `TourCard`).
+
+### 2026-10-23 (13) — paleta azul oficial en todo el sitio (solo light mode)
+
+1. `app/globals.css`: `@theme` remapeado a la paleta oficial (ver sección "Paleta azul oficial"): tokens `sky`, `sky-light`, `sky-deep`, `sky-pale` nuevos; `brand`/`primary` → azul profundo, `surface` → blanco, `ink` → negro, `ink-soft` → gris #444, `charcoal` → negro; eliminados `navy`, `azure` y `primary-dark`. Regla nueva: outline de foco blanco dentro de `bg-sky-deep`/`bg-brand`.
+2. Ajustes por componente: `TestimonialsSection` pasó de `bg-azure` a `bg-sky-deep` (comillas y anillos en `sky-light`, cargo `white/90`); `Header` hovers y activos del menú en `sky-pale`; `TourCard` placeholder de imagen en `sky-pale` y precio en `sky-deep`; `TourSearch` botón en `sky-deep` con hover `sky`; `ScrollToTop` hover `sky`; botón del estado vacío hover `sky`; `Footer` fondo `bg-black` con títulos, iconos y redes en `sky`.
+3. Hero, overlays, CTA y cabecera de `/tours` heredan el cambio vía tokens (oscuros → negro, CTA → azul profundo). Sin dark mode, sin paleta roja, sin cambios de estructura ni funcionalidad. Logo y fotos intactos.
+4. Build de producción verificado. Lint: solo el error pre-existente de `TourCard`.
 
 ### 2026-10-23 (11) — paddings uniformes, sidebar móvil glassmorphism y carrito
 

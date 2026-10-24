@@ -1,8 +1,11 @@
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
+import GallerySection from "@/components/GallerySection";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import ToursSections from "@/components/ToursSections";
+import OtherToursSection from "@/components/OtherToursSection";
+import PopularToursSection from "@/components/PopularToursSection";
+import TeamSection from "@/components/TeamSection";
 import { getDestinations, getOtherTours, getPopularTours } from "@/lib/tours";
 
 export default function Home() {
@@ -15,11 +18,11 @@ export default function Home() {
       <Header />
       <main id="inicio" className="flex-1">
         <Hero />
-        <ToursSections
-          popular={popular}
-          other={other}
-          destinations={destinations}
-        />
+        <PopularToursSection popular={popular} destinations={destinations} />
+        <TeamSection />
+        {/* "Otras opciones" debajo del equipo, separada de los populares */}
+        <OtherToursSection other={other} />
+        <GallerySection />
       </main>
       <CtaSection />
       <Footer />

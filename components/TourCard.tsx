@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import Image from "next/image";
@@ -41,7 +42,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-charcoal/5 transition-shadow hover:shadow-lg hover:shadow-charcoal/10">
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface">
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-sky-pale">
         <Image
           src={tour.image}
           alt={tour.imageAlt}
@@ -94,13 +95,11 @@ export default function TourCard({ tour }: { tour: Tour }) {
           <span className="truncate">{tour.duration}</span>
         </p>
         <p className="shrink-0 text-right leading-none">
-          <span className="text-[11px] font-medium text-ink-faint">Desde </span>
-          <span className="text-base font-extrabold text-primary-dark sm:text-lg">
+          <span className="text-[11px] font-medium text-ink-faint">Desde {" "}</span>
+          <span className="text-base font-extrabold text-sky-deep sm:text-lg">
             ${tour.price}
           </span>
-          <span className="mt-1 block text-[11px] font-medium text-ink-faint">
-            por persona
-          </span>
+
         </p>
       </div>
     </article>

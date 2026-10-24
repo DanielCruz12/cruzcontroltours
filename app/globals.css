@@ -1,16 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  /* Identidad visual Cruz Control Tours */
-  --color-navy: #082b4c;
-  --color-brand: #000000; /* negro de marca (el del logotipo) */
-  --color-charcoal: #2a2a2a; /* fondo/texto oscuro de la identidad */
-  --color-primary: #2a2a2a;
-  --color-primary-dark: #282828;
-  --color-surface: #f4f8fc;
-  --color-ink: #202020;
-  --color-ink-soft: #5a5a5a;
-  --color-ink-faint: #8a8a8a;
+  /* ── Paleta oficial azul de Cruz Control Tours (solo light mode) ──
+     La paleta roja queda reservada para un futuro modo oscuro. */
+  --color-sky: #3aa8df; /* azul cielo: iconos y detalles decorativos */
+  --color-sky-light: #64c4ef; /* azul claro: acentos y brillos */
+  --color-sky-deep: #0082b6; /* azul profundo: botones y acciones */
+  --color-sky-pale: #bbd8eb; /* azul pálido: hovers y fondos suaves */
+
+  /* Tokens semánticos remapeados a la paleta oficial */
+  --color-brand: #0082b6; /* azul profundo (CTA, enlaces y acciones) */
+  --color-primary: #0082b6; /* acentos: etiquetas, iconos y destacados */
+  --color-surface: #ffffff; /* fondo de página y secciones (blanco) */
+  --color-ink: #000000; /* texto principal (negro) */
+  --color-ink-soft: #444444; /* texto secundario (gris de paleta) */
+  --color-ink-faint: #8a8a8a; /* texto terciario */
+  --color-charcoal: #000000; /* oscuros: hero, overlays y sombras */
 }
 
 @theme inline {
@@ -60,6 +65,18 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+/* En las franjas azul profundo el outline de foco pasa a blanco para
+   no confundirse con el fondo. */
+.bg-sky-deep :focus-visible,
+.bg-brand :focus-visible {
+  outline-color: #ffffff;
+}
+
+/* En las secciones negras (galería, footer) el foco pasa a azul cielo. */
+.bg-black :focus-visible {
+  outline-color: #3aa8df;
 }
 
 @media (prefers-reduced-motion: reduce) {
