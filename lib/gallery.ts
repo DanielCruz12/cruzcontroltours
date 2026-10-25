@@ -2,7 +2,7 @@
 //
 // ⚠️ FOTOS TEMPORALES (Unsplash): misma convención que lib/tours.ts.
 // Reemplazar por fotografía propia y real de los tours antes de producción.
-// Cada foto es configurable: título, destino, alt, recorte (aspect),
+// Cada foto es configurable: título, destino, alt, proporción (aspect),
 // ancho de tarjeta y punto focal (position). El movimiento por scroll usa
 // `travel` por fila; la dirección se alterna automáticamente por índice.
 
@@ -17,19 +17,17 @@ export type GalleryPhoto = {
   /** Ubicación corta que se muestra siempre en la tarjeta. */
   location: string;
   alt: string;
-  /** Proporción de la tarjeta en móvil (clase literal de Tailwind). */
+  /** Proporción de la foto: define las dimensiones del lightbox. */
   aspect: "aspect-[4/3]" | "aspect-square" | "aspect-[3/4]" | "aspect-[16/10]";
-  /** Ancho de la tarjeta en md+ (clase literal de Tailwind). */
-  width: "md:w-[260px]" | "md:w-[300px]" | "md:w-[360px]" | "md:w-[420px]";
+  /** Ancho de la tarjeta en móvil y md+ (clase literal de Tailwind). */
+  width: "w-[130px] md:w-[260px]" | "w-[150px] md:w-[300px]" | "w-[180px] md:w-[360px]" | "w-[210px] md:w-[420px]";
   /** Punto focal del recorte (object-position). */
   position?: string;
-  /** true si la tarjeta ocupa las 2 columnas del grid móvil. */
-  wide?: boolean;
 };
 
 export type GalleryRow = {
-  /** Altura fija de la fila en md+ (clase literal de Tailwind). */
-  height: "md:h-[300px]" | "md:h-[380px]" | "md:h-[320px]" | "md:h-[400px]";
+  /** Altura fija de la fila en móvil y md+ (clase literal de Tailwind). */
+  height: "h-[200px] md:h-[300px]" | "h-[250px] md:h-[380px]" | "h-[210px] md:h-[320px]";
   /** Recorrido máximo del desplazamiento vinculado al scroll (px). */
   travel: number;
   photos: GalleryPhoto[];
@@ -38,7 +36,7 @@ export type GalleryRow = {
 // Filas pares ← y filas impares →; `travel` distinto por fila da profundidad.
 export const galleryRows: GalleryRow[] = [
   {
-    height: "md:h-[300px]",
+    height: "h-[200px] md:h-[300px]",
     travel: 240,
     photos: [
       {
@@ -48,9 +46,8 @@ export const galleryRows: GalleryRow[] = [
         location: "Santa Ana",
         alt: "Vista panorámica del Lago de Coatepeque rodeado de montañas",
         aspect: "aspect-[4/3]",
-        width: "md:w-[420px]",
+        width: "w-[210px] md:w-[420px]",
         position: "50% 55%",
-        wide: true,
       },
       {
         id: "surf-el-tunco",
@@ -59,7 +56,7 @@ export const galleryRows: GalleryRow[] = [
         location: "La Libertad",
         alt: "Surfista en una ola en la playa El Tunco",
         aspect: "aspect-square",
-        width: "md:w-[300px]",
+        width: "w-[150px] md:w-[300px]",
         position: "50% 40%",
       },
       {
@@ -69,7 +66,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Parque Nacional Los Volcanes",
         alt: "Laguna turquesa en el cráter del volcán de Santa Ana",
         aspect: "aspect-[4/3]",
-        width: "md:w-[360px]",
+        width: "w-[180px] md:w-[360px]",
         position: "50% 45%",
       },
       {
@@ -79,7 +76,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Cerro Verde",
         alt: "Caminantes recorriendo un sendero entre bosque de montaña",
         aspect: "aspect-[3/4]",
-        width: "md:w-[260px]",
+        width: "w-[130px] md:w-[260px]",
         position: "50% 40%",
       },
       {
@@ -89,7 +86,7 @@ export const galleryRows: GalleryRow[] = [
         location: "La Libertad",
         alt: "Playa de arena con palmeras en la costa del Pacífico",
         aspect: "aspect-[16/10]",
-        width: "md:w-[360px]",
+        width: "w-[180px] md:w-[360px]",
         position: "50% 60%",
       },
       {
@@ -99,13 +96,13 @@ export const galleryRows: GalleryRow[] = [
         location: "Cuscatlán",
         alt: "Iglesia colonial del pueblo de Suchitoto",
         aspect: "aspect-square",
-        width: "md:w-[260px]",
+        width: "w-[130px] md:w-[260px]",
         position: "50% 55%",
       },
     ],
   },
   {
-    height: "md:h-[380px]",
+    height: "h-[250px] md:h-[380px]",
     travel: 320,
     photos: [
       {
@@ -115,9 +112,8 @@ export const galleryRows: GalleryRow[] = [
         location: "Playa El Zonte",
         alt: "Grupo de viajeros saltando de alegría en la playa",
         aspect: "aspect-[16/10]",
-        width: "md:w-[420px]",
+        width: "w-[210px] md:w-[420px]",
         position: "50% 40%",
-        wide: true,
       },
       {
         id: "amanecer-volcan",
@@ -126,7 +122,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Volcán de Santa Ana",
         alt: "Campamento al amanecer junto a las montañas",
         aspect: "aspect-[3/4]",
-        width: "md:w-[260px]",
+        width: "w-[130px] md:w-[260px]",
         position: "50% 60%",
       },
       {
@@ -136,7 +132,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Ruta de las Flores",
         alt: "Cascada entre bosque tropical cerca de Juayúa",
         aspect: "aspect-square",
-        width: "md:w-[300px]",
+        width: "w-[150px] md:w-[300px]",
         position: "50% 60%",
       },
       {
@@ -146,7 +142,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Cerro Verde",
         alt: "Guía con cámara observando el paisaje de montaña",
         aspect: "aspect-[4/3]",
-        width: "md:w-[360px]",
+        width: "w-[180px] md:w-[360px]",
         position: "50% 45%",
       },
       {
@@ -156,7 +152,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Santa Ana",
         alt: "Persona remando en un lago rodeado de montañas",
         aspect: "aspect-[16/10]",
-        width: "md:w-[300px]",
+        width: "w-[150px] md:w-[300px]",
         position: "50% 55%",
       },
       {
@@ -166,13 +162,13 @@ export const galleryRows: GalleryRow[] = [
         location: "El Tunco",
         alt: "Surfista cabalgando una ola",
         aspect: "aspect-[4/3]",
-        width: "md:w-[360px]",
+        width: "w-[180px] md:w-[360px]",
         position: "50% 45%",
       },
     ],
   },
   {
-    height: "md:h-[320px]",
+    height: "h-[210px] md:h-[320px]",
     travel: 200,
     photos: [
       {
@@ -182,9 +178,8 @@ export const galleryRows: GalleryRow[] = [
         location: "Sonsonate",
         alt: "Montañas verdes de la Ruta de las Flores",
         aspect: "aspect-[16/10]",
-        width: "md:w-[420px]",
+        width: "w-[210px] md:w-[420px]",
         position: "50% 60%",
-        wide: true,
       },
       {
         id: "laguna-crater",
@@ -193,7 +188,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Volcán de Santa Ana",
         alt: "Laguna turquesa en el cráter del volcán de Santa Ana",
         aspect: "aspect-square",
-        width: "md:w-[300px]",
+        width: "w-[150px] md:w-[300px]",
         position: "50% 65%",
       },
       {
@@ -203,7 +198,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Parque Nacional Los Volcanes",
         alt: "Grupo de senderistas caminando por una vereda",
         aspect: "aspect-[4/3]",
-        width: "md:w-[360px]",
+        width: "w-[180px] md:w-[360px]",
         position: "50% 45%",
       },
       {
@@ -213,7 +208,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Juayúa",
         alt: "Cascada escondida entre vegetación tropical",
         aspect: "aspect-[3/4]",
-        width: "md:w-[260px]",
+        width: "w-[130px] md:w-[260px]",
         position: "50% 55%",
       },
       {
@@ -223,7 +218,7 @@ export const galleryRows: GalleryRow[] = [
         location: "San Salvador",
         alt: "Ciudad de San Salvador frente al volcán",
         aspect: "aspect-[4/3]",
-        width: "md:w-[360px]",
+        width: "w-[180px] md:w-[360px]",
         position: "50% 60%",
       },
       {
@@ -233,7 +228,7 @@ export const galleryRows: GalleryRow[] = [
         location: "Lago de Coatepeque",
         alt: "Atardecer reflejado en un lago de montaña",
         aspect: "aspect-[16/10]",
-        width: "md:w-[300px]",
+        width: "w-[150px] md:w-[300px]",
         position: "50% 60%",
       },
     ],

@@ -12,7 +12,7 @@ import {
 import type { GalleryPhoto } from "@/lib/gallery";
 import { ChevronLeftIcon, ChevronRightIcon, ExpandIcon, XIcon } from "./icons";
 
-// Nota: la clase `md:min-w-[calc(100%_+_300px)]` de las filas garantiza al
+// Nota: la clase `min-w-[calc(100%_+_300px)]` de las filas garantiza al
 // menos 150 px de recorrido por lado en cualquier pantalla (incluido el
 // zoom global), de modo que el desplazamiento nunca deja huecos.
 
@@ -183,8 +183,8 @@ export default function GallerySection() {
   // Sin estado de React: un listener pasivo de scroll agenda un solo rAF
   // que escribe `translate3d` directamente sobre cada fila. El progreso
   // (0 al entrar la sección, 1 al salir) es reversible y proporcional, y
-  // las filas pares van ← y las impares →. Con prefers-reduced-motion o
-  // en pantallas <768px las filas quedan estáticas.
+  // las filas pares van ← y las impares →. Solo con prefers-reduced-motion
+  // quedan estáticas: el efecto aplica también en móvil.
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -213,10 +213,6 @@ export default function GallerySection() {
     let raf = 0;
     const update = () => {
       raf = 0;
-      if (window.innerWidth < 768) {
-        clearTransforms();
-        return;
-      }
       const rect = section.getBoundingClientRect();
       const viewport = window.innerHeight;
       if (rect.bottom < 0 || rect.top > viewport) return; // fuera de pantalla
@@ -278,8 +274,8 @@ export default function GallerySection() {
         </div>
       </div>
 
-      {/* Filas de la galería: grid 2 columnas en móvil (estáticas) y filas
-          flex en md+ que se desplazan con el scroll. */}
+      {/* Filas flex de la galería que se desplazan con el scroll en todos
+          los tamaños (direcciones alternas e intensidad por fila). */}
       <div className="mt-10 flex flex-col gap-4 sm:mt-14 sm:gap-5">
         {galleryRows.map((row, rowIndex) => (
           <div
@@ -287,7 +283,7 @@ export default function GallerySection() {
             ref={(element) => {
               rowRefs.current[rowIndex] = element;
             }}
-            className={`grid grid-cols-2 gap-3 px-4 will-change-transform sm:px-6 md:flex md:min-w-[calc(100%_+_300px)] md:justify-center md:gap-5 md:px-0 ${row.height}`}
+            className={`flex min-w-[calc(100%_+_300px)] gap-3 px-4 will-change-transform sm:gap-5 sm:px-6 md:justify-center md:px-0 ${row.height}`}
           >
             {row.photos.map((photo, photoIndex) => {
               const flatIndex = galleryOffsets[rowIndex] + photoIndex;
@@ -298,9 +294,7 @@ export default function GallerySection() {
                   onClick={(event) => openAt(flatIndex, event.currentTarget)}
                   aria-haspopup="dialog"
                   aria-label={`Ampliar foto: ${photo.title}, ${photo.location}`}
-                  className={`group relative shrink-0 overflow-hidden rounded-xl bg-charcoal ring-1 ring-white/10 transition-shadow duration-300 hover:ring-sky md:aspect-auto md:h-full ${photo.aspect} ${photo.width} ${
-                    photo.wide ? "col-span-2" : ""
-                  }`}
+                  className={`group relative h-full shrink-0 overflow-hidden rounded-xl bg-charcoal ring-1 ring-white/10 transition-shadow duration-300 hover:ring-sky ${photo.width}`}
                 >
                   {/* La escala del hover vive en un contenedor interno: el
                       translate de la fila y este transform nunca se pisan. */}
@@ -309,7 +303,7 @@ export default function GallerySection() {
                       src={photoSrc(photo, 900)}
                       alt=""
                       fill
-                      sizes="(max-width: 767px) 50vw, 420px"
+                      sizes="(max-width: 767px) 210px, 420px"
                       className="object-cover"
                       style={{ objectPosition: photo.position }}
                     />

@@ -3,7 +3,7 @@
 Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar.
 **Actualiza este archivo al terminar cada sesión.**
 
-Última actualización: 2026-10-23
+Última actualización: 2026-10-24
 
 ## Stack
 
@@ -66,6 +66,12 @@ npm run lint    # eslint
 ```
 
 ## Historial de sesiones
+
+### 2026-10-24 (16) — galería animada en móvil y equipo a pantalla completa
+
+1. `lib/gallery.ts` + `components/GallerySection.tsx`: en móvil la galería dejó de ser un grid 2 columnas estático y ahora usa las mismas **filas flex con el movimiento vinculado al scroll** (se eliminó el corte `<768px` del efecto; solo `prefers-reduced-motion` queda estático). La config ahora lleva clases móvil + md: alturas de fila `h-[200px]/[250px]/[210px]` y anchos de tarjeta `w-[130px]–[210px]` (desktop intacto: 300–400px / 260–420px). Se eliminó el campo `wide` (era el `col-span-2` del grid móvil) y las clases `aspect` de la tarjeta (la fila fija la altura y cada tarjeta su ancho); `aspect` sigue definiendo las dimensiones del lightbox. `sizes` del `<Image>` actualizado: 210px móvil / 420px md+.
+2. `components/TeamSection.tsx`: la franja "Nuestro equipo" ahora ocupa `min-h-screen` (100vh) en todos los tamaños. Con el zoom global 0.8 los `vh` se dividen por el zoom efectivo, así que renderiza exactamente una pantalla completa.
+3. Build de producción y lint verificados (100 % limpio).
 
 ### 2026-10-23 (15) — "Otras opciones" debajo del equipo
 

@@ -88,7 +88,7 @@ export default function TeamSection() {
       onFocus={() => setPaused(true)}
       onBlur={handleBlur}
     >
-      <div className="mx-auto flex min-h-[28rem] max-w-4xl flex-col items-center justify-center px-4 py-16 sm:min-h-[32rem] sm:px-6 sm:py-20 lg:min-h-[34rem] lg:py-24">
+      <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
         <p
           id="equipo-titulo"
           className="text-center text-xs font-extrabold uppercase tracking-[0.3em] text-white/80 sm:text-sm"
