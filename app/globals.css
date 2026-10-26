@@ -74,8 +74,10 @@ body {
   outline-color: #ffffff;
 }
 
-/* En las secciones negras (galería, footer) el foco pasa a azul cielo. */
-.bg-black :focus-visible {
+/* Sobre superficies negras (lightbox de la galería y similares) el foco
+   pasa a azul cielo para contrastar. */
+.bg-black :focus-visible,
+[class*="bg-black/"] :focus-visible {
   outline-color: #3aa8df;
 }
 

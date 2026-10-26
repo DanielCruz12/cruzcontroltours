@@ -7,7 +7,7 @@ export default function CtaSection() {
   return (
     <section
       aria-labelledby="cta-titulo"
-      className="relative overflow-hidden bg-brand"
+      className="relative overflow-hidden "
     >
       {/* Video de fondo en bucle (muted + playsInline). Con movimiento
           reducido se oculta y queda la franja negra lisa. */}

@@ -1,13 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import {
-  ClockIcon,
-  FacebookIcon,
-  InstagramIcon,
   MailIcon,
   MapPinIcon,
   PhoneIcon,
-  UsersIcon,
 } from "./icons";
 
 const DESTINATIONS = [
@@ -70,21 +66,19 @@ export default function Footer() {
             id="nosotros"
             className="col-span-2 lg:col-span-1 lg:col-start-1 lg:row-start-2"
           >
-            <p className="max-w-md text-xs leading-relaxed text-white/60 sm:text-sm">
+            <p className="max-w-md text-xs leading-relaxed text-white/60 sm:text-sm pt-4">
               Organizamos experiencias en Centroamérica con atención
               personalizada, guías locales y rutas cuidadosamente
               planificadas. Viaja con confianza, comodidad y el respaldo de
               un equipo que te acompaña en todo momento.
             </p>
             <p className="mt-3 flex items-center gap-2 text-xs text-white/70">
-              <ClockIcon className="size-3.5 shrink-0 text-sky" />
               Horario: Lun–Sáb | 8:00 AM – 6:00 PM
             </p>
             <p className="mt-1 flex items-center gap-2 text-xs text-white/70">
-              <UsersIcon className="size-3.5 shrink-0 text-sky" />
               Atención: Tours privados y grupales
             </p>
-            <div className="mt-4 flex items-center gap-2">
+            {/*   <div className="mt-4 flex items-center gap-2">
               <a
                 href="https://www.instagram.com/"
                 target="_blank"
@@ -103,15 +97,15 @@ export default function Footer() {
               >
                 <FacebookIcon className="size-4" />
               </a>
-            </div>
+            </div> */}
           </div>
 
           {/* Contacto */}
           <div className="col-span-2 lg:col-span-1 lg:col-start-3 lg:row-start-1 lg:row-span-2">
-            <h3 className="text-[11px] font-bold uppercase tracking-wider text-sky">
+            {/*   <h3 className="text-[11px] font-bold uppercase tracking-wider text-sky">
               Contacto
-            </h3>
-            <ul className="mt-2 space-y-3 text-xs text-white/70 lg:mt-3 lg:space-y-4 lg:text-sm">
+            </h3> */}
+            <ul className="mt-2 pt-4 space-y-3 text-xs text-white/70 lg:mt-3 lg:space-y-4 lg:text-sm">
               <li className="flex gap-2.5">
                 <MapPinIcon className="mt-0.5 size-3.5 shrink-0 text-sky lg:size-4" />
                 <a

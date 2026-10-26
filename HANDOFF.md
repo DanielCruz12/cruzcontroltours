@@ -3,7 +3,7 @@
 Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar.
 **Actualiza este archivo al terminar cada sesión.**
 
-Última actualización: 2026-10-24
+Última actualización: 2026-10-25
 
 ## Stack
 
@@ -24,7 +24,7 @@ Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar
 - **Color `charcoal`**: no existe por defecto en Tailwind v4 — se definió `--color-charcoal: #2a2a2a` en `@theme` (antes TODAS las clases `*-charcoal*` no generaban CSS: hero sin fondo, overlays sin degradado, etc.).
 - **Paleta azul oficial (solo light mode)** — ver la sección "Paleta azul oficial" más abajo. Sustituye la decisión anterior de marca negra (sesión 9): `brand` y `primary` ahora son azul profundo `#0082B6`.
 - **Cards de tours del mismo tamaño**: grids unificados a `md:3 / xl:4` columnas en todas las secciones (se eliminó `2xl:5` que hacía las cards populares más chicas que las otras) + altura fija de 2 líneas para el nombre (`min-h-[2.75em]`) y ubicación con `truncate` en `TourCard`.
-- **Buscador glassmorphism**: `TourSearch` superpuesto al hero con `-mt-32 md:-mt-40` y cristal **blanco translúcido** (`bg-white/45` + `backdrop-blur-2xl`). Los inputs son **transparentes** (solo borde `white/90`) para verse del mismo tono que el panel — el usuario pidió uniformidad total; al enfocar, borde azul + `bg-white/15` sutil. Primero se probó cristal oscuro, luego inputs con blanco propio (se veían más claros).
+- **Buscador**: `TourSearch` superpuesto al hero con `-mt-32 md:-mt-40` y **tarjeta blanca sólida** (rediseño de la sesión 22): `bg-white` + `shadow-xl shadow-charcoal/10` + `ring-ink/5`, título "Encuentra tu tour" arriba, campos blancos con borde `ink/15` y foco `sky-deep`, iconos de etiqueta en `sky`, botón `bg-sky-deep` con hover `sky`. Sustituye al glassmorphism anterior (cristal blanco translúcido con inputs transparentes).
 
 ## Paleta azul oficial (solo light mode)
 
@@ -66,6 +66,55 @@ npm run lint    # eslint
 ```
 
 ## Historial de sesiones
+
+### 2026-10-25 (22) — buscador del inicio rediseñado (tarjeta blanca sólida)
+
+1. `components/TourSearch.tsx`: al usuario no le gustaba el glassmorphism anterior. De 3 opciones mostradas eligió la **tarjeta blanca sólida**: panel `bg-white` con sombra suave y anillo sutil, título "Encuentra tu tour" arriba, grid destino/fecha/personas con campos blancos de borde `ink/15` y foco `sky-deep` (el date lleva `[color-scheme:light]`), etiquetas con iconos `sky` y botón azul profundo (`hover:bg-sky`). Sin dividers ni blur. Lógica intacta: filtros por destino, scroll a `#tours`, `id="destinos"` (el footer enlaza ahí).
+2. Build de producción y lint verificados (100 % limpio).
+
+### 2026-10-25 (21) — datos del miembro anclados a las flechas
+
+1. `components/TeamSection.tsx`: se agregó `justify-end` a las figuras apiladas del slider. Como la celda del grid la define el mensaje más largo, antes el avatar/nombre/cargo "flotaban" según el largo del mensaje activo y quedaban lejos de las flechas con mensajes cortos. Ahora foto + nombre + cargo quedan **anclados abajo, pegados a los controles** sin importar el tamaño del mensaje (el mensaje crece hacia arriba).
+2. ⚠️ Cambios del usuario en esta sesión (no revertir): `Footer.tsx` volvió a **fondo negro** (la versión de la sesión 10: logo sin panel, textos blancos) — la decisión de footer blanco de la sesión 17 quedó anulada; `lib/guides.ts` quedó con **una sola guía** (Ruta de las Flores); en `TeamSection` el nombre quedó `text-2xl sm:text-base` y el cargo usa `text-md` (⚠️ `text-md` no existe en Tailwind — la clase no genera CSS; ofrecer cambiarla a `text-sm` si el usuario quiere).
+3. Build de producción y lint verificados (100 % limpio).
+
+### 2026-10-25 (20) — avatar del equipo más grande
+
+1. `components/TeamSection.tsx`: avatar del miembro más grande — foto `size-16 sm:size-20` (64/80 px, Image 80×80) e iniciales con el mismo tamaño (`size-16 sm:size-20`, `text-xl sm:text-2xl`). Nota: el usuario ajustó por su cuenta la sección (quitó el título "Nuestro equipo", `min-h-[90vh]`, frase a `text-3xl` con comillas `&quot;`, `pt-10 pb-5` en el figcaption) — no revertir.
+2. Build de producción y lint verificados (100 % limpio).
+
+### 2026-10-25 (19) — TeamSection rediseñada como composición compacta centrada
+
+1. `components/TeamSection.tsx` rediseñado siguiendo una referencia visual (título → testimonio → avatar → nombre/cargo → controles, todo centrado en vertical y horizontal; se mantiene el `min-h-screen`):
+   - **Título** "Nuestro equipo": de `text-2xl sm:text-4xl extrabold` a `text-xl font-bold sm:text-3xl` (tamaño moderado) con menos margen inferior (`mt-6 sm:mt-8`).
+   - **Testimonio**: de `text-2xl sm:text-3xl lg:text-4xl` a `text-lg sm:text-xl` (18–20px móvil / 20px desktop), `leading-relaxed`, ancho controlado `max-w-2xl`; comillas decorativas `font-script` más sutiles (`text-2xl sm:text-3xl`, `sky-light/80`).
+   - **Avatar**: 44px móvil / 52px desktop (`size-11 sm:size-13`, Image 52×52); nombre bold + cargo más compacto (`mt-0.5`, `gap-2.5`); separación testimonio→datos reducida (`mt-5 sm:mt-6`).
+   - **Controles**: las flechas dejaron de ir en los extremos de la sección en `lg+` (se eliminaron los bloques absolutos); ahora flechas a los lados + indicadores centrados entre ellas **en todos los tamaños**, justo debajo de la persona (`mt-5 sm:mt-6`, `gap-3 sm:gap-5`). Botones más discretos: `size-9 sm:size-10`, `bg-white/10`, `ring-white/20`, icono `size-4`, hover `sky-light/40`.
+   - Indicadores intactos: puntos `h-2.5`, activo = cápsula blanca `w-7`. Sin tarjetas, bordes ni sombras; fondo `bg-sky-deep` y lógica del carrusel (autoplay 6s, pausa con hover/foco, fundidos, `prefers-reduced-motion`, a11y) sin cambios.
+2. Build de producción y lint verificados (100 % limpio).
+
+### 2026-10-25 (18) — galería sin espacios en blanco: más fotos y recorrido acotado
+
+1. **Causa de los huecos blancos**: las filas usaban `min-w-[calc(100%+400px)]` + `md:justify-center`, así que si el contenido era más angosto que el ancho forzado quedaba centrado y al desplazarse se veía blanco en los extremos. Solución:
+   - Se quitaron `min-w`, `justify-center` y los paddings de las filas: ahora la fila tiene el ancho natural del contenido y desborda por la derecha.
+   - **Base `-shift`**: el transform ahora es `translate3d(t × dirección × shift − shift)` — cada fila arranca pre-desplazada a la izquierda (base −shift) y recorre de 0 a −2shift. Así el viewport queda cubierto por fotos en **todo** el recorrido, en ambos extremos (pares ←, impares →, igual que antes).
+   - El `shift` se mide del contenido real: `min(travel, (scrollWidth − clientWidth)/2)` — si las fotos no desbordan, la fila queda estática. Sin huecos en ningún tamaño de pantalla.
+2. **Más fotos en todas las filas** (32 en total: 10/12/10): fila 1 +4 (orillas del lago, cascada en la montaña, senderos con niebla, atardecer en la costa), fila 2 +2 (café de la finca, caminata en grupo), fila 3 +4 (niebla en la cumbre, paseo entre cafetales, rocas del Pacífico, vista desde la cumbre). 10 IDs Unsplash nuevos **verificados HTTP 200** (verificados también y libres: photo-1468581264429, photo-1508739773434, photo-1528605248644, photo-1495474472287).
+3. **Recorridos más suaves** (el usuario pidió que no se desplacen demasiado): `travel` 240/320/200 → **140/160/120** px.
+4. Nota: el usuario ajustó por su cuenta el header de la galería (`text-start` sin `mx-auto`) y quitó `justify-center`/`bg-white` de la sección — no revertir.
+5. Build de producción y lint verificados (100 % limpio).
+
+### 2026-10-25 (17) — rediseño estilo framer.university, fondos blancos y secciones nuevas
+
+1. **Fondos negros eliminados** (el usuario dijo que el negro no es la paleta): `GallerySection` pasó de `bg-black` a **blanco** (título `text-ink`, descripción `text-ink-soft`, tarjetas `bg-sky-pale` + `ring-ink/10`) y el `Footer` pasó a blanco con borde superior (`border-ink/10`): textos `ink-soft`, encabezados e iconos `sky-deep`, redes `bg-ink/5 ring-ink/10`, copyright `ink-faint`. ⚠️ El **logo es claro**, así que ahora vive dentro de un panel `rounded-2xl bg-sky-deep` (azul de paleta, no negro). El hero (video), el CTA (azul) y el lightbox (`bg-black/90`, overlay, no fondo de sección) quedaron como estaban. En `globals.css` la regla de foco azul cielo sobre negro ahora cubre también `[class*="bg-black/"]` (lightbox).
+2. **Galería**: ahora es una sección de **100vh completo** — eyebrow + título + descripción + **link "Síguenos en Instagram →"** (con `ArrowRightIcon`) arriba y las filas abajo, centradas en vertical (`flex min-h-screen flex-col justify-center`). Las fotos se hicieron **más pequeñas**: filas `h-[150px]/[165px]/[155px]` (md: 220/250/230) y tarjetas `w-[100px]–[150px]` (md: 190–290). El `min-w` de las filas subió a `calc(100%_+_400px)` para mantener ≥200px de recorrido por lado con las tarjetas nuevas. `sizes` actualizado: 150px móvil / 290px md+.
+3. **Fila 2 con más fotos**: +4 fotos nuevas (10 en total), IDs Unsplash **verificados HTTP 200**: mirador entre volcanes (photo-1469474968028…), café de altura (photo-1447933601403…), canotaje en Suchitlán (photo-1476514525535…), bosque nuboso (photo-1441974231531…). Verificados también y libres para reuso: photo-1506905925346, photo-1464822759023, photo-1518495973542.
+4. **TeamSection**: el título "Nuestro equipo" pasó de eyebrow a **H2 grande** (`text-2xl sm:text-4xl`); la sección sigue en `min-h-screen` (título + frase + foto + controles comparten el 100vh).
+5. **Secciones nuevas estilo framer.university** (eyebrow + H2 + copy + link con flecha, fondo blanco):
+   - `components/GuidesSection.tsx` + `lib/guides.ts` — "Guías de viaje" con 3 tarjetas (imagen `aspect-[16/10]`, categoría, título, extracto). ⚠️ Contenido ilustrativo; las tarjetas y el link apuntan a `/tours` hasta que existan páginas reales.
+   - `components/FaqSection.tsx` — "Preguntas frecuentes" con 6 acordeones nativos (`<details>`/`<summary>`, sin JS, chevron rota con `group-open`). ⚠️ Respuestas de ejemplo (reserva/pago por WhatsApp), reemplazar por datos reales.
+   - Orden de la home: Hero → Populares → Equipo → Otras opciones → Galería → **Guías** → **FAQ** → CTA → Footer.
+6. Build de producción y lint verificados (100 % limpio).
 
 ### 2026-10-24 (16) — galería animada en móvil y equipo a pantalla completa
 

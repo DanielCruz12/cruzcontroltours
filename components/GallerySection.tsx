@@ -10,11 +10,13 @@ import {
   photoSrc,
 } from "@/lib/gallery";
 import type { GalleryPhoto } from "@/lib/gallery";
-import { ChevronLeftIcon, ChevronRightIcon, ExpandIcon, XIcon } from "./icons";
+import { ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon, ExpandIcon, XIcon } from "./icons";
 
-// Nota: la clase `min-w-[calc(100%_+_300px)]` de las filas garantiza al
-// menos 150 px de recorrido por lado en cualquier pantalla (incluido el
-// zoom global), de modo que el desplazamiento nunca deja huecos.
+// Nota: cada fila se desplaza desde una posición base de `-shift` px (el
+// contenido arranca fuera del borde izquierdo), de modo que el viewport
+// queda cubierto por fotos en TODO el recorrido: nunca se ven espacios en
+// blanco en los extremos. El recorrido por fila es min(travel configurado,
+// la mitad del desbordamiento real del contenido medido).
 
 /** Lightbox accesible: foco atrapado, Escape/flechas, bloqueo de scroll. */
 function LightboxDialog({
@@ -183,8 +185,11 @@ export default function GallerySection() {
   // Sin estado de React: un listener pasivo de scroll agenda un solo rAF
   // que escribe `translate3d` directamente sobre cada fila. El progreso
   // (0 al entrar la sección, 1 al salir) es reversible y proporcional, y
-  // las filas pares van ← y las impares →. Solo con prefers-reduced-motion
-  // quedan estáticas: el efecto aplica también en móvil.
+  // las filas pares van ← y las impares →. Cada fila parte de una base de
+  // -shift px (pre-desplazada a la izquierda) para que el contenido cubra
+  // el viewport en todo el recorrido, sin espacios en blanco. Solo con
+  // prefers-reduced-motion quedan estáticas: el efecto aplica también en
+  // móvil.
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -197,8 +202,10 @@ export default function GallerySection() {
       });
     };
 
-    // Mitad del desbordamiento real de cada fila (la clase min-w garantiza
-    // al menos MIN_TRAVEL_PX por lado en cualquier pantalla).
+    // Mitad del desbordamiento real del contenido de cada fila: si las
+    // fotos no desbordan el viewport, la fila queda estática. Así el
+    // recorrido nunca supera lo que el contenido puede cubrir (sin
+    // huecos en ningún extremo).
     const measure = () => {
       const width = section.clientWidth;
       galleryRows.forEach((row, index) => {
@@ -225,8 +232,12 @@ export default function GallerySection() {
         const element = rowRefs.current[index];
         if (!element) return;
         const direction = index % 2 === 0 ? -1 : 1;
+        const shift = shiftsRef.current[index];
+        // Base -shift: el contenido arranca desplazado a la izquierda, de
+        // modo que en cualquier punto del recorrido (0 → -2shift) las fotos
+        // cubren todo el viewport, en ambos extremos.
         element.style.transform = `translate3d(${
-          t * direction * shiftsRef.current[index]
+          t * direction * shift - shift
         }px,0,0)`;
       });
     };
@@ -253,37 +264,45 @@ export default function GallerySection() {
     <section
       ref={sectionRef}
       aria-labelledby="galeria-titulo"
-      className="relative overflow-x-clip bg-black py-16 sm:py-20 lg:py-24"
+      className="relative flex min-h-screen flex-col overflow-x-clip py-14 sm:py-16"
     >
-      {/* Encabezado */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-sky sm:text-sm">
-            Momentos inolvidables
-          </p>
-          <h2
-            id="galeria-titulo"
-            className="mt-3 text-2xl font-extrabold tracking-tight text-white sm:text-4xl"
-          >
-            El Salvador se vive, no solo se visita
-          </h2>
-          <p className="mt-3 text-xs leading-relaxed text-white/70 sm:text-base">
-            Descubre los paisajes, las personas y las aventuras que hacen
-            especial cada recorrido con Cruz Control Tours.
-          </p>
-        </div>
+      {/* Encabezado: eyebrow + título + descripción + link. Las filas de
+          fotos van abajo y todo comparte el 100vh de la sección. */}
+      <div className="text-start max-w-2xl px-4 text-center sm:px-6">
+        <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-sky-deep sm:text-sm">
+          Momentos inolvidables
+        </p>
+        <h2
+          id="galeria-titulo"
+          className="mt-3 text-2xl font-extrabold tracking-tight text-ink sm:text-4xl"
+        >
+          El Salvador se vive, no solo se visita
+        </h2>
+        <p className="mt-3 text-xs leading-relaxed text-ink-soft sm:text-base">
+          Descubre los paisajes, las personas y las aventuras que hacen
+          especial cada recorrido con Cruz Control Tours.
+        </p>
+        <a
+          href="https://www.instagram.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-sky sm:text-base"
+        >
+          Síguenos en Instagram
+          <ArrowRightIcon className="size-4" />
+        </a>
       </div>
 
       {/* Filas flex de la galería que se desplazan con el scroll en todos
           los tamaños (direcciones alternas e intensidad por fila). */}
-      <div className="mt-10 flex flex-col gap-4 sm:mt-14 sm:gap-5">
+      <div className="mt-10 flex flex-col gap-3 sm:mt-12 sm:gap-4">
         {galleryRows.map((row, rowIndex) => (
           <div
             key={rowIndex}
             ref={(element) => {
               rowRefs.current[rowIndex] = element;
             }}
-            className={`flex min-w-[calc(100%_+_300px)] gap-3 px-4 will-change-transform sm:gap-5 sm:px-6 md:justify-center md:px-0 ${row.height}`}
+            className={`flex gap-3 will-change-transform sm:gap-5 ${row.height}`}
           >
             {row.photos.map((photo, photoIndex) => {
               const flatIndex = galleryOffsets[rowIndex] + photoIndex;
@@ -294,7 +313,7 @@ export default function GallerySection() {
                   onClick={(event) => openAt(flatIndex, event.currentTarget)}
                   aria-haspopup="dialog"
                   aria-label={`Ampliar foto: ${photo.title}, ${photo.location}`}
-                  className={`group relative h-full shrink-0 overflow-hidden rounded-xl bg-charcoal ring-1 ring-white/10 transition-shadow duration-300 hover:ring-sky ${photo.width}`}
+                  className={`group relative h-full shrink-0 overflow-hidden rounded-xl bg-sky-pale ring-1 ring-ink/10 transition-shadow duration-300 hover:ring-sky ${photo.width}`}
                 >
                   {/* La escala del hover vive en un contenedor interno: el
                       translate de la fila y este transform nunca se pisan. */}
@@ -303,7 +322,7 @@ export default function GallerySection() {
                       src={photoSrc(photo, 900)}
                       alt=""
                       fill
-                      sizes="(max-width: 767px) 210px, 420px"
+                      sizes="(max-width: 767px) 150px, 290px"
                       className="object-cover"
                       style={{ objectPosition: photo.position }}
                     />
