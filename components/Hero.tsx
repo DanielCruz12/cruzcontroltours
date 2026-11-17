@@ -303,19 +303,19 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-transparent to-charcoal/70" />
 
       {/* El padding inferior reserva espacio para el buscador superpuesto */}
-      <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-4 pb-48 pt-20 sm:px-6 sm:pb-52 lg:min-h-[640px] lg:pb-56 lg:pt-24">
+      <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-4 pb-48 pt-20 sm:px-6 sm:pb-52 lg:min-h-[520px] lg:pb-48">
         <div className="max-w-2xl">
-          <h1 className="text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-4xl">
             Los mejores tours en{" "}
             <span className="font-extrabold">
               {" "}
               <br />
               El Salvador</span>
           </h1>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/85 sm:text-lg lg:text-xl">
+          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/85 sm:text-lg lg:mt-4">
             Aventuras únicas y experiencias que se quedan para siempre.
           </p>
-          <ul className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 sm:mt-10">
+          <ul className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 sm:mt-10 lg:mt-6">
             {BENEFITS.map(({ icon: BenefitIcon, label }) => (
               <li key={label} className="flex items-center gap-2.5">
                 <span className="grid size-10 place-items-center rounded-full bg-white/10 text-white backdrop-blur-sm ring-1 ring-white/20 sm:size-11">
@@ -326,8 +326,8 @@ export default function Hero() {
             ))}
           </ul>
 
-          {/* Frase manuscrita (móvil y tablets) */}
-          <div className="mt-12 xl:hidden">
+          {/* Frase manuscrita (móvil y tablet) */}
+          <div className="mt-12 lg:hidden">
             <p className="font-script text-2xl text-white/90 sm:text-3xl">El Salvador te espera</p>
             <svg
               viewBox="0 0 220 12"
@@ -348,7 +348,7 @@ export default function Hero() {
       </div>
 
       {/* Frase manuscrita (desktop) */}
-      <div className="pointer-events-none absolute right-10 top-1/2 z-10 hidden -translate-y-1/2 rotate-[-6deg] xl:block">
+      <div className="pointer-events-none absolute right-10 top-1/2 z-10 hidden -translate-y-1/2 rotate-[-6deg] lg:block">
         <p className="font-script text-4xl text-white drop-shadow-lg">
           El Salvador te espera
         </p>

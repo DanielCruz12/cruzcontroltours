@@ -20,7 +20,7 @@ const NAV_LINKS = [
   { href: "/#destinos", label: "Destinos" },
   { href: "/tours", label: "Tours" },
   { href: "/#nosotros", label: "Nosotros" },
-  { href: "/#contacto", label: "Contacto" },
+  { href: "/contacto", label: "Contacto" },
 ];
 
 function focusSearchBar() {
@@ -39,7 +39,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
 
-  // Intensifica el cristal del header cuando la página ya no está arriba del todo
+  // Activa el cristal oscuro cuando la página ya no está arriba del todo
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -76,16 +76,25 @@ export default function Header() {
   }, []);
 
   const isActive = (href: string) => href === pathname;
+  // Transparente solo al inicio del home (sobre el video); en el resto,
+  // cristal oscuro para que el texto blanco siempre se lea.
+  const solid = scrolled || pathname !== "/";
 
   return (
     <>
       <header
-        className={`sticky top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 ${scrolled
-            ? "border-white/60 bg-white/75 shadow-lg shadow-charcoal/5"
-            : "border-white/25 bg-white/45"
+        className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,box-shadow] duration-300 ${solid
+            ? "border-white/10 bg-charcoal/50 shadow-lg shadow-charcoal/30 backdrop-blur-xl backdrop-saturate-150"
+            : "border-transparent bg-transparent"
           }`}
       >
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:h-20">
+        {/* Degradado sobre el video para que el texto blanco se lea;
+            se desvanece cuando entra el cristal oscuro al hacer scroll. */}
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/10 to-transparent transition-opacity duration-300 ${solid ? "opacity-0" : "opacity-100"}`}
+        />
+        <div className="relative mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
           {/* Logo */}
           <Link
             href="/"
@@ -94,7 +103,7 @@ export default function Header() {
             onClick={() => setMenuOpen(false)}
           >
             <img
-              className="h-10 w-auto drop-shadow-sm sm:h-12 lg:h-14"
+              className="size-9 rounded-full object-cover ring-1 ring-white/40"
               src="/logocruztours.png"
               alt="Cruz Control Tours"
             />
@@ -102,15 +111,15 @@ export default function Header() {
 
           {/* Navegación desktop */}
           <nav aria-label="Navegación principal" className="hidden lg:block">
-            <ul className="flex items-center gap-7 xl:gap-9">
+            <ul className="flex items-center gap-6 xl:gap-8">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     aria-current={isActive(link.href) ? "page" : undefined}
-                    className={`text-sm font-semibold transition-colors ${isActive(link.href)
-                      ? "text-primary"
-                      : "text-ink-soft hover:text-primary"
+                    className={`relative text-[13px] font-semibold transition-colors ${isActive(link.href)
+                      ? "text-white after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-sky"
+                      : "text-white/70 hover:text-white"
                       }`}
                   >
                     {link.label}
@@ -130,7 +139,7 @@ export default function Header() {
                 aria-haspopup="listbox"
                 aria-expanded={langOpen}
                 aria-label="Cambiar idioma"
-                className="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:bg-sky-pale hover:text-ink sm:px-3"
+                className="flex items-center gap-1.5 rounded-full px-2 py-1.5 text-[13px] font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white sm:px-2.5"
               >
                 <FlagSV className="w-5 rounded-[3px] shadow-sm ring-1 ring-charcoal/10" />
                 <span className="hidden sm:inline">ES</span>
@@ -142,7 +151,7 @@ export default function Header() {
                 <ul
                   role="listbox"
                   aria-label="Idioma"
-                  className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-white/50 bg-white/90 p-1.5 shadow-xl shadow-charcoal/10"
+                  className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-white/10 bg-charcoal/90 p-1.5 shadow-xl shadow-charcoal/30 backdrop-blur-xl"
                 >
                   <li
                     role="option"
@@ -158,7 +167,7 @@ export default function Header() {
                     aria-selected="false"
                     aria-disabled="true"
                     title="Disponible próximamente"
-                    className="mt-1 flex cursor-not-allowed items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold text-ink-faint"
+                    className="mt-1 flex cursor-not-allowed items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/50"
                   >
                     <FlagUS className="w-5 rounded-[3px] opacity-60" />
                     English
@@ -175,7 +184,7 @@ export default function Header() {
               type="button"
               onClick={focusSearchBar}
               aria-label="Buscar tours"
-              className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-sky-pale hover:text-primary"
+              className="grid size-9 place-items-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-white"
             >
               <SearchIcon className="size-5" />
             </button>
@@ -184,7 +193,7 @@ export default function Header() {
             <button
               type="button"
               aria-label="Carrito de compras"
-              className="grid size-10 place-items-center rounded-full text-ink-soft transition-colors hover:bg-sky-pale hover:text-primary"
+              className="grid size-9 place-items-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-white"
             >
               <CartIcon className="size-5" />
             </button>
@@ -196,7 +205,7 @@ export default function Header() {
               aria-expanded={menuOpen}
               aria-controls="menu-movil"
               aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-              className="grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-sky-pale lg:hidden"
+              className="grid size-9 place-items-center rounded-full text-white transition-colors hover:bg-white/10 lg:hidden"
             >
               {menuOpen ? <XIcon className="size-5" /> : <MenuIcon className="size-5" />}
             </button>

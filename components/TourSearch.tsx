@@ -43,7 +43,7 @@ export default function TourSearch({
     <section
       id="destinos"
       aria-label="Buscar tours"
-      className="relative z-20 mx-auto -mt-32 w-full max-w-6xl px-4 sm:px-6 md:-mt-40"
+      className="relative z-20 mx-auto -mt-32 w-full max-w-6xl scroll-mt-20 px-4 sm:px-6 md:-mt-40 lg:-mt-48"
     >
       <form
         onSubmit={handleSubmit}

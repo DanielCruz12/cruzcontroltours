@@ -264,33 +264,35 @@ export default function GallerySection() {
     <section
       ref={sectionRef}
       aria-labelledby="galeria-titulo"
-      className="relative flex min-h-screen flex-col overflow-x-clip py-14 sm:py-16"
+      className="relative overflow-x-clip py-14 sm:py-16"
     >
       {/* Encabezado: eyebrow + título + descripción + link. Las filas de
-          fotos van abajo y todo comparte el 100vh de la sección. */}
-      <div className="text-start max-w-2xl px-4 text-center sm:px-6">
-        <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-sky-deep sm:text-sm">
-          Momentos inolvidables
-        </p>
-        <h2
-          id="galeria-titulo"
-          className="mt-3 text-2xl font-extrabold tracking-tight text-ink sm:text-4xl"
-        >
-          El Salvador se vive, no solo se visita
-        </h2>
-        <p className="mt-3 text-xs leading-relaxed text-ink-soft sm:text-base">
-          Descubre los paisajes, las personas y las aventuras que hacen
-          especial cada recorrido con Cruz Control Tours.
-        </p>
-        <a
-          href="https://www.instagram.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-sky sm:text-base"
-        >
-          Síguenos en Instagram
-          <ArrowRightIcon className="size-4" />
-        </a>
+          fotos van abajo. */}
+      <div className="mx-auto max-w-7xl px-4 text-start sm:px-6">
+        <div className="max-w-2xl">
+          <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-sky-deep sm:text-sm">
+            Momentos inolvidables
+          </p>
+          <h2
+            id="galeria-titulo"
+            className="mt-3 text-2xl font-extrabold tracking-tight text-ink sm:text-4xl"
+          >
+            El Salvador se vive, no solo se visita
+          </h2>
+          <p className="mt-3 text-xs leading-relaxed text-ink-soft sm:text-base">
+            Descubre los paisajes, las personas y las aventuras que hacen
+            especial cada recorrido con Cruz Control Tours.
+          </p>
+          <a
+            href="https://www.instagram.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-sky sm:text-base"
+          >
+            Síguenos en Instagram
+            <ArrowRightIcon className="size-4" />
+          </a>
+        </div>
       </div>
 
       {/* Filas flex de la galería que se desplazan con el scroll en todos

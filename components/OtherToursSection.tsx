@@ -33,11 +33,11 @@ export default function OtherToursSection({ other }: { other: Tour[] }) {
           </Link>
         </div>
 
-        <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0 xl:grid-cols-4">
+        <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0 xl:grid-cols-5">
           {other.map((tour) => (
             <li
               key={tour.id}
-              className="w-[70vw] max-w-[260px] shrink-0 snap-start md:w-auto md:max-w-none"
+              className="w-[60vw] max-w-[210px] shrink-0 snap-start md:w-auto md:max-w-none"
             >
               <TourCard tour={tour} />
             </li>

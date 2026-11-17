@@ -67,6 +67,14 @@ npm run lint    # eslint
 
 ## Historial de sesiones
 
+### 2026-11-17 — formulario de contacto, bandeja de mensajes y slices Redux
+
+1. **Capa API** (`lib/api/`): `client.ts` (fetch tipado, base `NEXT_PUBLIC_API_URL` con fallback a `http://localhost:3002/api/v1`, desenvuelve `{ data }`, `ApiError`/`toErrorMessage`), `customers.ts` (CRUD contra `POST/GET /customers`, `GET/DELETE /customers/:id`) y `tours.ts` (CRUD contra `/tours`; `price` llega como string por ser numeric).
+2. **Slices Redux** (`lib/store/`): `customersSlice.ts` (thunks `fetchCustomers`, `createCustomer`, `removeCustomer` + `resetSubmit`), `toursSlice.ts` (`fetchTours`, `createTour`, `updateTour`, `removeTour` + `resetSave`), `store.ts`, `hooks.ts` (`useAppDispatch`, `useAppSelector`, `useAppStore`). Deps nuevas en `package.json`: `@reduxjs/toolkit ^2.5.0`, `react-redux ^9.2.0` (falta `npm install`).
+3. **Componentes**: `ContactForm.tsx` (valida igual que el `customerSchema` del backend: nombre/teléfono/correo requeridos, mensaje opcional máx. 2000; pantalla de éxito), `CustomerMessages.tsx` (bandeja con GET + DELETE con confirmación en dos pasos), `Providers.tsx` (monta el store en `app/layout.tsx`), iconos `SendIcon`/`TrashIcon` en `icons.tsx`.
+4. **Páginas**: `/contacto` (formulario + tarjeta de contacto directo) y `/mensajes` (bandeja interna, `robots: noindex`, fuera del nav). Nav "Contacto" ahora apunta a `/contacto`. `.env` + `.env.example` nuevos con `NEXT_PUBLIC_API_URL`.
+5. ⚠️ No se corrió `tsc`, build, lint ni migraciones (el usuario lo hace). Pendiente: `npm install` en el front y proteger `GET/DELETE /customers` con auth en el backend (TODO ya anotado en `customer-routes.ts`).
+
 ### 2026-10-25 (22) — buscador del inicio rediseñado (tarjeta blanca sólida)
 
 1. `components/TourSearch.tsx`: al usuario no le gustaba el glassmorphism anterior. De 3 opciones mostradas eligió la **tarjeta blanca sólida**: panel `bg-white` con sombra suave y anillo sutil, título "Encuentra tu tour" arriba, grid destino/fecha/personas con campos blancos de borde `ink/15` y foco `sky-deep` (el date lleva `[color-scheme:light]`), etiquetas con iconos `sky` y botón azul profundo (`hover:bg-sky`). Sin dividers ni blur. Lógica intacta: filtros por destino, scroll a `#tours`, `id="destinos"` (el footer enlaza ahí).

@@ -64,7 +64,7 @@ export default function Footer() {
           {/* Marca: descripción, horario y redes */}
           <div
             id="nosotros"
-            className="col-span-2 lg:col-span-1 lg:col-start-1 lg:row-start-2"
+            className="col-span-2 scroll-mt-20 lg:col-span-1 lg:col-start-1 lg:row-start-2"
           >
             <p className="max-w-md text-xs leading-relaxed text-white/60 sm:text-sm pt-4">
               Organizamos experiencias en Centroamérica con atención

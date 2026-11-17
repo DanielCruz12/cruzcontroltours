@@ -34,7 +34,7 @@ export default function PopularToursSection({
       <section id="tours" className="scroll-mt-24 bg-surface pt-36 pb-12 sm:pt-24 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-10">
-            <div>
+            <div className="max-w-2xl text-start">
               <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-primary">
                 Top en El Salvador
               </p>
@@ -79,11 +79,11 @@ export default function PopularToursSection({
           )}
 
           {filtered.length > 0 ? (
-            <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0 xl:grid-cols-4">
+            <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0 xl:grid-cols-5">
               {filtered.map((tour) => (
                 <li
                   key={tour.id}
-                  className="w-[70vw] max-w-[260px] shrink-0 snap-start md:w-auto md:max-w-none"
+                  className="w-[60vw] max-w-[210px] shrink-0 snap-start md:w-auto md:max-w-none"
                 >
                   <TourCard tour={tour} />
                 </li>

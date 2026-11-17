@@ -14,8 +14,8 @@ export default function GuidesSection() {
       aria-labelledby="guias-titulo"
       className="bg-white py-14 sm:py-16"
     >
-      <div className="text-start max-w-7xl px-4 sm:px-6">
-        <div className="text-start max-w-2xl text-center">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="max-w-2xl text-start">
           <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-sky-deep sm:text-sm">
             Guías de viaje
           </p>
