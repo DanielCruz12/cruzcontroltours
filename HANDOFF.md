@@ -3,7 +3,7 @@
 Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar.
 **Actualiza este archivo al terminar cada sesión.**
 
-Última actualización: 2026-10-25
+Última actualización: 2026-11-18
 
 ## Stack
 
@@ -45,8 +45,9 @@ Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar
 
 ## Estado actual del proyecto
 
-- El buscador filtra solo los tours populares de la home (por `destination`).
-- Datos de tours (`lib/tours.ts`), equipo (`lib/team.ts`), galería (`lib/gallery.ts`) y todas las fotos son **temporales** (Unsplash / contenido ilustrativo): pendiente backend/fotos/testimonios/equipo reales.
+- El buscador filtra solo los tours populares de la home (por `destination`, hoy genérico "El Salvador" para los del backend).
+- La home (populares + otras opciones) lista tours del backend vía `toursSlice` + `toCardTour()` (solo `active`; sin fotos: placeholder "Foto próximamente"). `/tours` sigue con el catálogo estático de `lib/tours.ts`.
+- Datos de equipo (`lib/team.ts`), galería (`lib/gallery.ts`) y todas las fotos son **temporales** (Unsplash / contenido ilustrativo): pendiente backend/fotos/testimonios/equipo reales.
 - Selector de idioma: EN marcado "Pronto" (deshabilitado) en `Header.tsx`.
 - Footer usa datos de contacto reales (sesión 2): dirección, WhatsApp +503 6050 3161 y correo.
 
@@ -65,7 +66,53 @@ npm start       # servir el build
 npm run lint    # eslint
 ```
 
+## Puertos y enlace (front + panel + backend)
+
+- Front: **3000** (`next dev`), Panel: **3001** (`next dev -p 3001`), Backend: **3002** (`/api/v1`).
+- Front y panel usan la misma variable `NEXT_PUBLIC_API_URL=http://localhost:3002/api/v1` y el mismo contrato (`{ data }`, errores `{ message }`, DELETE → 204).
+- El backend acepta ambos orígenes en `CORS_ORIGINS` (`http://localhost:3000,http://localhost:3001`).
+- Tabla `customers` compartida: el formulario `/contacto` la escribe, la bandeja `/mensajes` y la tabla `/panel/clientes` del panel la leen/borran. El backend la devuelve ordenada por `createdAt` DESC.
+- Cada proyecto tiene su `HANDOFF.md` en su raíz: este archivo (front), `nodejs-cruzcontroltours/HANDOFF.md` (backend) y `panel-cruzcontroltours/HANDOFF.md` (panel).
+
 ## Historial de sesiones
+
+### 2026-11-18 (3) — home conectada al slice de tours del backend
+
+1. Nuevo `lib/tour-adapters.ts`: `toCardTour()` mapea `ApiTour` al shape de las cards (valores temporales porque el backend no los trae: destino/ubicación "El Salvador", categoría "Aventura", `image` vacía, duración desde `durationDays`, `price` a número). `POPULAR_TOUR_COUNT = 5`: los 5 primeros activos van a populares, el resto a "otras opciones".
+2. Nuevos `components/ToursLoader.tsx` (dispara `fetchTours` una vez, sin UI) y `components/ToursSkeleton.tsx` (esqueleto con la misma retícula). `PopularToursSection` y `OtherToursSection` leen del store (sin props); solo muestran tours `active`. Populares tiene estados carga/error-con-reintento/vacío; Otras se oculta si falla o no sobran tours. `page.tsx` monta el loader y las secciones sin props.
+3. `TourCard`: si `tour.image` está vacía muestra placeholder ("Foto próximamente" + `ImageIcon` nuevo en `icons.tsx`) sobre el fondo `sky-pale` existente. `/tours` sigue con el catálogo estático.
+4. Verificación headless (`tours-verify.tmp.cjs` en la raíz, 30/30 PASS): store+thunk+adapter+componentes reales con fetch mockeado — loading con skeleton en ambas secciones, error con reintento (y recuperación re-despachando), vacío, solo `active`, split 5 populares/1 resto, placeholder sin foto, precio `45.00→$45`, duración singular/plural y destino en el buscador; 20 renders seguidos a ~9ms. El submit del buscador (filtrado interactivo) solo se puede probar en navegador.
+5. ⚠️ tsc directo y eslint bloqueados por el sandbox (EPERM en `@types/node/index.d.ts`, `react-dom/server*` y archivos de eslint — pre-existente, pasa también sin mis cambios). Con `tsconfig.verify.json` (`types: [react, react-dom]`) el único error es el `process` pre-existente de `lib/api/client.ts` (archivo no tocado); cero errores en los archivos nuevos/editados. `tsconfig.verify.json` y el harness quedan en la raíz para re-correr/borrar. Falta `npm run build` y `npm run lint` del usuario.
+
+### 2026-11-18 (2) — slice de solo-listado de tours en el front
+
+1. Nuevos `lib/api/tours.ts` (tipo `ApiTour` + `listTours()` contra `GET /tours`; `price` llega como string por ser numeric) y `lib/store/toursSlice.ts` (thunk `fetchTours` + estado `items/listStatus/listError`, sin CRUD). El tipo se llama `ApiTour` para no chocar con el `Tour` del catálogo estático de `lib/tours.ts`.
+2. `store.ts` registra `tours` junto a `customers`. Ningún componente usa el slice todavía: la home y `/tours` siguen mostrando el catálogo estático.
+3. ⚠️ No se corrió build, tsc ni lint (el usuario lo hace). Verificación solo por lectura (sin imports colgando ni choques con `lib/tours.ts`).
+
+### 2026-11-18 — quitados los slices de tours del front
+
+1. Borrados `lib/store/toursSlice.ts` y `lib/api/tours.ts` (ningún componente usaba sus thunks; solo estaban registrados en el store). `store.ts` queda solo con `customers` (formulario `/contacto` + bandeja `/mensajes`).
+2. El CRUD de tours vive ahora en el panel (`/panel/tours` con su propio `toursSlice` + `tour-service`). El front sigue mostrando el catálogo estático de `lib/tours.ts` (9 tours, sin cambios).
+3. ⚠️ No se corrió build, tsc ni lint (el usuario lo hace). Verificación solo por lectura (sin imports colgando de `toursSlice`/`api/tours`).
+
+### 2026-11-17 (4) — fix TS2307 en `import "./globals.css"`
+
+1. Nuevos `css.d.ts` (front en raíz, panel en `src/types/`): `declare module "*.css";`. El panel lo necesita porque su Next 15.1.11 no trae esa declaración (Next 16 sí); en el front queda como respaldo. Cubiertos por el `**/*.ts` de cada tsconfig.
+
+### 2026-11-17 (3) — enlace front + panel + backend
+
+1. Sin cambios de código en el front: `lib/api/` + `NEXT_PUBLIC_API_URL` ya apuntaban al backend y siguen iguales.
+2. Backend: `GET /customers` ahora ordena por `createdAt` DESC (la bandeja `/mensajes` muestra lo más reciente primero sin cambios); `.env.example` documenta qué puerto es cada consumidor.
+3. Panel enlazado al mismo backend y limpio: solo tabla de clientes (`/panel/clientes`), rebranding a Cruz Control Tours y puerto 3001 (detalle en su `HANDOFF.md`; fusionado con los fixes de la sesión paralela: `customer-table.tsx`, cookie `Secure` solo en https).
+4. Creados `HANDOFF.md` de backend y panel; agregada la sección "Puertos y enlace" a este archivo.
+
+### 2026-11-17 (2) — corrección de errores del repo (sin tsc/build/lint/migraciones)
+
+1. Front: `TeamSection.tsx` — `text-md` (clase inexistente en Tailwind, no generaba CSS) → `text-sm`. Era el pendiente anotado en la sesión 21.
+2. Backend: `tour-routes.ts` — `price` como string ahora se valida numérico (`/^\d+(\.\d{1,2})?$/` + positivo) para devolver 400 en vez de un 500 de Postgres; `README.md` — scripts `db:generate`/`db:migrate` inexistentes → `dz:gen`/`dz:mig` reales.
+3. Panel (otra sesión lo migró de eventos/noticias a clientes en paralelo): creado `customer-table.tsx` faltante (la página `/panel/clientes` lo importaba y no existía), nav apunta a `/panel/clientes`, login redirige a `/panel/clientes` y la cookie `Secure` ahora es solo en https (en localhost impedía persistir la sesión).
+4. No se corrió tsc, build, tests ni migraciones (indicación del usuario); eslint tampoco pudo correrse (el sandbox bloquea `node_modules` con EPERM). Verificación solo por lectura.
 
 ### 2026-11-17 — formulario de contacto, bandeja de mensajes y slices Redux
 

@@ -4,7 +4,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { Tour } from "@/lib/tours";
-import { ClockIcon, HeartIcon, MapPinIcon } from "./icons";
+import { ClockIcon, HeartIcon, ImageIcon, MapPinIcon } from "./icons";
 
 const FAVORITES_KEY = "cct-favoritos";
 
@@ -43,13 +43,24 @@ export default function TourCard({ tour }: { tour: Tour }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-charcoal/5 transition-shadow hover:shadow-lg hover:shadow-charcoal/10">
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-sky-pale">
-        <Image
-          src={tour.image}
-          alt={tour.imageAlt}
-          fill
-          sizes="(max-width: 767px) 360px, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 20vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-        />
+        {tour.image ? (
+          <Image
+            src={tour.image}
+            alt={tour.imageAlt}
+            fill
+            sizes="(max-width: 767px) 360px, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 20vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="absolute inset-0 grid place-items-center">
+            <div className="flex flex-col items-center gap-2 px-6 text-center">
+              <ImageIcon className="size-10 text-sky-deep/40" />
+              <p className="text-[11px] font-bold uppercase tracking-wider text-sky-deep/60">
+                Foto próximamente
+              </p>
+            </div>
+          </div>
+        )}
         {/* Degradado inferior para legibilidad */}
         <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-charcoal/85 via-charcoal/35 to-transparent" />
 

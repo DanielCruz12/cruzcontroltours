@@ -1,11 +1,13 @@
-// Endpoints de tours (tabla `tours`).
-// Backend: GET/POST /tours, GET/PUT/DELETE /tours/:id
+// Endpoints de tours (tabla `tours`): el front solo lista (GET /tours).
+// El CRUD completo vive en el panel (panel-cruzcontroltours).
 //
 // Nota: `price` es numeric(10,2) en Postgres, así que llega como string.
+// El tipo se llama ApiTour para no chocar con el `Tour` del catálogo
+// estático de `@/lib/tours`.
 
 import { apiFetch } from "./client";
 
-export type Tour = {
+export type ApiTour = {
   id: number;
   title: string;
   description: string | null;
@@ -15,33 +17,6 @@ export type Tour = {
   createdAt: string;
 };
 
-export type NewTourInput = {
-  title: string;
-  description?: string;
-  price: number | string;
-  durationDays?: number;
-  active?: boolean;
-};
-
-export function listTours(): Promise<Tour[]> {
-  return apiFetch<Tour[]>("/tours");
-}
-
-export function getTour(id: number): Promise<Tour> {
-  return apiFetch<Tour>(`/tours/${id}`);
-}
-
-export function createTour(input: NewTourInput): Promise<Tour> {
-  return apiFetch<Tour>("/tours", { method: "POST", body: input });
-}
-
-export function updateTour(
-  id: number,
-  input: NewTourInput,
-): Promise<Tour> {
-  return apiFetch<Tour>(`/tours/${id}`, { method: "PUT", body: input });
-}
-
-export async function deleteTour(id: number): Promise<void> {
-  await apiFetch<void>(`/tours/${id}`, { method: "DELETE" });
+export function listTours(): Promise<ApiTour[]> {
+  return apiFetch<ApiTour[]>("/tours");
 }

@@ -143,7 +143,7 @@ export default function TeamSection() {
                     <p className="text-2xl font-bold text-white sm:text-base">
                       {member.name}
                     </p>
-                    <p className="mt-0.5 text-md text-white/90">
+                    <p className="mt-0.5 text-sm text-white/90">
                       {member.role}
                     </p>
                   </div>

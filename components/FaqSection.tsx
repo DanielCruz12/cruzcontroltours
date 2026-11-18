@@ -1,41 +1,24 @@
+"use client";
+
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { fetchFaqs } from "@/lib/store/faqsSlice";
 import { ChevronDownIcon } from "./icons";
 
-// ⚠️ CONTENIDO ILUSTRATIVO TEMPORAL: preguntas y respuestas de ejemplo para
-// el diseño; reemplazar por las dudas reales de los clientes (y verificar
-// datos de reserva/pago) antes de producción.
-
-const FAQS = [
-  {
-    q: "¿Cómo reservo un tour?",
-    a: "Escríbenos por WhatsApp al +503 6050 3161 o usa el buscador de la página: eliges tour, fecha y número de personas, y confirmamos tu reserva en minutos.",
-  },
-  {
-    q: "¿Qué incluye el precio?",
-    a: "Transporte desde el punto de encuentro, guía y entradas a los sitios, según el tour. Los alimentos no están incluidos salvo que el tour lo indique.",
-  },
-  {
-    q: "¿Hacen tours privados o personalizados?",
-    a: "Sí. Organizamos salidas privadas para familias y grupos con itinerario a tu medida: cuéntanos tus fechas y tus ideas.",
-  },
-  {
-    q: "¿Qué pasa si llueve el día del tour?",
-    a: "Reprogramamos sin costo o te reembolsamos. Te avisamos con anticipación si el clima impide realizar la actividad.",
-  },
-  {
-    q: "¿Recogen en mi hotel?",
-    a: "Incluimos recogida en hoteles del área de San Salvador o acordamos un punto de encuentro; para otras zonas, consulta por WhatsApp.",
-  },
-  {
-    q: "¿Cómo realizo el pago?",
-    a: "Reservas con depósito o transferencia y puedes pagar el resto el día del tour. Coordinamos los detalles contigo.",
-  },
-];
-
-/**
- * Sección "Preguntas frecuentes" estilo framer.university: eyebrow + título
- * + enlace de contacto y acordeones nativos (`details`/`summary`, sin JS).
- */
 export default function FaqSection() {
+  const dispatch = useAppDispatch();
+  const { items, listStatus, listError } = useAppSelector(
+    (state) => state.faqs,
+  );
+
+  useEffect(() => {
+    if (listStatus === "idle") dispatch(fetchFaqs());
+  }, [dispatch, listStatus]);
+
+  const faqs = items.filter((faq) => faq.active);
+
+  if (listStatus === "succeeded" && faqs.length === 0) return null;
+
   return (
     <section
       aria-labelledby="faq-titulo"
@@ -66,22 +49,52 @@ export default function FaqSection() {
           </p>
         </div>
 
-        <div className="mt-10 space-y-3 sm:mt-12">
-          {FAQS.map((faq) => (
-            <details
-              key={faq.q}
-              className="group rounded-2xl border border-ink/10 bg-white px-5 py-4"
+        {listStatus === "loading" || listStatus === "idle" ? (
+          <div className="mt-10 space-y-3 sm:mt-12" aria-busy="true">
+            <p className="sr-only">Cargando preguntas…</p>
+            <div aria-hidden="true" className="space-y-3">
+              {[0, 1, 2].map((index) => (
+                <div
+                  key={index}
+                  className="h-14 animate-pulse rounded-2xl border border-ink/10 bg-ink/5"
+                />
+              ))}
+            </div>
+          </div>
+        ) : listStatus === "failed" ? (
+          <div className="mt-10 rounded-2xl border border-dashed border-charcoal/15 bg-white px-6 py-10 text-center sm:mt-12">
+            <p className="text-sm font-extrabold text-charcoal sm:text-base">
+              No pudimos cargar las preguntas
+            </p>
+            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-ink-soft sm:text-sm">
+              {listError ?? "Ocurrió un error inesperado. Inténtalo de nuevo."}
+            </p>
+            <button
+              type="button"
+              onClick={() => dispatch(fetchFaqs())}
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-sky sm:text-sm"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-bold text-ink [&::-webkit-details-marker]:hidden sm:text-base">
-                {faq.q}
-                <ChevronDownIcon className="size-4 shrink-0 text-sky-deep transition-transform duration-300 group-open:rotate-180" />
-              </summary>
-              <p className="mt-3 text-xs leading-relaxed text-ink-soft sm:text-sm">
-                {faq.a}
-              </p>
-            </details>
-          ))}
-        </div>
+              Reintentar
+            </button>
+          </div>
+        ) : (
+          <div className="mt-10 space-y-3 sm:mt-12">
+            {faqs.map((faq) => (
+              <details
+                key={faq.id}
+                className="group rounded-2xl border border-ink/10 bg-white px-5 py-4"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-bold text-ink [&::-webkit-details-marker]:hidden sm:text-base">
+                  {faq.question}
+                  <ChevronDownIcon className="size-4 shrink-0 text-sky-deep transition-transform duration-300 group-open:rotate-180" />
+                </summary>
+                <p className="mt-3 text-xs leading-relaxed text-ink-soft sm:text-sm">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

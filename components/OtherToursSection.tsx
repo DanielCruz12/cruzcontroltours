@@ -1,10 +1,32 @@
+"use client";
+
 import Link from "next/link";
-import type { Tour } from "@/lib/tours";
+import { useAppSelector } from "@/lib/store/hooks";
+import { POPULAR_TOUR_COUNT, toCardTour } from "@/lib/tour-adapters";
 import { ArrowRightIcon } from "./icons";
 import TourCard from "./TourCard";
+import ToursSkeleton from "./ToursSkeleton";
 
-/** "Otras opciones" más accesibles, debajo de la sección del equipo. */
-export default function OtherToursSection({ other }: { other: Tour[] }) {
+/**
+ * "Otras opciones": los tours activos que sobran de "populares".
+ * Se oculta si la carga falla (el error con reintento vive en Populares)
+ * o si no hay tours de sobra.
+ */
+export default function OtherToursSection() {
+  const { items, listStatus } = useAppSelector((state) => state.tours);
+
+  const other = items
+    .filter((tour) => tour.active)
+    .slice(POPULAR_TOUR_COUNT)
+    .map((tour) => toCardTour(tour));
+
+  if (
+    listStatus === "failed" ||
+    (listStatus === "succeeded" && other.length === 0)
+  ) {
+    return null;
+  }
+
   return (
     <section id="opciones" className="py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -33,16 +55,20 @@ export default function OtherToursSection({ other }: { other: Tour[] }) {
           </Link>
         </div>
 
-        <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0 xl:grid-cols-5">
-          {other.map((tour) => (
-            <li
-              key={tour.id}
-              className="w-[60vw] max-w-[210px] shrink-0 snap-start md:w-auto md:max-w-none"
-            >
-              <TourCard tour={tour} />
-            </li>
-          ))}
-        </ul>
+        {listStatus === "loading" || listStatus === "idle" ? (
+          <ToursSkeleton count={4} />
+        ) : (
+          <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0 xl:grid-cols-5">
+            {other.map((tour) => (
+              <li
+                key={tour.id}
+                className="w-[60vw] max-w-[210px] shrink-0 snap-start md:w-auto md:max-w-none"
+              >
+                <TourCard tour={tour} />
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   );
