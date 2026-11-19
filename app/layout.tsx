@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { Caveat, Plus_Jakarta_Sans } from "next/font/google";
+import { Hanken_Grotesk } from "next/font/google";
 import Providers from "@/components/Providers";
 import ScrollToTop from "@/components/ScrollToTop";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
-  subsets: ["latin"],
-});
-
-const caveat = Caveat({
-  variable: "--font-caveat",
+// Fuente base de todo el sitio (variable: incluye todos los pesos).
+const hanken = Hanken_Grotesk({
+  variable: "--font-hanken",
   subsets: ["latin"],
 });
 
@@ -52,9 +49,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${jakarta.variable} ${caveat.variable} h-full antialiased`}
+      className={`${hanken.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
+        <SmoothScroll />
         <Providers>
           {children}
           <ScrollToTop />

@@ -3,7 +3,14 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { SparklesIcon, UsersIcon } from "./icons";
+import {
+  ChevronDownIcon,
+  HeartIcon,
+  ImageIcon,
+  SearchIcon,
+  SendIcon,
+  SparklesIcon,
+} from "./icons";
 
 // ── Escenas de video del hero ────────────────────────────────────────
 // Los archivos van en /public/videos/ (actualmente: 1.mp4, 2.mp4 y 3.mp4).
@@ -38,21 +45,79 @@ const READY_TIMEOUT_MS = 5_000; // máximo de espera antes de usar el respaldo
 
 type ConnectionLike = { saveData?: boolean; effectiveType?: string };
 
-const BENEFITS = [
-  { icon: UsersIcon, label: "Guías locales expertos" },
-  { icon: SparklesIcon, label: "Experiencias auténticas" },
+const PLACEHOLDER_EXAMPLES = [
+  "Tour de 3 días por la Ruta de las Flores…",
+  "Fin de semana de surf en El Tunco…",
+  "Aventura al volcán de Santa Ana…",
 ];
 
+const CHIPS = [
+  { icon: SearchIcon, text: "Encuentra los mejores tours" },
+  { icon: SparklesIcon, text: "Escapada de fin de semana" },
+  { icon: HeartIcon, text: "El plan ideal para ti" },
+];
+
+const TOOL_ICONS = [SparklesIcon, ImageIcon, SearchIcon, SendIcon];
+
+const EXPERT_AVATARS = [
+  { initial: "M", classes: "bg-neutral-900 text-white" },
+  { initial: "S", classes: "bg-neutral-500 text-white" },
+  { initial: "R", classes: "bg-stone-300 text-neutral-800" },
+];
+
+function ToolCircles() {
+  return (
+    <span className="inline-flex items-center align-middle" aria-hidden="true">
+      {TOOL_ICONS.map((Icon, index) => (
+        <span
+          key={index}
+          className={`grid size-9 place-items-center rounded-full bg-white text-neutral-800 shadow-md ring-2 ring-white sm:size-12 ${
+            index > 0 ? "-ml-2" : ""
+          }`}
+        >
+          <Icon className="size-4 sm:size-5" />
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function ExpertAvatars() {
+  return (
+    <span className="inline-flex items-center align-middle" aria-hidden="true">
+      {EXPERT_AVATARS.map((avatar, index) => (
+        <span
+          key={avatar.initial}
+          className={`grid size-9 place-items-center rounded-full text-sm font-bold shadow-md ring-2 ring-white sm:size-12 sm:text-base ${avatar.classes} ${
+            index > 0 ? "-ml-2" : ""
+          }`}
+        >
+          {avatar.initial}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export default function Hero() {
+  // ── Estado del fondo de video ──────────────────────────────────────
   // `visible` es la escena en la capa delantera; `fading` indica que un
   // fundido cruzado está en curso; `failed` marca escenas con video caído.
   const [visible, setVisible] = useState(0);
   const [fading, setFading] = useState(false);
-  const [failed, setFailed] = useState<boolean[]>(() => SCENES.map(() => false));
+  const [failed, setFailed] = useState<boolean[]>(() =>
+    SCENES.map(() => false),
+  );
   const [reducedMotion, setReducedMotion] = useState(false);
   // El primer video entra con un fade-in suave sobre la imagen de respaldo.
   const [started, setStarted] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null]);
+
+  // ── Estado del contenido ───────────────────────────────────────────
+  const [mounted, setMounted] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const [exampleIndex, setExampleIndex] = useState(0);
+  const [exampleVisible, setExampleVisible] = useState(true);
 
   // ── Motor de secuencia (se arma una sola vez al montar) ─────────────
   // Usa dos capas <video> superpuestas: la delantera muestra la escena
@@ -61,9 +126,8 @@ export default function Hero() {
   // (crossfade auténtico, sin huecos ni carrusel). Los videos nunca se
   // recrean: solo se les cambia el src cuando están ocultos.
   useEffect(() => {
-    const frontVideo = videoRefs.current[0];
-    const backVideo = videoRefs.current[1];
-    if (!frontVideo || !backVideo) return;
+    const videos = videoRefs.current;
+    if (!videos[0] || !videos[1]) return;
 
     // Accesibilidad: con movimiento reducido se deja la imagen estática.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -71,8 +135,9 @@ export default function Hero() {
       return;
     }
 
-    const connection = (navigator as Navigator & { connection?: ConnectionLike })
-      .connection;
+    const connection = (
+      navigator as Navigator & { connection?: ConnectionLike }
+    ).connection;
     // Conexiones muy limitadas: mejor la imagen estática que un video a medias.
     if (connection?.saveData || connection?.effectiveType === "slow-2g") return;
 
@@ -86,163 +151,133 @@ export default function Hero() {
     };
 
     let current = 0; // espejo de `visible` para los temporizadores
-    let isFading = false;
-    let waiting = false; // true mientras se espera que la escena siguiente cargue
     const failedScenes = SCENES.map(() => false);
-    const timers: {
-      prep?: number;
-      scene?: number;
-      ready?: number;
-      fade?: number;
-    } = {};
-
-    const clearTimer = (key: keyof typeof timers) => {
-      if (timers[key] !== undefined) {
-        window.clearTimeout(timers[key]);
-        delete timers[key];
-      }
-    };
-    const clearTimers = () => {
-      clearTimer("prep");
-      clearTimer("scene");
-      clearTimer("ready");
-      clearTimer("fade");
+    const layerScene = [0, 1]; // qué escena tiene cargada cada capa
+    const timers: number[] = [];
+    const later = (fn: () => void, ms: number) => {
+      timers.push(window.setTimeout(fn, ms));
     };
 
-    const markFailed = (index: number, value: boolean) => {
-      failedScenes[index] = value;
+    const markFailed = (sceneIdx: number) => {
+      if (failedScenes[sceneIdx]) return;
+      failedScenes[sceneIdx] = true;
       setFailed([...failedScenes]);
     };
 
-    // La capa que acaba de quedar oculta ahora carga (solo metadatos) la
-    // escena que seguirá después: el cambio de src nunca es visible.
-    const prepareBackLayer = () => {
-      const hiddenLayer = (current + 1) % 2;
-      const upcoming = (current + 1) % SCENES.length;
-      const video = videoRefs.current[hiddenLayer];
+    const setVideoSrc = (layer: number, sceneIdx: number) => {
+      const video = videoRefs.current[layer];
       if (!video) return;
-      video.pause();
-      video.src = sceneSrc(upcoming);
-      video.preload = "metadata";
-      video.load();
-    };
-
-    const scheduleNextScene = () => {
-      clearTimer("prep");
-      clearTimer("scene");
-      // Precarga controlada: el siguiente video empieza a descargarse un
-      // poco antes de necesitarse, nunca todos a la vez.
-      timers.prep = window.setTimeout(() => {
-        if (isFading) return;
-        const video = videoRefs.current[(current + 1) % 2];
-        if (video) {
-          video.preload = "auto";
-          video.load();
-        }
-      }, SCENE_MS - PREP_MS);
-      timers.scene = window.setTimeout(advance, SCENE_MS);
-    };
-
-    const startFade = () => {
-      if (isFading) return;
-      waiting = false;
-      clearTimer("ready");
-      const next = (current + 1) % SCENES.length;
-      if (!failedScenes[next]) {
-        videoRefs.current[(current + 1) % 2]?.play().catch(() => {
-          markFailed(next, true);
-        });
+      const src = sceneSrc(sceneIdx);
+      if (video.getAttribute("src") !== src) {
+        video.setAttribute("src", src);
+        video.load();
       }
-      isFading = true;
-      setFading(true);
-      timers.fade = window.setTimeout(() => {
-        current = (current + 1) % SCENES.length;
-        setVisible(current);
-        isFading = false;
-        setFading(false);
-        prepareBackLayer();
-        scheduleNextScene();
-      }, CROSSFADE_MS);
+      layerScene[layer] = sceneIdx;
     };
 
-    // Al terminar el tiempo de la escena: fundir a la siguiente si ya está
-    // lista, o esperar a que cargue (con límite y respaldo de imagen).
-    function advance() {
-      if (isFading) return;
-      const next = (current + 1) % SCENES.length;
-      markFailed(next, false); // nueva oportunidad para escenas caídas
-      const video = videoRefs.current[(current + 1) % 2];
-      if (!video) {
-        startFade();
-        return;
+    const playVideo = (layer: number) => {
+      videoRefs.current[layer]?.play().catch(() => {
+        markFailed(layerScene[layer]);
+      });
+    };
+
+    const nextValid = (from: number) => {
+      for (let step = 1; step <= SCENES.length; step++) {
+        const candidate = (from + step) % SCENES.length;
+        if (!failedScenes[candidate]) return candidate;
       }
-      if (video.readyState >= 3) {
-        startFade();
-        return;
-      }
-      video.preload = "auto";
-      video.load();
-      waiting = true;
-      clearTimer("ready");
-      timers.ready = window.setTimeout(() => {
-        // Tardó demasiado: imagen de respaldo y el ciclo continúa.
-        markFailed(next, true);
-        startFade();
-      }, READY_TIMEOUT_MS);
-    }
-
-    // El video trasero terminó de precargarse: ya puede empezar el fundido.
-    const handleCanPlay = (event: Event) => {
-      if (!waiting) return;
-      if (event.target !== videoRefs.current[(current + 1) % 2]) return;
-      startFade();
+      return -1;
     };
 
-    const handleError = (event: Event) => {
-      const layer = event.target === videoRefs.current[0] ? 0 : 1;
-      const sceneIdx =
-        layer === current % 2 ? current : (current + 1) % SCENES.length;
-      markFailed(sceneIdx, true);
-      if (waiting) startFade();
+    const advance = () => {
+      const upcoming = nextValid(current);
+      // Todas fallidas: se queda la imagen de respaldo.
+      if (upcoming === -1) return;
+      const hiddenLayer = current % 2 === 0 ? 1 : 0;
+      // Precarga la siguiente escena en la capa oculta…
+      setVideoSrc(hiddenLayer, upcoming);
+      later(() => {
+        // …y funde hacia ella.
+        current = upcoming;
+        setFading(true);
+        playVideo(hiddenLayer);
+        later(() => {
+          setVisible(current);
+          setFading(false);
+          schedule();
+        }, CROSSFADE_MS);
+      }, PREP_MS);
     };
 
-    // Cuando un video empieza a reproducirse de verdad, ya se puede fundir
-    // desde la imagen de respaldo (cubre el tiempo de carga inicial).
+    const schedule = () => {
+      later(advance, SCENE_MS - PREP_MS);
+    };
+
     const handlePlaying = () => setStarted(true);
+    const handleError = (layer: number) => () => {
+      markFailed(layerScene[layer]);
+      // Si cayó la escena visible, avanza de inmediato a la siguiente válida.
+      if (layerScene[layer] === current) {
+        timers.forEach((timer) => window.clearTimeout(timer));
+        timers.length = 0;
+        setFading(false);
+        advance();
+      }
+    };
+    const errorHandlers = [handleError(0), handleError(1)];
 
-    frontVideo.addEventListener("canplay", handleCanPlay);
-    frontVideo.addEventListener("error", handleError);
-    frontVideo.addEventListener("playing", handlePlaying);
-    backVideo.addEventListener("canplay", handleCanPlay);
-    backVideo.addEventListener("error", handleError);
-    backVideo.addEventListener("playing", handlePlaying);
+    videos[0]?.addEventListener("playing", handlePlaying);
+    videos[0]?.addEventListener("error", errorHandlers[0]);
+    videos[1]?.addEventListener("playing", handlePlaying);
+    videos[1]?.addEventListener("error", errorHandlers[1]);
 
-    // Arranque: la primera escena se reproduce y la segunda queda en
-    // metadatos (no se descargan todos los videos a la vez).
-    frontVideo.src = sceneSrc(0);
-    frontVideo.preload = "auto";
-    frontVideo.load();
-    frontVideo.play().catch(() => {
-      markFailed(0, true);
-    });
-    backVideo.src = sceneSrc(1);
-    backVideo.preload = "metadata";
-    backVideo.load();
-
-    scheduleNextScene();
+    // Escena inicial en la capa 0.
+    setVideoSrc(0, 0);
+    playVideo(0);
+    // Si tarda demasiado, se marca como fallida y sigue con la siguiente.
+    later(() => {
+      if (!failedScenes[0]) {
+        const video = videoRefs.current[0];
+        const stalled =
+          !video || video.readyState < 3 || video.currentTime === 0;
+        if (stalled) {
+          markFailed(0);
+          timers.forEach((timer) => window.clearTimeout(timer));
+          timers.length = 0;
+          advance();
+          return;
+        }
+      }
+      schedule();
+    }, READY_TIMEOUT_MS);
 
     return () => {
-      clearTimers();
-      frontVideo.removeEventListener("canplay", handleCanPlay);
-      frontVideo.removeEventListener("error", handleError);
-      frontVideo.removeEventListener("playing", handlePlaying);
-      backVideo.removeEventListener("canplay", handleCanPlay);
-      backVideo.removeEventListener("error", handleError);
-      backVideo.removeEventListener("playing", handlePlaying);
-      frontVideo.pause();
-      backVideo.pause();
+      timers.forEach((timer) => window.clearTimeout(timer));
+      videos[0]?.removeEventListener("playing", handlePlaying);
+      videos[0]?.removeEventListener("error", errorHandlers[0]);
+      videos[1]?.removeEventListener("playing", handlePlaying);
+      videos[1]?.removeEventListener("error", errorHandlers[1]);
+      videos[0]?.pause();
+      videos[1]?.pause();
     };
   }, []);
+
+  // Entrada del contenido + rotación del placeholder (pausada con reduced-motion).
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    const interval = window.setInterval(() => {
+      setExampleVisible(false);
+      window.setTimeout(() => {
+        setExampleIndex((index) => (index + 1) % PLACEHOLDER_EXAMPLES.length);
+        setExampleVisible(true);
+      }, 200);
+    }, 3000);
+    return () => window.clearInterval(interval);
+  }, [reducedMotion]);
 
   // Capa 0 → escenas pares, capa 1 → escenas impares: cada escena siempre
   // entra por una capa distinta a la que sale.
@@ -253,8 +288,18 @@ export default function Hero() {
     front === 1 ? visible : nextScene,
   ];
 
+  const reveal = (distance: string) =>
+    `motion-safe:transition-all motion-safe:duration-[600ms] motion-safe:ease-out ${
+      mounted
+        ? "motion-safe:translate-y-0 motion-safe:opacity-100"
+        : `${distance} motion-safe:opacity-0`
+    }`;
+
   return (
-    <section className="relative overflow-hidden bg-charcoal" aria-label="Presentación">
+    <section
+      className="relative flex min-h-[100svh] flex-col overflow-hidden bg-charcoal"
+      aria-label="Presentación"
+    >
       {/* Capa base: imagen de respaldo (sin JS, con movimiento reducido
           o cuando un video falla o tarda demasiado) */}
       <Image
@@ -298,74 +343,88 @@ export default function Hero() {
         );
       })}
 
-      {/* Overlay degradado para garantizar la legibilidad del texto */}
+      {/* Overlay oscuro para garantizar la legibilidad del texto */}
       <div className="absolute inset-0 bg-gradient-to-r from-charcoal/50 via-charcoal/60 to-charcoal/30" />
       <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-transparent to-charcoal/70" />
 
-      {/* El padding inferior reserva espacio para el buscador superpuesto */}
-      <div className="relative z-10 mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-4 pb-48 pt-20 sm:px-6 sm:pb-52 lg:min-h-[520px] lg:pb-48">
-        <div className="max-w-2xl">
-          <h1 className="text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-4xl">
-            Los mejores tours en{" "}
-            <span className="font-extrabold">
-              {" "}
-              <br />
-              El Salvador</span>
-          </h1>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/85 sm:text-lg lg:mt-4">
-            Aventuras únicas y experiencias que se quedan para siempre.
-          </p>
-          <ul className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4 sm:mt-10 lg:mt-6">
-            {BENEFITS.map(({ icon: BenefitIcon, label }) => (
-              <li key={label} className="flex items-center gap-2.5">
-                <span className="grid size-10 place-items-center rounded-full bg-white/10 text-white backdrop-blur-sm ring-1 ring-white/20 sm:size-11">
-                  <BenefitIcon className="size-4.5 sm:size-5" />
-                </span>
-                <span className="text-xs font-semibold text-white/90 sm:text-sm">{label}</span>
-              </li>
-            ))}
-          </ul>
-
-          {/* Frase manuscrita (móvil y tablet) */}
-          <div className="mt-12 lg:hidden">
-            <p className="font-script text-2xl text-white/90 sm:text-3xl">El Salvador te espera</p>
-            <svg
-              viewBox="0 0 220 12"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-              className="mt-1 h-3 w-48 text-white"
+      {/* Contenido centrado */}
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-4 pb-20 pt-32 text-center sm:px-6 sm:pb-24 sm:pt-36">
+        <h1 className="max-w-5xl text-[40px] font-light leading-[1.05] tracking-[-0.02em] text-white sm:text-[72px]">
+          <span className="block overflow-hidden">
+            <span
+              className={`block ${reveal("motion-safe:translate-y-full")}`}
+              style={{ transitionDelay: "0ms" }}
             >
-              <path
-                d="M3 9c40-6 140-8 214-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="5"
-                strokeLinecap="round"
+              Planea con <ToolCircles /> IA,
+            </span>
+          </span>
+          <span className="block overflow-hidden">
+            <span
+              className={`block ${reveal("motion-safe:translate-y-full")}`}
+              style={{ transitionDelay: "120ms" }}
+            >
+              viaja con <ExpertAvatars /> expertos.
+            </span>
+          </span>
+        </h1>
+
+        <p
+          className={`mx-auto mt-6 max-w-2xl text-base font-normal leading-relaxed text-white/85 sm:text-xl ${reveal("motion-safe:translate-y-4")}`}
+          style={{ transitionDelay: "250ms" }}
+        >
+          Cuéntanos cómo sueñas tu viaje y lo convertimos en un itinerario
+          perfecto con guías locales.
+        </p>
+
+        {/* Caja de prompt (glassmorphism) */}
+        <div
+          className={`mx-auto mt-10 w-full max-w-[720px] ${reveal("motion-safe:translate-y-6")}`}
+          style={{ transitionDelay: "400ms" }}
+        >
+          <div className="rounded-[28px] border border-white/60 bg-white/35 p-3 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] backdrop-blur-[20px] transition-all duration-300 focus-within:border-white/90 focus-within:shadow-[0_24px_70px_-20px_rgba(0,0,0,0.35)]">
+            <div className="relative">
+              <textarea
+                value={prompt}
+                onChange={(event) => setPrompt(event.target.value)}
+                aria-label="Describe tu viaje ideal"
+                rows={2}
+                className=" w-full resize-none rounded-[20px] bg-white/70 p-4 pb-14 text-[15px] leading-relaxed text-neutral-900 outline-none"
               />
-            </svg>
+              {prompt === "" && (
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute left-4 top-4 text-[15px] text-neutral-400 transition-opacity duration-200 ${
+                    exampleVisible ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  {PLACEHOLDER_EXAMPLES[exampleIndex]}
+                </span>
+              )}
+              <a
+                href="#tours"
+                className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-xl bg-neutral-900 py-2.5 pl-4 pr-3 text-sm font-medium text-white shadow transition-colors hover:bg-neutral-700"
+              >
+                Crear mi viaje
+                <span aria-hidden="true" className="h-4 w-px bg-white/25" />
+                <ChevronDownIcon className="size-4" />
+              </a>
+            </div>
+
+            <div className="mt-3 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] md:flex-wrap md:justify-center [&::-webkit-scrollbar]:hidden">
+              {CHIPS.map(({ icon: ChipIcon, text }) => (
+                <button
+                  key={text}
+                  type="button"
+                  onClick={() => setPrompt(text)}
+                  className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white/60 px-4 py-2 text-sm text-neutral-700 backdrop-blur transition-colors hover:bg-white/90"
+                >
+                  <ChipIcon className="size-4" />
+                  {text}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Frase manuscrita (desktop) */}
-      <div className="pointer-events-none absolute right-10 top-1/2 z-10 hidden -translate-y-1/2 rotate-[-6deg] lg:block">
-        <p className="font-script text-4xl text-white drop-shadow-lg">
-          El Salvador te espera
-        </p>
-        <svg
-          viewBox="0 0 220 12"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-          className="mt-1 h-3 w-56 text-white"
-        >
-          <path
-            d="M3 9c40-6 140-8 214-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-        </svg>
       </div>
     </section>
   );

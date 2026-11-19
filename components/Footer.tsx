@@ -44,14 +44,14 @@ export default function Footer() {
             aria-label="Destinos"
             className="lg:col-start-2 lg:row-start-1"
           >
-            <h3 className="text-[11px] font-bold uppercase tracking-wider text-sky">
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
               Destinos
             </h3>
             <ul className="mt-2 grid grid-cols-2 gap-x-5 gap-y-1.5 lg:mt-3 lg:grid-cols-1 lg:gap-y-2.5">
               {DESTINATIONS.map((destination) => (
                 <li key={destination}>
                   <Link
-                    href="/#destinos"
+                    href="/#tours"
                     className="text-xs text-white/70 transition-colors hover:text-white lg:text-sm"
                   >
                     {destination}
@@ -107,7 +107,7 @@ export default function Footer() {
             </h3> */}
             <ul className="mt-2 pt-4 space-y-3 text-xs text-white/70 lg:mt-3 lg:space-y-4 lg:text-sm">
               <li className="flex gap-2.5">
-                <MapPinIcon className="mt-0.5 size-3.5 shrink-0 text-sky lg:size-4" />
+                <MapPinIcon className="mt-0.5 size-3.5 shrink-0 text-white/70 lg:size-4" />
                 <a
                   href={MAPS_URL}
                   target="_blank"
@@ -119,7 +119,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex gap-2.5">
-                <PhoneIcon className="mt-0.5 size-3.5 shrink-0 text-sky lg:size-4" />
+                <PhoneIcon className="mt-0.5 size-3.5 shrink-0 text-white/70 lg:size-4" />
                 <a
                   href={WHATSAPP_URL}
                   target="_blank"
@@ -130,7 +130,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex gap-2.5">
-                <MailIcon className="mt-0.5 size-3.5 shrink-0 text-sky lg:size-4" />
+                <MailIcon className="mt-0.5 size-3.5 shrink-0 text-white/70 lg:size-4" />
                 <a
                   href="mailto:cruzcontroltours@gmail.com"
                   className="transition-colors hover:text-white"

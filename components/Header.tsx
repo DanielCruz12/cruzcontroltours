@@ -11,26 +11,16 @@ import {
   FlagSV,
   FlagUS,
   MenuIcon,
-  SearchIcon,
   XIcon,
 } from "./icons";
 
 const NAV_LINKS = [
   { href: "/", label: "Inicio" },
-  { href: "/#destinos", label: "Destinos" },
+  { href: "/#tours", label: "Destinos" },
   { href: "/tours", label: "Tours" },
   { href: "/#nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
-
-function focusSearchBar() {
-  document
-    .getElementById("destinos")
-    ?.scrollIntoView({ behavior: "smooth", block: "center" });
-  window.setTimeout(() => {
-    document.getElementById("buscar-destino")?.focus({ preventScroll: true });
-  }, 350);
-}
 
 export default function Header() {
   const pathname = usePathname();
@@ -118,7 +108,7 @@ export default function Header() {
                     href={link.href}
                     aria-current={isActive(link.href) ? "page" : undefined}
                     className={`relative text-[13px] font-semibold transition-colors ${isActive(link.href)
-                      ? "text-white after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-sky"
+                      ? "text-white after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-white"
                       : "text-white/70 hover:text-white"
                       }`}
                   >
@@ -156,11 +146,11 @@ export default function Header() {
                   <li
                     role="option"
                     aria-selected="true"
-                    className="flex items-center gap-2.5 rounded-lg bg-sky-pale px-3 py-2.5 text-sm font-semibold text-ink"
+                    className="flex items-center gap-2.5 rounded-lg bg-white px-3 py-2.5 text-sm font-semibold text-ink"
                   >
                     <FlagSV className="w-5 rounded-[3px]" />
                     Español
-                    <CheckIcon className="ml-auto size-4 text-primary" />
+                    <CheckIcon className="ml-auto size-4 text-neutral-900" />
                   </li>
                   <li
                     role="option"
@@ -178,16 +168,6 @@ export default function Header() {
                 </ul>
               )}
             </div>
-
-            {/* Búsqueda */}
-            <button
-              type="button"
-              onClick={focusSearchBar}
-              aria-label="Buscar tours"
-              className="grid size-9 place-items-center rounded-full text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-            >
-              <SearchIcon className="size-5" />
-            </button>
 
             {/* Carrito (temporal: solo el icono, sin funcionalidad todavía) */}
             <button
@@ -252,7 +232,7 @@ export default function Header() {
               type="button"
               onClick={() => setMenuOpen(false)}
               aria-label="Cerrar menú"
-              className="grid size-9 place-items-center rounded-full text-ink transition-colors hover:bg-sky-pale"
+              className="grid size-9 place-items-center rounded-full text-ink transition-colors hover:bg-neutral-100"
             >
               <XIcon className="size-5" />
             </button>
@@ -268,8 +248,8 @@ export default function Header() {
                     onClick={() => setMenuOpen(false)}
                     aria-current={isActive(link.href) ? "page" : undefined}
                     className={`flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors ${isActive(link.href)
-                      ? "bg-sky-pale text-primary"
-                      : "text-ink hover:bg-sky-pale"
+                      ? "bg-neutral-900 text-white"
+                      : "text-ink hover:bg-neutral-100"
                       }`}
                   >
                     {link.label}

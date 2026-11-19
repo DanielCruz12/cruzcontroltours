@@ -5,22 +5,41 @@
      La paleta roja queda reservada para un futuro modo oscuro. */
   --color-sky: #3aa8df; /* azul cielo: iconos y detalles decorativos */
   --color-sky-light: #64c4ef; /* azul claro: acentos y brillos */
-  --color-sky-deep: #0082b6; /* azul profundo: botones y acciones */
+  --color-sky-deep: #0082b6; /* azul profundo: fondos y acentos */
   --color-sky-pale: #bbd8eb; /* azul pálido: hovers y fondos suaves */
 
   /* Tokens semánticos remapeados a la paleta oficial */
-  --color-brand: #0082b6; /* azul profundo (CTA, enlaces y acciones) */
+  --color-brand: #0082b6; /* azul profundo (acentos; CTA y enlaces van en negro) */
   --color-primary: #0082b6; /* acentos: etiquetas, iconos y destacados */
   --color-surface: #ffffff; /* fondo de página y secciones (blanco) */
   --color-ink: #000000; /* texto principal (negro) */
   --color-ink-soft: #444444; /* texto secundario (gris de paleta) */
   --color-ink-faint: #8a8a8a; /* texto terciario */
   --color-charcoal: #000000; /* oscuros: hero, overlays y sombras */
+
+  /* ── Base premium (nuevas secciones) ── */
+  --color-canvas: #ffffff; /* fondo de página */
+  --color-mist: #f3f3f3; /* gris muy claro: contenedores */
+  --color-coal: #171717; /* casi negro: texto y botones */
+  --color-smoke: #737373; /* gris medio: texto secundario */
+
+  --radius-card: 24px;
+  --radius-panel: 32px;
+  --radius-btn: 14px;
+
+  --shadow-soft: 0 10px 24px -12px rgb(0 0 0 / 0.5);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
-  --font-sans: var(--font-jakarta);
-  --font-script: var(--font-caveat);
+  --font-sans: var(--font-hanken), "Hanken Grotesk", sans-serif;
+  --font-script: var(--font-hanken), "Hanken Grotesk", sans-serif;
+  /* Archivo y Space Mono usan la fuente del sistema hasta que se
+     agreguen sus archivos a public/font (ver .lista-titulo y .meta). */
+  --font-archivo: "Archivo", sans-serif;
+  --font-spacemono: "Space Mono", monospace;
+  --font-hanken: var(--font-hanken), "Hanken Grotesk", sans-serif;
 }
 
 :root {
@@ -46,6 +65,25 @@ html {
   scroll-padding-top: 4rem;
 }
 
+/* Lenis: estilos recomendados (solo aplican cuando Lenis está activo;
+   con movimiento reducido manda el scroll-behavior: smooth de arriba). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 @media (min-width: 1024px) {
   html {
     scroll-padding-top: 5rem;
@@ -55,6 +93,109 @@ html {
 body {
   background-color: var(--color-surface);
   color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* ── Sistema tipográfico: Hanken Grotesk como base del sitio ── */
+.logo {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+/* Título display (h1 y títulos de sección): mismo estilo que el
+   "Questions, answered." del FAQ. El color se define en cada uso. */
+.titulo-display {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 640px) {
+  .titulo-display {
+    font-size: 72px;
+  }
+}
+
+/* Pill y botón de referencia (estilo minimalista de la sección FAQ).
+   .pill-blanco es la variante inversa para usar sobre fondos oscuros. */
+.pill-negro,
+.pill-blanco {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.375rem 1rem;
+  font-size: 14px;
+  line-height: 1.25rem;
+}
+
+.pill-negro {
+  background-color: #171717;
+  color: #ffffff;
+}
+
+.pill-blanco {
+  background-color: #ffffff;
+  color: #171717;
+}
+
+.btn-negro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 14px;
+  background-color: #171717;
+  padding: 0.75rem 1.5rem;
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.5);
+  transition: background-color 150ms ease;
+}
+
+.btn-negro:hover {
+  background-color: #404040;
+}
+
+.btn-negro:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Marquee infinito de aliados: la pista mide dos listas idénticas,
+   así que de 0 a -50% el ciclo se repite sin saltos. */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Entrada de tarjetas al filtrar el portafolio. */
+@keyframes portfolio-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lista-titulo {
+  font-family: var(--font-archivo);
+  text-transform: uppercase;
+}
+
+.meta {
+  font-family: var(--font-spacemono);
+  font-size: 12px;
 }
 
 ::selection {

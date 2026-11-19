@@ -1,15 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchFaqs } from "@/lib/store/faqsSlice";
-import { ChevronDownIcon } from "./icons";
+import { PlusIcon } from "./icons";
 
 export default function FaqSection() {
   const dispatch = useAppDispatch();
   const { items, listStatus, listError } = useAppSelector(
     (state) => state.faqs,
   );
+  const [openId, setOpenId] = useState<number | null>(null);
+  const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const idPrefix = useId();
 
   useEffect(() => {
     if (listStatus === "idle") dispatch(fetchFaqs());
@@ -19,82 +22,149 @@ export default function FaqSection() {
 
   if (listStatus === "succeeded" && faqs.length === 0) return null;
 
+  const focusButton = (index: number) => {
+    const count = faqs.length;
+    if (count === 0) return;
+    const next = (index + count) % count;
+    buttonRefs.current[next]?.focus();
+  };
+
   return (
     <section
-      aria-labelledby="faq-titulo"
-      className="bg-white py-14 sm:py-16"
+      aria-labelledby={`${idPrefix}-titulo`}
+      className="bg-white py-20 font-hanken text-neutral-900 sm:py-28"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="max-w-2xl text-start">
-          <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-sky-deep sm:text-sm">
-            Preguntas frecuentes
+      <div className="mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
+        {/* Columna izquierda (sticky) */}
+        <div className="self-start lg:sticky lg:top-28">
+          <p className="pill-negro">
+            FAQ
           </p>
           <h2
-            id="faq-titulo"
-            className="mt-3 text-2xl font-extrabold tracking-tight text-ink sm:text-4xl"
+            id={`${idPrefix}-titulo`}
+            className="titulo-display mt-6 text-neutral-900"
           >
-            Todo lo que necesitas saber
+            Questions,
+            <br />
+            answered.
           </h2>
-          <p className="mt-3 text-xs leading-relaxed text-ink-soft sm:text-base">
-            ¿No encuentras tu respuesta?{" "}
+
+          <div className="mt-10 rounded-[24px] bg-[#F3F3F3] p-7">
+            <p className="text-xl font-medium text-neutral-900">
+              Still have a question?
+            </p>
+            <p className="mt-2 text-base leading-relaxed text-neutral-500">
+              Can&apos;t find the answer you&apos;re looking for? Our team
+              will get back to you shortly.
+            </p>
             <a
-              href="https://wa.me/50360503161"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold text-primary transition-colors hover:text-sky"
+              href="/contacto"
+              className="btn-negro mt-6"
             >
-              Escríbenos por WhatsApp
+              Book a demo
             </a>
-            .
-          </p>
+          </div>
         </div>
 
-        {listStatus === "loading" || listStatus === "idle" ? (
-          <div className="mt-10 space-y-3 sm:mt-12" aria-busy="true">
-            <p className="sr-only">Cargando preguntas…</p>
-            <div aria-hidden="true" className="space-y-3">
-              {[0, 1, 2].map((index) => (
-                <div
-                  key={index}
-                  className="h-14 animate-pulse rounded-2xl border border-ink/10 bg-ink/5"
-                />
-              ))}
+        {/* Columna derecha (acordeón) */}
+        <div>
+          {listStatus === "loading" || listStatus === "idle" ? (
+            <div aria-busy="true">
+              <p className="sr-only">Cargando preguntas…</p>
+              <div aria-hidden="true">
+                {[0, 1, 2, 3].map((index) => (
+                  <div
+                    key={index}
+                    className="flex animate-pulse items-center justify-between gap-6 border-b border-neutral-200 py-9"
+                  >
+                    <div className="h-6 w-3/4 rounded-full bg-neutral-100" />
+                    <div className="size-10 shrink-0 rounded-full bg-neutral-100" />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ) : listStatus === "failed" ? (
-          <div className="mt-10 rounded-2xl border border-dashed border-charcoal/15 bg-white px-6 py-10 text-center sm:mt-12">
-            <p className="text-sm font-extrabold text-charcoal sm:text-base">
-              No pudimos cargar las preguntas
-            </p>
-            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-ink-soft sm:text-sm">
-              {listError ?? "Ocurrió un error inesperado. Inténtalo de nuevo."}
-            </p>
-            <button
-              type="button"
-              onClick={() => dispatch(fetchFaqs())}
-              className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-sky sm:text-sm"
-            >
-              Reintentar
-            </button>
-          </div>
-        ) : (
-          <div className="mt-10 space-y-3 sm:mt-12">
-            {faqs.map((faq) => (
-              <details
-                key={faq.id}
-                className="group rounded-2xl border border-ink/10 bg-white px-5 py-4"
+          ) : listStatus === "failed" ? (
+            <div className="rounded-[24px] bg-[#F3F3F3] p-7">
+              <p className="text-xl font-medium text-neutral-900">
+                No pudimos cargar las preguntas
+              </p>
+              <p className="mt-2 text-base leading-relaxed text-neutral-500">
+                {listError ?? "Ocurrió un error inesperado. Inténtalo de nuevo."}
+              </p>
+              <button
+                type="button"
+                onClick={() => dispatch(fetchFaqs())}
+                className="btn-negro mt-6"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-bold text-ink [&::-webkit-details-marker]:hidden sm:text-base">
-                  {faq.question}
-                  <ChevronDownIcon className="size-4 shrink-0 text-sky-deep transition-transform duration-300 group-open:rotate-180" />
-                </summary>
-                <p className="mt-3 text-xs leading-relaxed text-ink-soft sm:text-sm">
-                  {faq.answer}
-                </p>
-              </details>
-            ))}
-          </div>
-        )}
+                Reintentar
+              </button>
+            </div>
+          ) : (
+            <div>
+              {faqs.map((faq, index) => {
+                const isOpen = openId === faq.id;
+                const buttonId = `${idPrefix}-boton-${faq.id}`;
+                const panelId = `${idPrefix}-panel-${faq.id}`;
+                return (
+                  <div key={faq.id} className="border-b border-neutral-200">
+                    <h3>
+                      <button
+                        ref={(node) => {
+                          buttonRefs.current[index] = node;
+                        }}
+                        type="button"
+                        id={buttonId}
+                        aria-expanded={isOpen}
+                        aria-controls={panelId}
+                        onClick={() => setOpenId(isOpen ? null : faq.id)}
+                        onKeyDown={(event) => {
+                          if (event.key === "ArrowDown") {
+                            event.preventDefault();
+                            focusButton(index + 1);
+                          } else if (event.key === "ArrowUp") {
+                            event.preventDefault();
+                            focusButton(index - 1);
+                          } else if (event.key === "Home") {
+                            event.preventDefault();
+                            focusButton(0);
+                          } else if (event.key === "End") {
+                            event.preventDefault();
+                            focusButton(faqs.length - 1);
+                          }
+                        }}
+                        className="flex w-full items-center justify-between gap-6 py-9 text-left"
+                      >
+                        <span className="text-[22px] font-normal leading-snug text-neutral-900">
+                          {faq.question}
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className="grid size-10 shrink-0 place-items-center rounded-full bg-neutral-100 text-neutral-600 transition-colors duration-[250ms] hover:bg-neutral-200"
+                        >
+                          <PlusIcon
+                            className={`size-5 transition-transform duration-[250ms] ease-out ${isOpen ? "rotate-45" : ""}`}
+                          />
+                        </span>
+                      </button>
+                    </h3>
+                    <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={buttonId}
+                      className={`grid transition-[grid-template-rows,opacity] duration-[250ms] ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+                    >
+                      <div className="overflow-hidden">
+                        <p className="pb-9 pr-2 text-[17px] leading-relaxed text-neutral-500 sm:pr-16">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -32,10 +32,10 @@ export default function OtherToursSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-10">
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-primary">
+            <p className="pill-negro">
               Otras opciones
             </p>
-            <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-charcoal sm:text-4xl">
+            <h2 className="titulo-display mt-4 text-charcoal">
               Encuentra tu próxima aventura
             </h2>
             <p className="mt-3 max-w-xl text-xs leading-relaxed text-ink-soft sm:text-base">
@@ -48,7 +48,7 @@ export default function OtherToursSection() {
           </div>
           <Link
             href="/tours"
-            className="group inline-flex items-center gap-2 rounded-full border border-primary/30 px-4 py-2 text-xs font-bold text-primary transition-colors hover:border-primary hover:bg-primary hover:text-white sm:px-5 sm:py-2.5 sm:text-sm"
+            className="group inline-flex items-center gap-2 rounded-full border border-neutral-900/30 px-4 py-2 text-xs font-bold text-neutral-900 transition-colors hover:border-neutral-900 hover:bg-neutral-900 hover:text-white sm:px-5 sm:py-2.5 sm:text-sm"
           >
             Ver más tours
             <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-0.5" />

@@ -79,10 +79,10 @@ export default function TourCard({ tour }: { tour: Tour }) {
               ? `Quitar ${tour.name} de favoritos`
               : `Agregar ${tour.name} a favoritos`
           }
-          className="absolute right-3 top-3 grid size-9 place-items-center rounded-full bg-white/95 text-ink-soft shadow-sm transition-colors hover:text-primary aria-pressed:text-primary"
+          className="absolute right-3 top-3 grid size-9 place-items-center rounded-full bg-white/95 text-ink-soft shadow-sm transition-colors hover:text-neutral-900 aria-pressed:text-neutral-900"
         >
           <HeartIcon
-            className={`size-4.5 ${favorite ? "fill-primary text-primary" : ""}`}
+            className={`size-4.5 ${favorite ? "fill-neutral-900 text-neutral-900" : ""}`}
           />
         </button>
 

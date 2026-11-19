@@ -76,14 +76,14 @@ function MessageCard({
       <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-xs sm:text-sm">
         <a
           href={`mailto:${customer.correo}`}
-          className="inline-flex items-center gap-1.5 font-semibold text-sky-deep hover:underline"
+          className="inline-flex items-center gap-1.5 font-semibold text-neutral-900 hover:underline"
         >
           <MailIcon className="size-3.5" />
           {customer.correo}
         </a>
         <a
           href={`tel:${customer.telefono}`}
-          className="inline-flex items-center gap-1.5 font-semibold text-sky-deep hover:underline"
+          className="inline-flex items-center gap-1.5 font-semibold text-neutral-900 hover:underline"
         >
           <PhoneIcon className="size-3.5" />
           {customer.telefono}
@@ -141,7 +141,7 @@ export default function CustomerMessages() {
         <button
           type="button"
           onClick={() => dispatch(fetchCustomers())}
-          className="mt-4 rounded-full bg-sky-deep px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-sky"
+          className="btn-negro mt-4"
         >
           Reintentar
         </button>

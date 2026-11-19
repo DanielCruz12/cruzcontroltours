@@ -22,10 +22,10 @@ export default function ContactoPage() {
         {/* Encabezado de la página (con espacio para el navbar flotante) */}
         <section className="bg-charcoal pb-12 pt-24 sm:pb-16 sm:pt-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-white/80">
+            <p className="pill-blanco">
               Cruz Control Tours
             </p>
-            <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h1 className="titulo-display mt-4 text-white">
               Hablemos de tu próximo viaje
             </h1>
             <p className="mt-3 max-w-xl text-xs leading-relaxed text-white/70 sm:text-base">

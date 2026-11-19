@@ -37,7 +37,7 @@ function ArrowButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="grid size-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-sky-light/40 sm:size-10"
+      className="grid size-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-white/25 sm:size-10"
     >
       <ArrowIcon className="size-4" />
     </button>

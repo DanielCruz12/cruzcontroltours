@@ -16,12 +16,12 @@ export default function GuidesSection() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="max-w-2xl text-start">
-          <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-sky-deep sm:text-sm">
+          <p className="pill-negro">
             Guías de viaje
           </p>
           <h2
             id="guias-titulo"
-            className="mt-3 text-2xl font-extrabold tracking-tight text-ink sm:text-4xl"
+            className="titulo-display mt-4 text-ink"
           >
             Consejos y rutas para tu próxima aventura
           </h2>
@@ -31,7 +31,7 @@ export default function GuidesSection() {
           </p>
           <Link
             href="/tours"
-            className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-sky sm:text-base"
+            className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-neutral-900 transition-colors hover:text-neutral-500 sm:text-base"
           >
             Ver todos los tours
             <ArrowRightIcon className="size-4" />
@@ -43,7 +43,7 @@ export default function GuidesSection() {
             <Link
               key={guide.id}
               href="/tours"
-              className="group overflow-hidden rounded-2xl border border-ink/10 bg-white transition-shadow duration-300 hover:shadow-lg hover:shadow-sky-pale/50"
+              className="group overflow-hidden rounded-2xl border border-ink/10 bg-white transition-shadow duration-300 hover:shadow-lg hover:shadow-neutral-900/10"
             >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <Image

@@ -111,7 +111,7 @@ export default function ContactForm() {
         <button
           type="button"
           onClick={handleReset}
-          className="mt-6 rounded-full bg-sky-deep px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-sky"
+          className="btn-negro mt-6"
         >
           Enviar otro mensaje
         </button>
@@ -234,7 +234,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={sending}
-        className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-sky-deep px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-sky disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="btn-negro mt-5 w-full sm:w-auto"
       >
         <SendIcon className="size-4" />
         {sending ? "Enviando…" : "Enviar mensaje"}

@@ -115,7 +115,7 @@ function LightboxDialog({
             type="button"
             onClick={onPrev}
             aria-label="Foto anterior"
-            className="absolute left-0 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/25 transition-colors hover:bg-sky-light/40 sm:-left-4"
+            className="absolute left-0 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 sm:-left-4"
           >
             <ChevronLeftIcon className="size-5" />
           </button>
@@ -123,7 +123,7 @@ function LightboxDialog({
             type="button"
             onClick={onNext}
             aria-label="Foto siguiente"
-            className="absolute right-0 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/25 transition-colors hover:bg-sky-light/40 sm:-right-4"
+            className="absolute right-0 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 sm:-right-4"
           >
             <ChevronRightIcon className="size-5" />
           </button>
@@ -270,12 +270,12 @@ export default function GallerySection() {
           fotos van abajo. */}
       <div className="mx-auto max-w-7xl px-4 text-start sm:px-6">
         <div className="max-w-2xl">
-          <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-sky-deep sm:text-sm">
+          <p className="pill-negro">
             Momentos inolvidables
           </p>
           <h2
             id="galeria-titulo"
-            className="mt-3 text-2xl font-extrabold tracking-tight text-ink sm:text-4xl"
+            className="titulo-display mt-4 text-ink"
           >
             El Salvador se vive, no solo se visita
           </h2>
@@ -287,7 +287,7 @@ export default function GallerySection() {
             href="https://www.instagram.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary transition-colors hover:text-sky sm:text-base"
+            className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-neutral-900 transition-colors hover:text-neutral-500 sm:text-base"
           >
             Síguenos en Instagram
             <ArrowRightIcon className="size-4" />
@@ -315,7 +315,7 @@ export default function GallerySection() {
                   onClick={(event) => openAt(flatIndex, event.currentTarget)}
                   aria-haspopup="dialog"
                   aria-label={`Ampliar foto: ${photo.title}, ${photo.location}`}
-                  className={`group relative h-full shrink-0 overflow-hidden rounded-xl bg-sky-pale ring-1 ring-ink/10 transition-shadow duration-300 hover:ring-sky ${photo.width}`}
+                  className={`group relative h-full shrink-0 overflow-hidden rounded-xl bg-neutral-100 ring-1 ring-ink/10 transition-shadow duration-300 hover:ring-neutral-400 ${photo.width}`}
                 >
                   {/* La escala del hover vive en un contenedor interno: el
                       translate de la fila y este transform nunca se pisan. */}
