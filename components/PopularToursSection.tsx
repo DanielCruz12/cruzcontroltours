@@ -51,7 +51,7 @@ export default function PopularToursSection() {
           <ToursSkeleton />
         ) : listStatus === "failed" ? (
           <div className="rounded-2xl border border-dashed border-charcoal/15 bg-white px-6 py-14 text-center">
-            <p className="text-base font-extrabold text-charcoal sm:text-lg">
+            <p className="text-base font-bold text-charcoal sm:text-lg">
               No pudimos cargar los tours
             </p>
             <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-ink-soft sm:text-sm">
@@ -67,7 +67,7 @@ export default function PopularToursSection() {
           </div>
         ) : popular.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-charcoal/15 bg-white px-6 py-14 text-center">
-            <p className="text-base font-extrabold text-charcoal sm:text-lg">
+            <p className="text-base text-charcoal sm:text-lg">
               Aún no hay tours publicados
             </p>
             <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-ink-soft sm:text-sm">

@@ -13,6 +13,7 @@ import OtherToursSection from "@/components/OtherToursSection";
 import PopularToursSection from "@/components/PopularToursSection";
 import PortfolioSection from "@/components/PortfolioSection";
 import TeamSection from "@/components/TeamSection";
+import TeamTimelineSection from "@/components/TeamTimelineSection";
 import ToursLoader from "@/components/ToursLoader";
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
         <ToursLoader />
         <PopularToursSection />
         <TeamSection />
+        <TeamTimelineSection />
         {/* "Otras opciones" debajo del equipo, separada de los populares */}
         <OtherToursSection />
         <GallerySection />

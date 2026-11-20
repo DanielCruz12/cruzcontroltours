@@ -73,8 +73,8 @@ export default function CapabilitiesSection() {
           </div>
           <div>
             <p className="max-w-[420px] text-base leading-relaxed text-neutral-500">
-              From first sketch to final delivery, small senior teams pair
-              human craft with AI speed — so you see more directions, faster.
+              From first sketch to final delivery, small senior teams pair human
+              craft with AI speed — so you see more directions, faster.
             </p>
             <Link href="/tours" className="btn-negro mt-6">
               Explore all capabilities
@@ -118,9 +118,7 @@ export default function CapabilitiesSection() {
                       V
                     </span>
                   </span>
-                  <span className="text-[13px] font-medium text-neutral-900">
-                    Claude + Vlad
-                  </span>
+
                   <span className="grid size-5 place-items-center rounded-full bg-neutral-900 text-white">
                     <CheckIcon className="size-3" />
                   </span>

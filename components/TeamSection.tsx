@@ -6,11 +6,10 @@ import type { FocusEvent } from "react";
 import { team } from "@/lib/team";
 import { ChevronLeftIcon, ChevronRightIcon } from "./icons";
 
-// Tiempos (milisegundos)
-const AUTOPLAY_MS = 6_000; // cambio automático entre miembros
-const FADE_MS = 500; // duración del fundido cruzado
+const AUTOPLAY_MS = 6_000;
+const FADE_MS = 500;
 
-/** Iniciales (máx. 2 palabras) para el avatar cuando no hay foto del miembro. */
+/** Iniciales (máx. 2 palabras) para el avatar cuando no hay foto. */
 function initialsOf(name: string) {
   return name
     .split(" ")
@@ -21,7 +20,6 @@ function initialsOf(name: string) {
     .toUpperCase();
 }
 
-/** Botón circular semitransparente con flecha (tamaño discreto). */
 function ArrowButton({
   label,
   onClick,
@@ -37,31 +35,25 @@ function ArrowButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="grid size-9 place-items-center rounded-full bg-white/10 text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-white/25 sm:size-10"
+      className="grid size-12 place-items-center rounded-xl bg-white text-neutral-900 shadow-sm transition-colors hover:bg-neutral-100"
     >
-      <ArrowIcon className="size-4" />
+      <ArrowIcon className="size-5" />
     </button>
   );
 }
 
-/** Franja "Nuestro equipo" con fundidos cruzados (sin carrusel lateral). */
 export default function TeamSection() {
   const [active, setActive] = useState(0);
   // true mientras el cursor o el foco están dentro de la sección.
   const [paused, setPaused] = useState(false);
   const count = team.length;
 
-  /** Salto circular: permite "anterior" desde el primero sin salirse. */
   const goTo = (index: number) => {
     setActive(((index % count) + count) % count);
   };
 
-  // ── Cambio automático ──────────────────────────────────────────────
-  // Cada AUTOPLAY_MS avanza un miembro. El temporizador se reinicia con
-  // cada cambio de `active` (incluida la navegación manual) y no se
-  // programa mientras está `paused` ni con prefers-reduced-motion (en ese
-  // caso el usuario navega manualmente y el cambio es instantáneo: el CSS
-  // global ya anula la duración de las transiciones).
+  // Cambio automático cada 6s. Se reinicia con cada cambio (incluida la
+  // navegación manual) y se pausa con hover/foco o prefers-reduced-motion.
   useEffect(() => {
     if (paused) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -71,117 +63,108 @@ export default function TeamSection() {
     return () => window.clearTimeout(timer);
   }, [active, paused, count]);
 
-  // Solo se reanuda el autoplay cuando el foco sale de la sección por
-  // completo (no al moverse entre los controles internos).
+  // Solo se reanuda cuando el foco sale de la sección por completo.
   const handleBlur = (event: FocusEvent<HTMLElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setPaused(false);
     }
   };
 
+  const current = String(active + 1).padStart(2, "0");
+  const total = String(count).padStart(2, "0");
+
   return (
     <section
       aria-labelledby="equipo-titulo"
-      className="relative isolate bg-sky-deep"
+      className="bg-white py-20 sm:py-28"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={handleBlur}
     >
-      <div className="mx-auto flex min-h-[90vh] max-w-4xl flex-col items-center justify-center px-4 py-16 sm:px-6 sm:py-20 lg:py-24">
-        {/* Los miembros se apilan en la misma celda del grid: el más largo
-            define la altura (sin saltos) y el cambio es solo de opacidad.
-            Con justify-end el avatar/nombre/cargo quedan anclados abajo,
-            pegados a las flechas sin importar el largo del mensaje. */}
-        <div className="relative mt-6 grid w-full sm:mt-8" aria-live="polite">
-          {team.map((member, index) => {
-            const isActive = index === active;
-            return (
-              <figure
-                key={member.id}
-                inert={!isActive}
-                aria-hidden={!isActive}
-                className={`col-start-1 row-start-1 flex flex-col items-center justify-end text-center transition-opacity ease-in-out ${isActive ? "opacity-100" : "pointer-events-none opacity-0"
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="flex flex-col items-center rounded-[32px] bg-[#F3F3F3] px-6 py-12 text-center sm:p-16">
+          <p className="pill-negro">Nuestro equipo</p>
+          <h2 id="equipo-titulo" className="sr-only">
+            Nuestro equipo
+          </h2>
+
+          {/* Miembros apilados: el más largo define la altura (sin saltos)
+              y el cambio es reveal + fundido. */}
+          <div className="relative mt-8 grid w-full sm:mt-10" aria-live="polite">
+            {team.map((member, index) => {
+              const isActive = index === active;
+              return (
+                <figure
+                  key={member.id}
+                  inert={!isActive}
+                  aria-hidden={!isActive}
+                  className={`col-start-1 row-start-1 flex flex-col items-center transition-opacity ease-in-out ${
+                    isActive
+                      ? "opacity-100"
+                      : "pointer-events-none opacity-0"
                   }`}
-                style={{ transitionDuration: `${FADE_MS}ms` }}
-              >
-                <blockquote className="max-w-2xl">
-                  <p className="text-3xl font-semibold text-white">
+                  style={{ transitionDuration: `${FADE_MS}ms` }}
+                >
+                  <div
+                    key={active}
+                    className="flex flex-col items-center motion-safe:animate-[testimonial-in_500ms_ease-out]"
+                  >
                     <span
                       aria-hidden="true"
-                      className="relative -top-0.5 mr-1 font-script text-2xl leading-none text-sky-light/80 sm:mr-2 sm:-top-1 sm:text-3xl"
+                      className="font-serif text-7xl leading-none text-neutral-300"
                     >
-
+                      &ldquo;
                     </span>
-                    &quot;{member.motto}&quot;
-                    <span
-                      aria-hidden="true"
-                      className="relative top-1 ml-1 font-script text-2xl leading-none text-sky-light/80 sm:ml-2 sm:top-2 sm:text-3xl"
-                    >
-
-                    </span>
-                  </p>
-                </blockquote>
-                <figcaption className="mt-5 pt-10 pb-5 flex flex-col items-center gap-2.5 sm:mt-6">
-                  {member.image ? (
-                    <Image
-                      src={member.image}
-                      alt=""
-                      width={80}
-                      height={80}
-                      className="size-16 rounded-full object-cover ring-1 ring-sky-light/60 sm:size-20"
-                    />
-                  ) : (
-                    <span
-                      aria-hidden="true"
-                      className="grid size-16 place-items-center rounded-full bg-white/15 text-xl font-bold text-white ring-1 ring-sky-light/60 sm:size-20 sm:text-2xl"
-                    >
-                      {initialsOf(member.name)}
-                    </span>
-                  )}
-                  <div>
-                    <p className="text-2xl font-bold text-white sm:text-base">
-                      {member.name}
-                    </p>
-                    <p className="mt-0.5 text-sm text-white/90">
-                      {member.role}
-                    </p>
+                    <blockquote className="mt-2 max-w-3xl">
+                      <p className="text-[28px] font-light leading-[1.1] tracking-[-0.02em] text-neutral-900 sm:text-[48px]">
+                        {member.motto}
+                      </p>
+                    </blockquote>
+                    <figcaption className="mt-8 flex flex-col items-center gap-2">
+                      {member.image ? (
+                        <Image
+                          src={member.image}
+                          alt={`Foto de ${member.name}`}
+                          width={56}
+                          height={56}
+                          className="size-14 rounded-full object-cover"
+                        />
+                      ) : (
+                        <span
+                          aria-hidden="true"
+                          className="grid size-14 place-items-center rounded-full bg-neutral-300 text-lg font-bold text-neutral-500"
+                        >
+                          {initialsOf(member.name)}
+                        </span>
+                      )}
+                      <p className="mt-1 text-base font-bold text-neutral-900">
+                        {member.name}
+                      </p>
+                      <p className="text-sm text-neutral-500">{member.role}</p>
+                    </figcaption>
                   </div>
-                </figcaption>
-              </figure>
-            );
-          })}
-        </div>
-
-        {/* Controles: flechas a los lados con los indicadores centrados
-            entre ellas, justo debajo de la información del miembro (mismo
-            layout en todos los tamaños). */}
-        <div className="mt-5 flex items-center gap-3 sm:mt-6 sm:gap-5">
-          <ArrowButton
-            side="prev"
-            label="Miembro anterior"
-            onClick={() => goTo(active - 1)}
-          />
-          <div className="flex items-center gap-2.5">
-            {team.map((member, index) => (
-              <button
-                key={member.id}
-                type="button"
-                onClick={() => goTo(index)}
-                aria-label={`Ir al miembro ${index + 1}`}
-                aria-current={index === active ? "true" : undefined}
-                className={`h-2.5 rounded-full transition-all duration-300 ${index === active
-                  ? "w-7 bg-white"
-                  : "w-2.5 bg-white/40 hover:bg-white/70"
-                  }`}
-              />
-            ))}
+                </figure>
+              );
+            })}
           </div>
-          <ArrowButton
-            side="next"
-            label="Miembro siguiente"
-            onClick={() => goTo(active + 1)}
-          />
+
+          {/* Controles: flechas + contador */}
+          <div className="mt-10 flex items-center gap-5">
+            <ArrowButton
+              side="prev"
+              label="Miembro anterior"
+              onClick={() => goTo(active - 1)}
+            />
+            <p className="text-sm font-medium tabular-nums text-neutral-500">
+              {current} / {total}
+            </p>
+            <ArrowButton
+              side="next"
+              label="Miembro siguiente"
+              onClick={() => goTo(active + 1)}
+            />
+          </div>
         </div>
       </div>
     </section>
