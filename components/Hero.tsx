@@ -60,9 +60,9 @@ const CHIPS = [
 const TOOL_ICONS = [SparklesIcon, ImageIcon, SearchIcon, SendIcon];
 
 const EXPERT_AVATARS = [
-  { initial: "M", classes: "bg-neutral-900 text-white" },
-  { initial: "S", classes: "bg-neutral-500 text-white" },
-  { initial: "R", classes: "bg-stone-300 text-neutral-800" },
+  { id: 1, initial: "C", classes: "bg-neutral-900 text-white" },
+  { id: 2, initial: "C", classes: "bg-neutral-500 text-white" },
+  { id: 3, initial: "T", classes: "bg-stone-300 text-neutral-800" },
 ];
 
 function ToolCircles() {
@@ -87,7 +87,7 @@ function ExpertAvatars() {
     <span className="inline-flex items-center align-middle" aria-hidden="true">
       {EXPERT_AVATARS.map((avatar, index) => (
         <span
-          key={avatar.initial}
+          key={avatar.id}
           className={`grid size-9 place-items-center rounded-full text-sm font-bold shadow-md ring-2 ring-white sm:size-12 sm:text-base ${avatar.classes} ${
             index > 0 ? "-ml-2" : ""
           }`}
@@ -297,7 +297,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative flex min-h-[100svh] flex-col overflow-hidden bg-charcoal"
+      className="relative flex min-h-svh flex-col overflow-hidden bg-charcoal"
       aria-label="Presentación"
     >
       {/* Capa base: imagen de respaldo (sin JS, con movimiento reducido
@@ -344,11 +344,11 @@ export default function Hero() {
       })}
 
       {/* Overlay oscuro para garantizar la legibilidad del texto */}
-      <div className="absolute inset-0 bg-gradient-to-r from-charcoal/50 via-charcoal/60 to-charcoal/30" />
-      <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-transparent to-charcoal/70" />
+      <div className="absolute inset-0 bg-linear-to-r from-charcoal/50 via-charcoal/60 to-charcoal/30" />
+      <div className="absolute inset-0 bg-linear-to-b` from-charcoal/40 via-transparent to-charcoal/70" />
 
       {/* Contenido centrado */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-4 pb-20 pt-32 text-center sm:px-6 sm:pb-24 sm:pt-36">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-4 pb-20 pt-18 text-center sm:px-6 ">
         <h1 className="max-w-5xl text-[40px] font-light leading-[1.05] tracking-[-0.02em] text-white sm:text-[72px]">
           <span className="block overflow-hidden">
             <span
@@ -363,7 +363,7 @@ export default function Hero() {
               className={`block ${reveal("motion-safe:translate-y-full")}`}
               style={{ transitionDelay: "120ms" }}
             >
-              viaja con <ExpertAvatars /> expertos.
+              viaja con <ExpertAvatars />
             </span>
           </span>
         </h1>
@@ -372,13 +372,12 @@ export default function Hero() {
           className={`mx-auto mt-6 max-w-2xl text-base font-normal leading-relaxed text-white/85 sm:text-xl ${reveal("motion-safe:translate-y-4")}`}
           style={{ transitionDelay: "250ms" }}
         >
-          Cuéntanos cómo sueñas tu viaje y lo convertimos en un itinerario
-          perfecto con guías locales.
+          En Cruz control tours convertimos tu viaje en un itinerario perfecto
         </p>
 
         {/* Caja de prompt (glassmorphism) */}
         <div
-          className={`mx-auto mt-10 w-full max-w-[720px] ${reveal("motion-safe:translate-y-6")}`}
+          className={`mx-auto mt-10 w-full max-w-180 ${reveal("motion-safe:translate-y-6")}`}
           style={{ transitionDelay: "400ms" }}
         >
           <div className="rounded-[28px] border border-white/60 bg-white/35 p-3 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.25)] backdrop-blur-[20px] transition-all duration-300 focus-within:border-white/90 focus-within:shadow-[0_24px_70px_-20px_rgba(0,0,0,0.35)]">
@@ -387,7 +386,7 @@ export default function Hero() {
                 value={prompt}
                 onChange={(event) => setPrompt(event.target.value)}
                 aria-label="Describe tu viaje ideal"
-                rows={2}
+                rows={1}
                 className=" w-full resize-none rounded-[20px] bg-white/70 p-4 pb-14 text-[15px] leading-relaxed text-neutral-900 outline-none"
               />
               {prompt === "" && (
@@ -410,7 +409,7 @@ export default function Hero() {
               </a>
             </div>
 
-            <div className="mt-3 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] md:flex-wrap md:justify-center [&::-webkit-scrollbar]:hidden">
+            <div className="mt-3 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-none md:flex-wrap md:justify-center [&::-webkit-scrollbar]:hidden">
               {CHIPS.map(({ icon: ChipIcon, text }) => (
                 <button
                   key={text}

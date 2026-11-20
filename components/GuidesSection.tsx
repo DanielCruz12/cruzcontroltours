@@ -45,7 +45,7 @@ export default function GuidesSection() {
               href="/tours"
               className="group overflow-hidden rounded-2xl border border-ink/10 bg-white transition-shadow duration-300 hover:shadow-lg hover:shadow-neutral-900/10"
             >
-              <div className="relative aspect-[16/10] overflow-hidden">
+              <div className="relative aspect-16/10 overflow-hidden">
                 <Image
                   src={guide.image}
                   alt={guide.imageAlt}

@@ -6,6 +6,7 @@ import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
 import GallerySection from "@/components/GallerySection";
 import GuidesSection from "@/components/GuidesSection";
+import LaborSocialSection from "@/components/LaborSocialSection";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import OtherToursSection from "@/components/OtherToursSection";
@@ -32,6 +33,7 @@ export default function Home() {
         <CapabilitiesSection />
         <BlogSection />
         <PortfolioSection />
+        <LaborSocialSection />
         <FaqSection />
       </main>
       <CtaSection />
