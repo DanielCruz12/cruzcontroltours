@@ -1,12 +1,11 @@
+/* eslint-disable react-hooks/immutability */
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import type { FocusEvent } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { CheckIcon, SparklesIcon } from "./icons";
-
-gsap.registerPlugin(ScrollTrigger);
+import { CheckIcon } from "./icons";
 
 const AUTOPLAY_MS = 8_000;
 
@@ -101,21 +100,7 @@ function buildSteps(member: Member): Step[] {
       when: "Día 3 · Hora por confirmar",
       desc: "Descripción del paso pendiente.",
     },
-    {
-      title: "Ajustes juntos",
-      when: "Día 4 · Hora por confirmar",
-      desc: "Descripción del paso pendiente.",
-    },
-    {
-      title: "Reserva confirmada",
-      when: "Día 5 · Hora por confirmar",
-      desc: "Descripción del paso pendiente.",
-    },
-    {
-      title: "Disfruta tu viaje",
-      when: "Día 6 · Hora por confirmar",
-      desc: "Descripción del paso pendiente.",
-    },
+   
   ];
 }
 
@@ -131,15 +116,18 @@ function initialsOf(name: string) {
 
 export default function TeamTimelineSection() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [entered, setEntered] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [reduced, setReduced] = useState(false);
+  // Se lee en el estado inicial (no en un efecto) para que con
+  // movimiento reducido nunca se llegue a ocultar el panel.
+  const [reduced, setReduced] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
   const transitioning = useRef(false);
 
   const sectionRef = useRef<HTMLElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
   const cardTextRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLOListElement>(null);
   const ringRef = useRef<HTMLSpanElement>(null);
@@ -148,50 +136,13 @@ export default function TeamTimelineSection() {
   const member = MEMBERS[activeIndex];
   const steps = buildSteps(member);
 
+  // Reacciona si la preferencia cambia con la página abierta.
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setReduced(true);
-    }
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = (event: MediaQueryListEvent) => setReduced(event.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
   }, []);
-
-  // Entrada al hacer scroll: panel, foto (clip-path) y tarjeta.
-  useEffect(() => {
-    if (reduced) {
-      setEntered(true);
-      return;
-    }
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: panelRef.current,
-          start: "top 80%",
-          once: true,
-          onEnter: () => setEntered(true),
-        },
-      });
-      tl.from(panelRef.current, {
-        y: 24,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power2.out",
-      })
-        .from(
-          photoRef.current,
-          {
-            clipPath: "inset(0% 0% 100% 0%)",
-            duration: 0.7,
-            ease: "power3.out",
-          },
-          "-=0.4",
-        )
-        .from(
-          cardRef.current,
-          { y: 24, opacity: 0, duration: 0.5, ease: "power2.out" },
-          "-=0.5",
-        );
-    }, sectionRef);
-    return () => ctx.revert();
-  }, [reduced]);
 
   // Anillo de la miniatura activa (se desliza con transform).
   const moveRing = (index: number, instant = false) => {
@@ -201,7 +152,11 @@ export default function TeamTimelineSection() {
     if (instant || reduced) {
       gsap.set(ring, { x: button.offsetLeft });
     } else {
-      gsap.to(ring, { x: button.offsetLeft, duration: 0.3, ease: "power2.out" });
+      gsap.to(ring, {
+        x: button.offsetLeft,
+        duration: 0.3,
+        ease: "power2.out",
+      });
     }
   };
 
@@ -215,12 +170,12 @@ export default function TeamTimelineSection() {
 
   // Cambio de persona: crossfade de foto/texto + redibujo del timeline.
   useEffect(() => {
-    if (reduced || !entered) return;
+    if (reduced) return;
     moveRing(activeIndex);
     gsap.fromTo(
       [photoRef.current, cardTextRef.current],
       { opacity: 0, y: 8 },
-      { opacity: 1, y: 0, duration: 0.15, ease: "power1.out" },
+      { opacity: 1, y: 0, duration: 0.1, ease: "power1.out" },
     );
     const steps_ = timelineRef.current?.querySelectorAll("[data-step]");
     const connectors = timelineRef.current?.querySelectorAll("[data-draw]");
@@ -234,8 +189,8 @@ export default function TeamTimelineSection() {
           y: 0,
           opacity: (index, el) =>
             (el as HTMLElement).dataset.state === "todo" ? 0.35 : 1,
-          duration: 0.5,
-          stagger: 0.09,
+          duration: 0.25,
+          stagger: 0.04,
           ease: "power2.out",
         },
         0,
@@ -248,8 +203,8 @@ export default function TeamTimelineSection() {
         {
           scaleY: 1,
           transformOrigin: "top",
-          duration: 0.4,
-          stagger: 0.09,
+          duration: 0.2,
+          stagger: 0.04,
           ease: "power2.out",
         },
         0,
@@ -259,7 +214,7 @@ export default function TeamTimelineSection() {
       tl.fromTo(
         pops,
         { scale: 0.6 },
-        { scale: 1, duration: 0.3, stagger: 0.09, ease: "back.out(2)" },
+        { scale: 1, duration: 0.2, stagger: 0.04, ease: "back.out(2)" },
         0,
       );
     }
@@ -267,7 +222,7 @@ export default function TeamTimelineSection() {
       tl.kill();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeIndex, entered, reduced]);
+  }, [activeIndex, reduced]);
 
   // Autoplay cada 8s (pausado con hover/foco o movimiento reducido).
   useEffect(() => {
@@ -277,7 +232,7 @@ export default function TeamTimelineSection() {
     }, AUTOPLAY_MS);
     return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeIndex, entered, paused, reduced]);
+  }, [activeIndex, paused, reduced]);
 
   const focusThumb = (index: number) => {
     thumbRefs.current[index]?.focus();
@@ -286,7 +241,7 @@ export default function TeamTimelineSection() {
   const select = (index: number) => {
     const next = ((index % MEMBERS.length) + MEMBERS.length) % MEMBERS.length;
     if (next === activeIndex || transitioning.current) return;
-    if (reduced || !entered) {
+    if (reduced) {
       setActiveIndex(next);
       return;
     }
@@ -296,7 +251,7 @@ export default function TeamTimelineSection() {
     gsap.to([photoRef.current, cardTextRef.current], {
       opacity: 0,
       y: 8,
-      duration: 0.15,
+      duration: 0.1,
       ease: "power1.in",
       overwrite: true,
       onComplete: () => {
@@ -323,30 +278,34 @@ export default function TeamTimelineSection() {
     <section
       ref={sectionRef}
       aria-labelledby="equipo-selector-titulo"
-      className="bg-white py-20 sm:py-28"
+      className="py-20 sm:py-28"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={handleBlur}
     >
-      <h2 id="equipo-selector-titulo" className="sr-only">
-        Nuestro equipo
-      </h2>
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div
-          ref={panelRef}
-          className="rounded-[32px] bg-[#F3F3F3] p-4"
-        >
-          <div
-            aria-live="polite"
-            className="grid gap-4 lg:grid-cols-2"
+        <div className="mb-8 max-w-2xl text-start sm:mb-10">
+          <p className="pill-negro">Our team</p>
+          <h2
+            id="equipo-selector-titulo"
+            className="mt-4 text-[44px] font-light leading-[1.05] tracking-[-0.02em] text-neutral-900 sm:text-[56px]"
           >
+            The people behind your trip.
+          </h2>
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-neutral-500">
+            Local guides and travel experts who turn every tour into an
+            unforgettable experience.
+          </p>
+        </div>
+        <div className="rounded-[32px] p-4">
+          <div aria-live="polite" className="grid gap-4 lg:grid-cols-2">
             {/* Columna izquierda: foto + tarjeta + miniaturas */}
             <div>
               <div className="relative">
                 <div
                   ref={photoRef}
-                  className="relative aspect-[4/3] overflow-hidden rounded-[24px] bg-[#E7EFE3] lg:aspect-[4/5]"
+                  className="relative aspect-[16/10] overflow-hidden rounded-[24px] bg-[#e3edef] lg:aspect-[4/3]"
                 >
                   {member.photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -368,10 +327,7 @@ export default function TeamTimelineSection() {
                 </div>
 
                 {/* Tarjeta flotante glass */}
-                <div
-                  ref={cardRef}
-                  className="absolute inset-x-3 bottom-3 rounded-[24px] bg-white/70 p-5 shadow-sm backdrop-blur-[16px] sm:inset-x-4 sm:bottom-4"
-                >
+                <div className="absolute inset-x-3 bottom-3 rounded-[24px] bg-white/70 p-5 shadow-sm backdrop-blur-[16px] sm:inset-x-4 sm:bottom-4">
                   <div ref={cardTextRef}>
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="text-2xl font-bold text-neutral-900">
@@ -460,7 +416,6 @@ export default function TeamTimelineSection() {
             <div className="rounded-[24px] bg-white p-6 sm:p-8">
               <div className="flex items-center justify-between gap-4">
                 <p className="flex items-center gap-2 text-base font-semibold text-neutral-900">
-                  <SparklesIcon className="size-5" />
                   Tu viaje
                 </p>
                 <div className="flex" aria-hidden="true">

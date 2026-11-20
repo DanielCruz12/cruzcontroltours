@@ -26,13 +26,14 @@ export default function Home() {
         {/* Carga los tours del backend una vez; las secciones leen del store */}
         <ToursLoader />
         <PopularToursSection />
-        <TeamSection />
         <TeamTimelineSection />
         {/* "Otras opciones" debajo del equipo, separada de los populares */}
         <OtherToursSection />
         <GallerySection />
         {/* <GuidesSection /> */}
         <CapabilitiesSection />
+        <TeamSection />
+
         <BlogSection />
         <PortfolioSection />
         <LaborSocialSection />

@@ -22,9 +22,9 @@ export default function Footer() {
     <footer id="contacto" className="bg-black text-white">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-12">
         {/* Móvil: logo a la izquierda y destinos a la derecha en dos filas,
-            sin espacios vacíos. Desktop: tres columnas (marca / destinos /
-            contacto). */}
-        <div className="grid grid-cols-[auto_1fr] gap-x-6 lg:grid-cols-[1.3fr_0.7fr_1fr] lg:gap-x-10">
+            sin espacios vacíos. Desktop: cuatro columnas (marca / destinos /
+            servicios / contacto). */}
+        <div className="grid grid-cols-[auto_1fr] gap-x-6 lg:grid-cols-[1.2fr_0.6fr_0.9fr_1fr] lg:gap-x-10">
           {/* Logo (sin panel blanco: el logo es claro y contrasta con el
               fondo oscuro del footer) */}
           <Link
@@ -55,6 +55,32 @@ export default function Footer() {
                     className="text-xs text-white/70 transition-colors hover:text-white lg:text-sm"
                   >
                     {destination}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Servicios */}
+          <nav
+            aria-label="Servicios"
+            className="col-span-2 lg:col-span-1 lg:col-start-3 lg:row-start-1"
+          >
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
+              Servicios
+            </h3>
+            <ul className="mt-2 grid grid-cols-2 gap-x-5 gap-y-1.5 lg:mt-3 lg:grid-cols-1 lg:gap-y-2.5">
+              {[
+                "Tours privados",
+                "Transporte y mudanza",
+                "Traslados empresariales",
+              ].map((servicio) => (
+                <li key={servicio}>
+                  <Link
+                    href="/contacto"
+                    className="text-xs text-white/70 transition-colors hover:text-white lg:text-sm"
+                  >
+                    {servicio}
                   </Link>
                 </li>
               ))}
@@ -101,7 +127,7 @@ export default function Footer() {
           </div>
 
           {/* Contacto */}
-          <div className="col-span-2 lg:col-span-1 lg:col-start-3 lg:row-start-1 lg:row-span-2">
+          <div className="col-span-2 lg:col-span-1 lg:col-start-4 lg:row-start-1 lg:row-span-2">
             {/*   <h3 className="text-[11px] font-bold uppercase tracking-wider text-sky">
               Contacto
             </h3> */}
@@ -148,7 +174,22 @@ export default function Footer() {
             © {new Date().getFullYear()} Cruz Control Tours. Todos los derechos
             reservados.
           </p>
-          <p>Hecho con orgullo en El Salvador 🇸🇻</p>
+          <p>
+            <Link
+              href="/privacidad"
+              className="transition-colors hover:text-white"
+            >
+              Privacidad y cookies
+            </Link>
+            {" · "}
+            <Link
+              href="/terminos"
+              className="transition-colors hover:text-white"
+            >
+              Términos
+            </Link>
+            {" · "}Hecho con orgullo en El Salvador 🇸🇻
+          </p>
         </div>
       </div>
     </footer>

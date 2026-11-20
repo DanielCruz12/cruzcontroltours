@@ -11,6 +11,7 @@ export default function FaqSection() {
     (state) => state.faqs,
   );
   const [openId, setOpenId] = useState<number | null>(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const idPrefix = useId();
 
@@ -19,6 +20,13 @@ export default function FaqSection() {
   }, [dispatch, listStatus]);
 
   const faqs = items.filter((faq) => faq.active);
+
+  // La primera pregunta sale desplegada; al interactuar, manda el usuario.
+  useEffect(() => {
+    if (!hasInteracted && openId === null && faqs.length > 0) {
+      setOpenId(faqs[0].id);
+    }
+  }, [hasInteracted, openId, faqs]);
 
   if (listStatus === "succeeded" && faqs.length === 0) return null;
 
@@ -116,7 +124,10 @@ export default function FaqSection() {
                         id={buttonId}
                         aria-expanded={isOpen}
                         aria-controls={panelId}
-                        onClick={() => setOpenId(isOpen ? null : faq.id)}
+                        onClick={() => {
+                          setHasInteracted(true);
+                          setOpenId(isOpen ? null : faq.id);
+                        }}
                         onKeyDown={(event) => {
                           if (event.key === "ArrowDown") {
                             event.preventDefault();

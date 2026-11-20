@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk } from "next/font/google";
+import CookieBanner from "@/components/CookieBanner";
 import Providers from "@/components/Providers";
 import ScrollToTop from "@/components/ScrollToTop";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
           <ScrollToTop />
         </Providers>
+        <CookieBanner />
       </body>
     </html>
   );
