@@ -10,7 +10,7 @@ export default function FaqSection() {
   const { items, listStatus, listError } = useAppSelector(
     (state) => state.faqs,
   );
-  const [openId, setOpenId] = useState<number | null>(null);
+  const [openId, setOpenId] = useState<string | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const idPrefix = useId();

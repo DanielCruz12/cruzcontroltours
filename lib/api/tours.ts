@@ -8,7 +8,7 @@
 import { apiFetch } from "./client";
 
 export type ApiTour = {
-  id: number;
+  id: string;
   title: string;
   description: string | null;
   price: string;
@@ -21,6 +21,6 @@ export function listTours(): Promise<ApiTour[]> {
   return apiFetch<ApiTour[]>("/tours");
 }
 
-export function getTour(id: number): Promise<ApiTour> {
+export function getTour(id: string): Promise<ApiTour> {
   return apiFetch<ApiTour>(`/tours/${id}`);
 }

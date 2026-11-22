@@ -8,7 +8,7 @@ import {
 } from "@/lib/api/review-forms";
 import { toErrorMessage } from "@/lib/api/client";
 
-type Values = Record<number, { rating: number | null; text: string }>;
+type Values = Record<string, { rating: number | null; text: string }>;
 
 function emptyValues(form: PublicForm): Values {
   return Object.fromEntries(
@@ -25,13 +25,13 @@ export default function ReviewSubmitForm({
 }) {
   const [authorName, setAuthorName] = useState("");
   const [values, setValues] = useState<Values>(() => emptyValues(form));
-  const [hovered, setHovered] = useState<Record<number, number | null>>({});
-  const [errors, setErrors] = useState<Record<number, string>>({});
+  const [hovered, setHovered] = useState<Record<string, number | null>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
 
-  const setRating = (questionId: number, rating: number) => {
+  const setRating = (questionId: string, rating: number) => {
     setValues((prev) => ({
       ...prev,
       [questionId]: { ...prev[questionId], rating },
@@ -43,7 +43,7 @@ export default function ReviewSubmitForm({
     });
   };
 
-  const setText = (questionId: number, text: string) => {
+  const setText = (questionId: string, text: string) => {
     setValues((prev) => ({
       ...prev,
       [questionId]: { ...prev[questionId], text },
@@ -58,7 +58,7 @@ export default function ReviewSubmitForm({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const next: Record<number, string> = {};
+    const next: Record<string, string> = {};
     for (const question of form.questions) {
       if (!question.required) continue;
       const value = values[question.id];

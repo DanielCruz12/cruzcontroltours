@@ -3,7 +3,7 @@
 import { apiFetch } from "./client";
 
 export type PublicQuestion = {
-  id: number;
+  id: string;
   label: string;
   type: string;
   required: boolean;
@@ -17,7 +17,7 @@ export type PublicForm = {
 };
 
 export type SubmitAnswer = {
-  questionId: number;
+  questionId: string;
   ratingValue?: number | null;
   textValue?: string | null;
 };
@@ -31,8 +31,8 @@ export function getPublicForm(token: string): Promise<PublicForm> {
 export function submitReview(
   token: string,
   input: { authorName?: string | null; answers: SubmitAnswer[] },
-): Promise<{ id: number }> {
-  return apiFetch<{ id: number }>(
+): Promise<{ id: string }> {
+  return apiFetch<{ id: string }>(
     `/review-forms/public/${encodeURIComponent(token)}/submit`,
     { method: "POST", body: input },
   );

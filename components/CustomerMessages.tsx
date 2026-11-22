@@ -25,7 +25,7 @@ function MessageCard({
 }: {
   customer: Customer;
   deleting: boolean;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
 }) {
   const [confirming, setConfirming] = useState(false);
 
@@ -107,13 +107,13 @@ export default function CustomerMessages() {
   const items = useAppSelector((state) => state.customers.items);
   const listStatus = useAppSelector((state) => state.customers.listStatus);
   const listError = useAppSelector((state) => state.customers.listError);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (listStatus === "idle") dispatch(fetchCustomers());
   }, [dispatch, listStatus]);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     setDeletingId(id);
     try {
       await dispatch(removeCustomer(id)).unwrap();

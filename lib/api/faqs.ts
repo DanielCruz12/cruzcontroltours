@@ -1,7 +1,7 @@
 import { apiFetch } from "./client";
 
 export type Faq = {
-  id: number;
+  id: string;
   question: string;
   answer: string;
   active: boolean;

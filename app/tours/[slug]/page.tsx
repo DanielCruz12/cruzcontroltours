@@ -24,10 +24,12 @@ async function resolveTour(slug: string): Promise<ResolvedTour | null> {
   const local = getTourBySlug(slug);
   if (local) return { tour: local, description: null };
 
-  const match = slug.match(/-(\d+)$/);
+  const match = slug.match(
+    /-([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i,
+  );
   if (!match) return null;
   try {
-    const apiTour = await getTour(Number(match[1]));
+    const apiTour = await getTour(match[1]);
     if (!apiTour.active) return null;
     const tour = toCardTour(apiTour);
     if (tour.slug !== slug) return null;

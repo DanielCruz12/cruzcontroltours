@@ -4,7 +4,7 @@
 import { apiFetch } from "./client";
 
 export type Customer = {
-  id: number;
+  id: string;
   nombre: string;
   telefono: string;
   correo: string;
@@ -23,7 +23,7 @@ export function listCustomers(): Promise<Customer[]> {
   return apiFetch<Customer[]>("/customers");
 }
 
-export function getCustomer(id: number): Promise<Customer> {
+export function getCustomer(id: string): Promise<Customer> {
   return apiFetch<Customer>(`/customers/${id}`);
 }
 
@@ -31,6 +31,6 @@ export function createCustomer(input: NewCustomerInput): Promise<Customer> {
   return apiFetch<Customer>("/customers", { method: "POST", body: input });
 }
 
-export async function deleteCustomer(id: number): Promise<void> {
+export async function deleteCustomer(id: string): Promise<void> {
   await apiFetch<void>(`/customers/${id}`, { method: "DELETE" });
 }
