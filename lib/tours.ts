@@ -152,3 +152,7 @@ export function getOtherTours(): Tour[] {
 export function getDestinations(): string[] {
   return [...new Set(tours.map((tour) => tour.destination))];
 }
+
+export function getTourBySlug(slug: string): Tour | undefined {
+  return tours.find((tour) => tour.slug === slug);
+}

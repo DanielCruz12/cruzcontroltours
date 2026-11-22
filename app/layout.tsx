@@ -3,6 +3,7 @@ import { Hanken_Grotesk } from "next/font/google";
 import CookieBanner from "@/components/CookieBanner";
 import Providers from "@/components/Providers";
 import ScrollToTop from "@/components/ScrollToTop";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
           <ScrollToTop />
         </Providers>
+        <WhatsAppFloat />
         <CookieBanner />
       </body>
     </html>

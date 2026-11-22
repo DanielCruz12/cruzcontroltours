@@ -290,8 +290,8 @@ export default function PortfolioSection() {
           </h2>
           <div>
             <p className="max-w-[420px] text-base leading-relaxed text-neutral-500">
-              One subscription, every creative skill. Senior designers and
-              AI workflows that ship production-ready work every week.
+              One subscription, every creative skill. Senior designers and AI
+              workflows that ship production-ready work every week.
             </p>
             <Link href="/contacto" className="btn-negro mt-6">
               Start a project
@@ -355,10 +355,6 @@ export default function PortfolioSection() {
                 );
               })}
             </div>
-            <p className="shrink-0 text-sm text-neutral-500">
-              <span className="font-semibold text-neutral-900">20,000+</span>{" "}
-              ideas became delivered projects
-            </p>
           </div>
 
           {/* Carrusel */}
@@ -383,9 +379,7 @@ export default function PortfolioSection() {
                   }`}
                   style={{
                     transitionDelay:
-                      visible && !settled
-                        ? `${index * STAGGER_MS}ms`
-                        : "0ms",
+                      visible && !settled ? `${index * STAGGER_MS}ms` : "0ms",
                   }}
                 >
                   <div className="relative aspect-[16/10] overflow-hidden rounded-[18px] bg-neutral-100">

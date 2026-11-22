@@ -20,3 +20,7 @@ export type ApiTour = {
 export function listTours(): Promise<ApiTour[]> {
   return apiFetch<ApiTour[]>("/tours");
 }
+
+export function getTour(id: number): Promise<ApiTour> {
+  return apiFetch<ApiTour>(`/tours/${id}`);
+}

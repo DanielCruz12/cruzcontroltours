@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Tour } from "@/lib/tours";
 import { ClockIcon, HeartIcon, ImageIcon, MapPinIcon } from "./icons";
@@ -41,7 +42,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
   };
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-charcoal/5 transition-shadow hover:shadow-lg hover:shadow-charcoal/10">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-charcoal/5 transition-shadow hover:shadow-lg hover:shadow-charcoal/10">
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-sky-pale">
         {tour.image ? (
           <Image
@@ -79,7 +80,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
               ? `Quitar ${tour.name} de favoritos`
               : `Agregar ${tour.name} a favoritos`
           }
-          className="absolute right-3 top-3 grid size-9 place-items-center rounded-full bg-white/95 text-ink-soft shadow-sm transition-colors hover:text-neutral-900 aria-pressed:text-neutral-900"
+          className="absolute right-3 top-3 z-10 grid size-9 place-items-center rounded-full bg-white/95 text-ink-soft shadow-sm transition-colors hover:text-neutral-900 aria-pressed:text-neutral-900"
         >
           <HeartIcon
             className={`size-4.5 ${favorite ? "fill-neutral-900 text-neutral-900" : ""}`}
@@ -113,6 +114,11 @@ export default function TourCard({ tour }: { tour: Tour }) {
 
         </p>
       </div>
+      <Link
+        href={`/tours/${tour.slug}`}
+        aria-label={`Ver detalle de ${tour.name}`}
+        className="absolute inset-0 rounded-2xl"
+      />
     </article>
   );
 }
