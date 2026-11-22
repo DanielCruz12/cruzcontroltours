@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchTours } from "@/lib/store/toursSlice";
-import { POPULAR_TOUR_COUNT, toCardTour } from "@/lib/tour-adapters";
+import { toCardTour } from "@/lib/tour-adapters";
+import { SITE_CONFIG, gridColsClass } from "@/lib/site-config";
 import { ArrowRightIcon } from "./icons";
 import TourCard from "./TourCard";
 import ToursSkeleton from "./ToursSkeleton";
@@ -17,7 +18,7 @@ export default function PopularToursSection() {
 
   const activeTours = items.filter((tour) => tour.active);
   const popular = activeTours
-    .slice(0, POPULAR_TOUR_COUNT)
+    .slice(0, SITE_CONFIG.popularToursCount)
     .map((tour) => toCardTour(tour, true));
 
   const retry = () => dispatch(fetchTours());
@@ -75,11 +76,13 @@ export default function PopularToursSection() {
             </p>
           </div>
         ) : (
-          <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0 xl:grid-cols-5">
+          <ul
+            className={`flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 ${gridColsClass(SITE_CONFIG.popularToursCount)} lg:gap-4 [&::-webkit-scrollbar]:hidden`}
+          >
             {popular.map((tour) => (
               <li
                 key={tour.id}
-                className="w-[60vw] max-w-[210px] shrink-0 snap-start md:w-auto md:max-w-none"
+                className="w-[72vw] max-w-[270px] shrink-0 snap-start md:w-auto md:max-w-none"
               >
                 <TourCard tour={tour} />
               </li>

@@ -1,46 +1,9 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import type { Tour } from "@/lib/tours";
-import { ClockIcon, HeartIcon, ImageIcon, MapPinIcon } from "./icons";
-
-const FAVORITES_KEY = "cct-favoritos";
-
-function readFavorites(): string[] {
-  try {
-    const raw = window.localStorage.getItem(FAVORITES_KEY);
-    const parsed: unknown = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === "string") : [];
-  } catch {
-    return [];
-  }
-}
+import { ClockIcon, ImageIcon, MapPinIcon } from "./icons";
 
 export default function TourCard({ tour }: { tour: Tour }) {
-  const [favorite, setFavorite] = useState(false);
-
-  // Sincroniza el estado inicial con los favoritos guardados (solo cliente).
-  useEffect(() => {
-    setFavorite(readFavorites().includes(tour.id));
-  }, [tour.id]);
-
-  const toggleFavorite = () => {
-    setFavorite((prev) => {
-      const next = !prev;
-      const ids = readFavorites().filter((id) => id !== tour.id);
-      if (next) ids.push(tour.id);
-      try {
-        window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(ids));
-      } catch {
-        // Sin almacenamiento disponible: el estado en memoria sigue funcionando.
-      }
-      return next;
-    });
-  };
-
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-charcoal/5 transition-shadow hover:shadow-lg hover:shadow-charcoal/10">
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-sky-pale">
@@ -63,29 +26,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
           </div>
         )}
         {/* Degradado inferior para legibilidad */}
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-charcoal/85 via-charcoal/35 to-transparent" />
-
-        {/* Etiqueta de categoría */}
-        <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-charcoal shadow-sm">
-          {tour.category}
-        </span>
-
-        {/* Favorito */}
-        <button
-          type="button"
-          onClick={toggleFavorite}
-          aria-pressed={favorite}
-          aria-label={
-            favorite
-              ? `Quitar ${tour.name} de favoritos`
-              : `Agregar ${tour.name} a favoritos`
-          }
-          className="absolute right-3 top-3 z-10 grid size-9 place-items-center rounded-full bg-white/95 text-ink-soft shadow-sm transition-colors hover:text-neutral-900 aria-pressed:text-neutral-900"
-        >
-          <HeartIcon
-            className={`size-4.5 ${favorite ? "fill-neutral-900 text-neutral-900" : ""}`}
-          />
-        </button>
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-charcoal/85 via-charcoal/35 to-transparent" />
 
         {/* Nombre y ubicación sobre la imagen */}
         <div className="absolute inset-x-0 bottom-0 p-4 text-white">

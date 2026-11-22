@@ -333,7 +333,7 @@ export default function GallerySection() {
                   {/* Overlay oscuro que se revela con hover o foco */}
                   <div
                     aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                    className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
                   />
 
                   {/* Título + icono de ampliar (hover/foco) */}
@@ -351,7 +351,7 @@ export default function GallerySection() {
                       táctiles, donde no existe hover) */}
                   <div
                     aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 sm:p-4"
+                    className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent p-3 sm:p-4"
                   >
                     <p className="truncate text-xs font-semibold text-white">
                       {photo.location}

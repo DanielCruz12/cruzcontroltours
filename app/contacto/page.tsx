@@ -85,7 +85,6 @@ export default function ContactoPage() {
               <p className="mt-5 border-t border-white/20 pt-4 text-xs leading-relaxed text-white/80">
                 Horario: Lun–Sáb | 8:00 AM – 6:00 PM
                 <br />
-                Atención: Tours privados y grupales
               </p>
             </aside>
           </div>

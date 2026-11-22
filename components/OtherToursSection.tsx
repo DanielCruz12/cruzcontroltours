@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useAppSelector } from "@/lib/store/hooks";
-import { POPULAR_TOUR_COUNT, toCardTour } from "@/lib/tour-adapters";
+import { toCardTour } from "@/lib/tour-adapters";
+import { SITE_CONFIG } from "@/lib/site-config";
 import { ArrowRightIcon } from "./icons";
 import TourCard from "./TourCard";
 import ToursSkeleton from "./ToursSkeleton";
@@ -17,7 +18,7 @@ export default function OtherToursSection() {
 
   const other = items
     .filter((tour) => tour.active)
-    .slice(POPULAR_TOUR_COUNT)
+    .slice(SITE_CONFIG.popularToursCount)
     .map((tour) => toCardTour(tour));
 
   if (

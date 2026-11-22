@@ -1,17 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import {
-  MailIcon,
-  MapPinIcon,
-  PhoneIcon,
-} from "./icons";
+import { MailIcon, MapPinIcon, PhoneIcon } from "./icons";
 
-const DESTINATIONS = [
-  "El Salvador",
-  "Nicaragua",
-  "Honduras",
-  "Guatemala",
-];
+const DESTINATIONS = ["El Salvador", "Nicaragua", "Honduras", "Guatemala"];
 
 const WHATSAPP_URL = "https://wa.me/50360503161";
 const MAPS_URL =
@@ -40,10 +31,7 @@ export default function Footer() {
           </Link>
 
           {/* Destinos: junto al logo en móvil (2 columnas × 2 filas) */}
-          <nav
-            aria-label="Destinos"
-            className="lg:col-start-2 lg:row-start-1"
-          >
+          <nav aria-label="Destinos" className="lg:col-start-2 lg:row-start-1">
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
               Destinos
             </h3>
@@ -94,16 +82,14 @@ export default function Footer() {
           >
             <p className="max-w-md text-xs leading-relaxed text-white/60 sm:text-sm pt-4">
               Organizamos experiencias en Centroamérica con atención
-              personalizada, guías locales y rutas cuidadosamente
-              planificadas. Viaja con confianza, comodidad y el respaldo de
-              un equipo que te acompaña en todo momento.
+              personalizada, guías locales y rutas cuidadosamente planificadas.
+              Viaja con confianza, comodidad y el respaldo de un equipo que te
+              acompaña en todo momento.
             </p>
             <p className="mt-3 flex items-center gap-2 text-xs text-white/70">
               Horario: Lun–Sáb | 8:00 AM – 6:00 PM
             </p>
-            <p className="mt-1 flex items-center gap-2 text-xs text-white/70">
-              Atención: Tours privados y grupales
-            </p>
+
             {/*   <div className="mt-4 flex items-center gap-2">
               <a
                 href="https://www.instagram.com/"
@@ -140,8 +126,8 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="transition-colors hover:text-white"
                 >
-                  114 B calle los pocitos colonia dolores, 06015, San
-                  Salvador, El Salvador.
+                  114 B calle los pocitos colonia dolores, 06015, San Salvador,
+                  El Salvador.
                 </a>
               </li>
               <li className="flex gap-2.5">

@@ -162,8 +162,8 @@ export default function LaborSocialSection() {
       className="bg-white py-20 sm:py-28"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        {/* Encabezado centrado */}
-        <div className="mx-auto max-w-3xl text-center">
+        {/* Encabezado a la izquierda */}
+        <div className="max-w-2xl text-start">
           <p className="inline-flex rounded-full bg-[#E9E9EB] px-4 py-1.5 text-sm text-neutral-600">
             Labor social
           </p>
@@ -173,7 +173,7 @@ export default function LaborSocialSection() {
           >
             Tito&apos;s Hope{" "}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-neutral-500">
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-neutral-500">
             Brinda a perros y gatos callejeros en El Salvador un camino desde
             las calles hasta la seguridad ofreciendo atención veterinaria,
             servicios de esterilización, apoyo en su recuperación y la

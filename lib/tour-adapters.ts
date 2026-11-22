@@ -1,14 +1,5 @@
-// Adaptadores del backend al shape que pintan las cards (Tour).
-//
-// El backend aún no trae fotos, destino, ubicación ni categoría, así que el
-// adapter rellena valores temporales: destino/ubicación genéricos, categoría
-// por defecto e `image` vacía (TourCard muestra un placeholder en ese caso).
-
 import type { ApiTour } from "@/lib/api/tours";
 import type { Tour } from "@/lib/tours";
-
-/** Cuántos tours van en "populares"; el resto va a "otras opciones". */
-export const POPULAR_TOUR_COUNT = 5;
 
 const GENERIC_DESTINATION = "El Salvador";
 

@@ -1,6 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { guides } from "@/lib/guides";
+import { SITE_CONFIG, gridColsClass } from "@/lib/site-config";
 import { ArrowRightIcon } from "./icons";
 
 /**
@@ -9,6 +13,10 @@ import { ArrowRightIcon } from "./icons";
  * Las tarjetas enlazan a /tours hasta que existan páginas reales de guías.
  */
 export default function GuidesSection() {
+  const [visibleCount, setVisibleCount] = useState(SITE_CONFIG.guidesPageSize);
+  const items = guides.slice(0, visibleCount);
+  const hasMore = visibleCount < guides.length;
+
   return (
     <section
       aria-labelledby="guias-titulo"
@@ -38,14 +46,16 @@ export default function GuidesSection() {
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-6 sm:mt-12 md:grid-cols-3">
-          {guides.map((guide) => (
+        <div
+          className={`mt-10 grid gap-6 sm:mt-12 sm:grid-cols-2 ${gridColsClass(SITE_CONFIG.guidesPageSize)}`}
+        >
+          {items.map((guide) => (
             <Link
               key={guide.id}
               href="/tours"
               className="group overflow-hidden rounded-2xl border border-ink/10 bg-white transition-shadow duration-300 hover:shadow-lg hover:shadow-neutral-900/10"
             >
-              <div className="relative aspect-16/10 overflow-hidden">
+              <div className="relative aspect-[16/10] overflow-hidden">
                 <Image
                   src={guide.image}
                   alt={guide.imageAlt}
@@ -68,6 +78,30 @@ export default function GuidesSection() {
             </Link>
           ))}
         </div>
+
+        {guides.length > SITE_CONFIG.guidesPageSize && (
+          <div className="mt-8 flex justify-center">
+            {hasMore ? (
+              <button
+                type="button"
+                onClick={() =>
+                  setVisibleCount((count) => count + SITE_CONFIG.guidesPageSize)
+                }
+                className="btn-negro"
+              >
+                Ver más
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setVisibleCount(SITE_CONFIG.guidesPageSize)}
+                className="btn-negro"
+              >
+                Ver menos
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -91,12 +91,12 @@ export default async function TourDetailPage({
           ) : (
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-br from-sky-deep via-sky to-sky-pale"
+              className="absolute inset-0 bg-linear-to-br from-sky-deep via-sky to-sky-pale"
             />
           )}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/35 to-charcoal/20"
+            className="absolute inset-0 bg-linear-to-t from-charcoal/85 via-charcoal/35 to-charcoal/20"
           />
           <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-10 pt-28 sm:px-6">
             <Link

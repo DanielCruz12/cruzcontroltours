@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { SITE_CONFIG, gridColsClass } from "@/lib/site-config";
 import { useReveal } from "@/lib/useReveal";
 import { CheckIcon } from "./icons";
 
@@ -45,10 +47,35 @@ const CAPABILITIES: Capability[] = [
       "https://images.unsplash.com/photo-1558655146-9f40138edfeb?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Proceso de diseño de identidad de marca",
   },
+  {
+    number: "04",
+    title: "Product engineering",
+    description:
+      "Senior developers who join your team and ship production-ready code every sprint.",
+    chips: ["Frontend", "Backend", "QA"],
+    image:
+      "https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Equipo de desarrollo trabajando en un producto",
+  },
+  {
+    number: "05",
+    title: "Team augmentation",
+    description:
+      "Vetted designers and developers embedded in your workflow from day one.",
+    chips: ["Design", "Developers", "Agile"],
+    image:
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
+    imageAlt: "Equipo colaborando alrededor de una mesa",
+  },
 ];
 
 export default function CapabilitiesSection() {
+  const [visibleCount, setVisibleCount] = useState(
+    SITE_CONFIG.capabilitiesPageSize,
+  );
   const { ref: gridRef, visible, settled } = useReveal<HTMLDivElement>(900);
+  const items = CAPABILITIES.slice(0, visibleCount);
+  const hasMore = visibleCount < CAPABILITIES.length;
 
   return (
     <section
@@ -85,9 +112,9 @@ export default function CapabilitiesSection() {
         {/* Tarjetas */}
         <div
           ref={gridRef}
-          className="mt-12 grid gap-3 rounded-[32px] bg-[#F5F5F5] p-3 sm:mt-14 md:grid-cols-3"
+          className={`mt-12 grid gap-3 rounded-[32px] bg-[#F5F5F5] p-3 sm:mt-14 sm:grid-cols-2 ${gridColsClass(SITE_CONFIG.capabilitiesPageSize)}`}
         >
-          {CAPABILITIES.map((capability, index) => (
+          {items.map((capability, index) => (
             <article
               key={capability.number}
               className={`group rounded-[24px] bg-white p-3 motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-out ${
@@ -149,6 +176,34 @@ export default function CapabilitiesSection() {
             </article>
           ))}
         </div>
+
+        {CAPABILITIES.length > SITE_CONFIG.capabilitiesPageSize && (
+          <div className="mt-8 flex justify-center">
+            {hasMore ? (
+              <button
+                type="button"
+                onClick={() =>
+                  setVisibleCount(
+                    (count) => count + SITE_CONFIG.capabilitiesPageSize,
+                  )
+                }
+                className="btn-negro"
+              >
+                Ver más
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() =>
+                  setVisibleCount(SITE_CONFIG.capabilitiesPageSize)
+                }
+                className="btn-negro"
+              >
+                Ver menos
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { SITE_CONFIG } from "@/lib/site-config";
 import { useReveal } from "@/lib/useReveal";
 import {
   ArrowRightIcon,
@@ -252,7 +254,6 @@ export default function PortfolioSection() {
     updateScroll();
     window.addEventListener("resize", updateScroll);
     return () => window.removeEventListener("resize", updateScroll);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scrollByCard = (direction: 1 | -1) => {
@@ -366,13 +367,14 @@ export default function PortfolioSection() {
               aria-labelledby={`${idPrefix}-tab-${activeIndex}`}
               tabIndex={0}
               onScroll={updateScroll}
+              style={{ "--cols": SITE_CONFIG.portfolioVisible } as React.CSSProperties}
               className="mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {projects.map((project, index) => (
                 <article
                   key={`${activeTab}-${project.id}`}
                   data-card
-                  className={`group w-[85%] shrink-0 snap-start rounded-[24px] bg-white p-2 motion-safe:transition-all motion-safe:duration-[600ms] motion-safe:ease-out motion-safe:animate-[portfolio-in_300ms_ease-out] sm:w-[430px] ${
+                  className={`group w-[85%] shrink-0 snap-start rounded-[24px] bg-white p-2 motion-safe:transition-all motion-safe:duration-[600ms] motion-safe:ease-out motion-safe:animate-[portfolio-in_300ms_ease-out] sm:w-[430px] xl:w-[calc((100%-(var(--cols)-1)*0.75rem)/var(--cols))] ${
                     visible
                       ? "translate-y-0 opacity-100"
                       : "motion-safe:translate-y-6 motion-safe:opacity-0"

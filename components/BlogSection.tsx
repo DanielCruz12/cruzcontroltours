@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { SITE_CONFIG, gridColsClass } from "@/lib/site-config";
 import { useReveal } from "@/lib/useReveal";
 import { ArrowRightIcon } from "./icons";
 
@@ -39,14 +40,15 @@ const ARTICLES: Article[] = [
 
 const STAGGER_MS = 80;
 const REVEAL_MS = 600;
-const PAGE_SIZE = 3;
+const PAGE_SIZE = SITE_CONFIG.blogPageSize;
 
 export default function BlogSection() {
-  const [expanded, setExpanded] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const { ref, visible, settled } = useReveal<HTMLDivElement>(
     STAGGER_MS * (PAGE_SIZE - 1) + REVEAL_MS,
   );
-  const articles = expanded ? ARTICLES : ARTICLES.slice(0, PAGE_SIZE);
+  const articles = ARTICLES.slice(0, visibleCount);
+  const hasMore = visibleCount < ARTICLES.length;
 
   return (
     <section aria-labelledby="blog-titulo" className="bg-white py-20 sm:py-28">
@@ -74,7 +76,7 @@ export default function BlogSection() {
           {/* Tarjetas */}
           <div
             ref={ref}
-            className="mt-10 grid gap-3 sm:grid-cols-2 sm:mt-12 lg:grid-cols-3"
+            className={`mt-10 grid gap-3 sm:mt-12 sm:grid-cols-2 ${gridColsClass(PAGE_SIZE)}`}
           >
             {articles.map((article, index) => (
               <Link
@@ -110,14 +112,25 @@ export default function BlogSection() {
 
           {ARTICLES.length > PAGE_SIZE && (
             <div className="mt-8 flex justify-center">
-              <button
-                type="button"
-                onClick={() => setExpanded((value) => !value)}
-                aria-expanded={expanded}
-                className="btn-negro"
-              >
-                {expanded ? "Ver menos" : "Ver más"}
-              </button>
+              {hasMore ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setVisibleCount((count) => count + PAGE_SIZE)
+                  }
+                  className="btn-negro"
+                >
+                  Ver más
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount(PAGE_SIZE)}
+                  className="btn-negro"
+                >
+                  Ver menos
+                </button>
+              )}
             </div>
           )}
         </div>

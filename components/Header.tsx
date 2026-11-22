@@ -82,7 +82,7 @@ export default function Header() {
             se desvanece cuando entra el cristal oscuro al hacer scroll. */}
         <div
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/10 to-transparent transition-opacity duration-300 ${solid ? "opacity-0" : "opacity-100"}`}
+          className={`pointer-events-none absolute inset-0 bg-linear-to-b from-charcoal/40 via-charcoal/10 to-transparent transition-opacity duration-300 ${solid ? "opacity-0" : "opacity-100"}`}
         />
         <div className="relative mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
           {/* Logo */}
