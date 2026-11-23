@@ -3,7 +3,7 @@
 Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar.
 **Actualiza este archivo al terminar cada sesión.**
 
-Última actualización: 2026-11-18
+Última actualización: 2026-11-23
 
 ## Stack
 
@@ -75,6 +75,13 @@ npm run lint    # eslint
 - Cada proyecto tiene su `HANDOFF.md` en su raíz: este archivo (front), `nodejs-cruzcontroltours/HANDOFF.md` (backend) y `panel-cruzcontroltours/HANDOFF.md` (panel).
 
 ## Historial de sesiones
+
+### 2026-11-23 — blog: detalle, listado y lectura del backend
+
+1. Nuevo `lib/blog.ts`: catálogo estático de 6 artículos de turismo (español, con `relatedTourSlug`) + helpers `formatPostDate`, `readingMinutes`, `slugify`, `apiPostSlug` (`titulo-<uuid>`, mismo patrón que tours del backend), `extractApiPostId` y `sanitizePostHtml` (espejo sin DOM del `sanitize-html` del panel: quita etiquetas peligrosas, `on*`, `javascript:` y fuerza `target="_blank"`).
+2. Nuevas `/blog` (listado: mezcla publicados del panel + estáticos ordenados por fecha, fail-soft si el backend cae) y `/blog/[slug]` (detalle: resuelve estático primero y luego backend por sufijo UUID; hero con foto, meta fecha/lectura, contenido, aside con tour relacionado o tarjeta genérica de WhatsApp, 3 relacionados). Nuevo `components/BlogCard.tsx` reutilizable (listado, relacionados y home).
+3. `BlogSection` del home ahora usa el catálogo real, textos en español y enlaza a `/blog` y `/blog/[slug]` (antes apuntaba a `/tours` con artículos de ejemplo en inglés). Nuevo `lib/api/posts.ts` (`ApiPost` + `listPosts`/`getPost`); `next.config.ts` permite `*.amazonaws.com` (portadas S3 del panel); estilos `.rich-text-content` en `globals.css` con la paleta del sitio.
+4. El asistente corrió build (OK: 6 rutas `/blog/[slug]` prerenderizadas + `/blog`) y eslint (limpio en archivos nuevos; quedan errores pre-existentes en `*-verify.tmp.cjs` y warnings pre-existentes). NOTA: el usuario corre lint/build/tsc/migraciones/tests (no volver a correrlos).
 
 ### 2026-11-18 (3) — home conectada al slice de tours del backend
 
