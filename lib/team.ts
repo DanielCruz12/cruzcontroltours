@@ -1,52 +1,54 @@
-// Equipo de Cruz Control Tours.
+// Testimonios de clientes de Cruz Control Tours.
 //
-// ⚠️ CONTENIDO ILUSTRATIVO TEMPORAL: los nombres, cargos y frases de este
-// archivo son ejemplos de diseño y NO deben publicarse como información
-// real. Reemplazarlos por el equipo real (con fotos propias) antes de
-// producción.
+// ⚠️ CONTENIDO ILUSTRATIVO TEMPORAL: los nombres y frases de este archivo
+// son ejemplos de diseño y NO deben publicarse como información real.
+// Reemplazarlos por testimonios reales (con foto si el cliente autoriza)
+// antes de producción.
 //
 // Para i18n (el selector EN del Header está pendiente), mover los textos
 // a un diccionario de traducciones; la estructura de datos ya los separa
 // del componente.
 
-export type TeamMember = {
+export type Testimonial = {
   id: string;
-  /** Frase personal que se muestra en grande. */
+  /** Frase del cliente que se muestra en grande. */
   motto: string;
-  /** Nombre de la persona. */
+  /** Nombre del cliente. */
   name: string;
-  /** Cargo dentro de Cruz Control Tours. */
+  /** Qué servicio usó (tour, transporte, etc.). */
   role: string;
-  /** Foto del miembro (opcional). Si no se define, se muestran las
+  /** Foto del cliente (opcional). Si no se define, se muestran las
       iniciales del nombre en un círculo. */
   image?: string;
 };
 
-export const team: TeamMember[] = [
+export const testimonials: Testimonial[] = [
   {
-    id: "ejemplo-1",
+    id: "testimonio-1",
     motto:
-      "Conocemos cada sendero, cada mirador y cada historia detrás de los volcanes.",
-    name: "Carlos Méndez",
-    role: "Guía principal de aventura",
+      "El tour al volcán superó todo lo que esperábamos. Puntuales, atentos y con una energía increíble.",
+    name: "Gabriela Fuentes",
+    role: "Viajó al Volcán de Santa Ana",
   },
   {
-    id: "ejemplo-2",
-    motto: "Armamos cada itinerario como si viajara nuestra propia familia.",
-    name: "Andrea Torres",
-    role: "Coordinadora de tours",
-  },
-  {
-    id: "ejemplo-3",
+    id: "testimonio-2",
     motto:
-      "El café, las flores y la gente: la Ruta se disfruta mejor con alguien de aquí.",
-    name: "Jorge Hernández",
-    role: "Guía local — Ruta de las Flores",
+      "Nos armaron un itinerario perfecto para toda la familia, hasta los niños la pasaron increíble.",
+    name: "Roberto Castillo",
+    role: "Viajó a la Ruta de las Flores",
   },
   {
-    id: "ejemplo-4",
-    motto: "Estamos contigo desde el primer mensaje hasta el regreso a casa.",
-    name: "Sofía Ramos",
-    role: "Atención al viajero",
+    id: "testimonio-3",
+    motto:
+      "El traslado al aeropuerto fue puntual y comodísimo. Desde ese día los recomiendo con todo el mundo.",
+    name: "Elena Payés",
+    role: "Usó transporte privado",
+  },
+  {
+    id: "testimonio-4",
+    motto:
+      "Contratamos los traslados para todo nuestro equipo y ni un solo retraso en meses.",
+    name: "Miguel Ángel Rivas",
+    role: "Cliente empresarial",
   },
 ];

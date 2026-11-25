@@ -49,7 +49,7 @@ export default function TourCard({ tour }: { tour: Tour }) {
         </p>
         <p className="shrink-0 text-right leading-none">
           <span className="text-[11px] font-medium text-ink-faint">Desde {" "}</span>
-          <span className="text-base font-extrabold text-sky-deep sm:text-lg">
+          <span className="text-base font-extrabold text-neutral-900 sm:text-lg">
             ${tour.price}
           </span>
 

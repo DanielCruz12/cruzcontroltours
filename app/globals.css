@@ -131,9 +131,10 @@ body {
   line-height: 1.25rem;
 }
 
+/* Gris claro (antes negro): igual que el pill de "Otros servicios". */
 .pill-negro {
-  background-color: #171717;
-  color: #ffffff;
+  background-color: #e9e9eb;
+  color: #525252;
 }
 
 .pill-blanco {

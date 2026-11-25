@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useAppSelector } from "@/lib/store/hooks";
 import { toCardTour } from "@/lib/tour-adapters";
+// TEMPORAL: catálogo estático de prueba. Quitar cuando el backend tenga datos.
+import { getOtherTours } from "@/lib/tours";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { ArrowRightIcon } from "./icons";
 import TourCard from "./TourCard";
@@ -10,20 +12,25 @@ import ToursSkeleton from "./ToursSkeleton";
 
 /**
  * "Otras opciones": los tours activos que sobran de "populares".
- * Se oculta si la carga falla (el error con reintento vive en Populares)
- * o si no hay tours de sobra.
+ * TEMPORAL: si el backend no trae tours de sobra (o falla), se muestran los
+ * de prueba. Se oculta solo si el backend trae tours pero no sobra ninguno.
  */
 export default function OtherToursSection() {
   const { items, listStatus } = useAppSelector((state) => state.tours);
 
-  const other = items
-    .filter((tour) => tour.active)
+  const activeTours = items.filter((tour) => tour.active);
+  const apiOther = activeTours
     .slice(SITE_CONFIG.popularToursCount)
     .map((tour) => toCardTour(tour));
+  // TEMPORAL: fallback estático cuando el backend no aporta nada.
+  const other =
+    apiOther.length > 0 || activeTours.length > 0
+      ? apiOther
+      : getOtherTours();
 
   if (
-    listStatus === "failed" ||
-    (listStatus === "succeeded" && other.length === 0)
+    (listStatus === "succeeded" || listStatus === "failed") &&
+    other.length === 0
   ) {
     return null;
   }

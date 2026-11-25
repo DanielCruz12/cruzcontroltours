@@ -13,7 +13,7 @@ Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar
   - `app/` — layout, página home (`page.tsx`) y `/tours`
   - `components/` — Header, Hero, TourSearch, PopularToursSection, OtherToursSection, TourCard, TeamSection, GallerySection, CtaSection, ScrollToTop, Footer, icons
   - `lib/tours.ts` — catálogo estático de tours (9 tours: 5 populares + 4 otros)
-  - `lib/team.ts` — equipo (⚠️ contenido ilustrativo temporal)
+  - `lib/team.ts` — testimonios "What our clients say" (⚠️ contenido ilustrativo temporal)
   - `lib/gallery.ts` — galería "Momentos inolvidables" (⚠️ fotos temporales Unsplash, verificadas)
   - `public/` — `logocruztours.png` y `videos/1.mp4`, `2.mp4`, `3.mp4`
 - Orden de la home: Hero → Tours populares (con buscador) → **TeamSection → Otras opciones → GallerySection** → (main) → CtaSection → Footer. La galería separa a "Otras opciones" del CTA y el equipo no queda unido al CTA (el usuario pidió ambas cosas).
@@ -46,8 +46,8 @@ Contexto acumulado del proyecto para continuar el trabajo sin volver a preguntar
 ## Estado actual del proyecto
 
 - El buscador filtra solo los tours populares de la home (por `destination`, hoy genérico "El Salvador" para los del backend).
-- La home (populares + otras opciones) lista tours del backend vía `toursSlice` + `toCardTour()` (solo `active`; sin fotos: placeholder "Foto próximamente"). `/tours` sigue con el catálogo estático de `lib/tours.ts`.
-- Datos de equipo (`lib/team.ts`), galería (`lib/gallery.ts`) y todas las fotos son **temporales** (Unsplash / contenido ilustrativo): pendiente backend/fotos/testimonios/equipo reales.
+- La home (populares + otras opciones) lista tours del backend vía `toursSlice` + `toCardTour()` (solo `active`; sin fotos: placeholder "Foto próximamente") y **TEMPORALMENTE** cae al catálogo estático de `lib/tours.ts` cuando el backend no aporta nada. `/tours` sigue con el catálogo estático.
+- Datos de equipo (`TeamTimelineSection`), testimonios (`lib/team.ts`), "Otros servicios" (`CapabilitiesSection`), galería (`lib/gallery.ts`) y todas las fotos son **temporales** (Unsplash / contenido ilustrativo): pendiente backend/fotos/testimonios/equipo reales.
 - Selector de idioma: EN marcado "Pronto" (deshabilitado) en `Header.tsx`.
 - Footer usa datos de contacto reales (sesión 2): dirección, WhatsApp +503 6050 3161 y correo.
 

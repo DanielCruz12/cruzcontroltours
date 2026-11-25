@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { FocusEvent } from "react";
-import { team } from "@/lib/team";
+import { testimonials } from "@/lib/team";
 import { ChevronLeftIcon, ChevronRightIcon } from "./icons";
 
 const AUTOPLAY_MS = 6_000;
@@ -46,7 +46,7 @@ export default function TeamSection() {
   const [active, setActive] = useState(0);
   // true mientras el cursor o el foco están dentro de la sección.
   const [paused, setPaused] = useState(false);
-  const count = team.length;
+  const count = testimonials.length;
 
   const goTo = (index: number) => {
     setActive(((index % count) + count) % count);
@@ -75,7 +75,7 @@ export default function TeamSection() {
 
   return (
     <section
-      aria-labelledby="equipo-titulo"
+      aria-labelledby="testimonios-titulo"
       className="bg-white py-20 sm:py-28"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -84,15 +84,15 @@ export default function TeamSection() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex flex-col items-center rounded-[32px] bg-[#F3F3F3] px-6 py-12 text-center sm:p-16">
-          <p className="pill-negro">Nuestro equipo</p>
-          <h2 id="equipo-titulo" className="sr-only">
-            Nuestro equipo
+          <p className="pill-negro">What our clients say</p>
+          <h2 id="testimonios-titulo" className="sr-only">
+            What our clients say
           </h2>
 
           {/* Miembros apilados: el más largo define la altura (sin saltos)
               y el cambio es reveal + fundido. */}
           <div className="relative mt-8 grid w-full sm:mt-10" aria-live="polite">
-            {team.map((member, index) => {
+            {testimonials.map((member, index) => {
               const isActive = index === active;
               return (
                 <figure
@@ -153,7 +153,7 @@ export default function TeamSection() {
           <div className="mt-10 flex items-center gap-5">
             <ArrowButton
               side="prev"
-              label="Miembro anterior"
+              label="Testimonio anterior"
               onClick={() => goTo(active - 1)}
             />
             <p className="text-sm font-medium tabular-nums text-neutral-500">
@@ -161,7 +161,7 @@ export default function TeamSection() {
             </p>
             <ArrowButton
               side="next"
-              label="Miembro siguiente"
+              label="Testimonio siguiente"
               onClick={() => goTo(active + 1)}
             />
           </div>
