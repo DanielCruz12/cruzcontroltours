@@ -11,7 +11,7 @@ export const SITE_CONFIG: SiteConfig = {
   capabilitiesPageSize: 4,
   guidesPageSize: 4,
   popularToursCount: 4,
-  portfolioVisible: 4,
+  portfolioVisible: 3,
 };
 
 /** Static grid-cols class for a count (1-6), so Tailwind always generates it. */

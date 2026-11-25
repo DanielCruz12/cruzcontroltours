@@ -1,24 +1,38 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { SITE_CONFIG, gridColsClass } from "@/lib/site-config";
 import { getAllPosts } from "@/lib/blog";
-import { useReveal } from "@/lib/useReveal";
+import type { BlogPost } from "@/lib/blog";
 import BlogCard from "./BlogCard";
 
-const STAGGER_MS = 80;
-const REVEAL_MS = 600;
-const PAGE_SIZE = SITE_CONFIG.blogPageSize;
+function CardRow({
+  posts,
+  hidden = false,
+}: {
+  posts: BlogPost[];
+  hidden?: boolean;
+}) {
+  return (
+    <div
+      aria-hidden={hidden || undefined}
+      inert={hidden || undefined}
+      className={`flex shrink-0 items-stretch gap-3 pr-3 ${
+        hidden ? "motion-reduce:hidden" : ""
+      }`}
+    >
+      {posts.map((post) => (
+        <BlogCard
+          key={post.id}
+          slug={post.slug}
+          category={post.category}
+          title={post.title}
+          className="w-[280px] shrink-0 sm:w-[330px]"
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function BlogSection() {
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const { ref, visible, settled } = useReveal<HTMLDivElement>(
-    STAGGER_MS * (PAGE_SIZE - 1) + REVEAL_MS,
-  );
   const posts = getAllPosts();
-  const articles = posts.slice(0, visibleCount);
-  const hasMore = visibleCount < posts.length;
 
   return (
     <section aria-labelledby="blog-titulo" className="bg-white py-20 sm:py-28">
@@ -43,57 +57,21 @@ export default function BlogSection() {
             </Link>
           </div>
 
-          {/* Tarjetas */}
+          {/* Tarjetas: carrusel infinito de derecha a izquierda */}
           <div
-            ref={ref}
-            className={`mt-10 grid gap-3 sm:mt-12 sm:grid-cols-2 ${gridColsClass(PAGE_SIZE)}`}
+            className="mt-10 overflow-hidden sm:mt-12"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+              maskImage:
+                "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+            }}
           >
-            {articles.map((article, index) => (
-              <BlogCard
-                key={article.id}
-                slug={article.slug}
-                category={article.category}
-                title={article.title}
-                className={`motion-safe:transition-all motion-safe:ease-out motion-safe:hover:-translate-y-0.5 motion-safe:animate-[portfolio-in_300ms_ease-out] ${
-                  settled
-                    ? "motion-safe:duration-200"
-                    : "motion-safe:duration-[600ms]"
-                } ${
-                  visible
-                    ? "translate-y-0 opacity-100"
-                    : "motion-safe:translate-y-5 motion-safe:opacity-0"
-                }`}
-                style={{
-                  transitionDelay:
-                    visible && !settled ? `${index * STAGGER_MS}ms` : "0ms",
-                }}
-              />
-            ))}
-          </div>
-
-          {posts.length > PAGE_SIZE && (
-            <div className="mt-8 flex justify-center">
-              {hasMore ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisibleCount((count) => count + PAGE_SIZE)
-                  }
-                  className="btn-negro"
-                >
-                  Ver más
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setVisibleCount(PAGE_SIZE)}
-                  className="btn-negro"
-                >
-                  Ver menos
-                </button>
-              )}
+            <div className="flex w-max motion-reduce:w-auto motion-reduce:flex-wrap motion-safe:animate-[marquee-x_40s_linear_infinite] motion-safe:hover:[animation-play-state:paused] motion-safe:focus-within:[animation-play-state:paused]">
+              <CardRow posts={posts} />
+              <CardRow posts={posts} hidden />
             </div>
-          )}
+          </div>
         </div>
       </div>
     </section>

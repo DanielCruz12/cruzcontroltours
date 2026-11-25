@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
         pathname: "/**",
       },
+      // Fotos de productos del marketplace (Pexels).
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/**",
+      },
       // Portadas subidas desde el panel (van a S3 con la forma
       // `<bucket>.s3.<region>.amazonaws.com/...`).
       {

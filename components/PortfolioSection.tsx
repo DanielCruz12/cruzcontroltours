@@ -6,23 +6,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { useReveal } from "@/lib/useReveal";
-import {
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  SparklesIcon,
-  UsersIcon,
-} from "./icons";
+import { ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from "./icons";
 
 const TABS = [
   "All",
-  "Landing page",
-  "Apps",
-  "Emails",
-  "Presentations",
-  "Videos",
-  "Social media",
-  "Branding",
+  "Camisas",
+  "Gorras",
+  "Bolsones",
+  "Carteras",
+  "Tazas",
+  "Café",
 ] as const;
 
 type Tab = (typeof TABS)[number];
@@ -33,7 +26,6 @@ type Project = {
   category: Category;
   title: string;
   subtitle: string;
-  badge: "Expert-led" | "AI + expert";
   image: string;
   imageAlt: string;
 };
@@ -42,135 +34,124 @@ type Project = {
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1701815843414-50779f1c3b78?q=80&w=1200&auto=format&fit=crop";
 
-const img = (id: string) =>
-  `https://images.unsplash.com/${id}?q=80&w=1200&auto=format&fit=crop`;
+const pximg = (id: number) =>
+  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
 
+// NOTA: productos de ejemplo para maquetar el marketplace. Los títulos y
+// descripciones son temporales: reemplazar por el catálogo real antes de
+// producción. Fotos: Pexels (verificadas HTTP 200, libres para uso).
 const PROJECTS: Project[] = [
   {
-    id: "finflow",
-    category: "Landing page",
-    title: "FinFlow launch site",
-    subtitle: "Landing page · Fintech",
-    badge: "AI + expert",
-    image: img("photo-1498050108023-c5249f4df085"),
-    imageAlt: "Sitio de lanzamiento en una laptop",
+    id: "camisa-ruta-flores",
+    category: "Camisas",
+    title: "Camisa Ruta de las Flores",
+    subtitle: "Camisas · Algodón",
+    image: pximg(11671964),
+    imageAlt: "Camisa blanca colgada en un perchero",
   },
   {
-    id: "northwind",
-    category: "Landing page",
-    title: "Northwind beta page",
-    subtitle: "Landing page · Startup",
-    badge: "Expert-led",
-    image: img("photo-1522542550221-31fd19575a2d"),
-    imageAlt: "Bocetos del diseño de una página",
+    id: "camisa-volcan",
+    category: "Camisas",
+    title: "Camisa Volcán Ilamatepec",
+    subtitle: "Camisas · Algodón",
+    image: pximg(8532616),
+    imageAlt: "Camisa negra colgada en la pared",
   },
   {
-    id: "pulse",
-    category: "Apps",
-    title: "Pulse fitness app",
-    subtitle: "Mobile app · Health",
-    badge: "Expert-led",
-    image: img("photo-1551650975-87deedd944c3"),
-    imageAlt: "App móvil en un teléfono",
+    id: "camisa-tunco",
+    category: "Camisas",
+    title: "Camisa El Tunco Surf",
+    subtitle: "Camisas · Manga corta",
+    image: pximg(10877346),
+    imageAlt: "Fila de camisas de colores en percheros",
   },
   {
-    id: "roam",
-    category: "Apps",
-    title: "Roam travel planner",
-    subtitle: "Mobile app · Travel",
-    badge: "AI + expert",
-    image: img("photo-1512941937669-90a1b58e7e9c"),
-    imageAlt: "Persona usando una app de viajes",
+    id: "gorra-coatepeque",
+    category: "Gorras",
+    title: "Gorra Lago Coatepeque",
+    subtitle: "Gorras · Bordada",
+    image: pximg(18417334),
+    imageAlt: "Gorra azul en estudio",
   },
   {
-    id: "onboarding-emails",
-    category: "Emails",
-    title: "Onboarding email series",
-    subtitle: "Email · SaaS",
-    badge: "AI + expert",
-    image: img("photo-1596526131083-e8c633c948d5"),
-    imageAlt: "Serie de correos de bienvenida",
+    id: "gorra-cct",
+    category: "Gorras",
+    title: "Gorra Cruz Control Tours",
+    subtitle: "Gorras · Clásica",
+    image: pximg(1878821),
+    imageAlt: "Gorra oscura con diseño bordado",
   },
   {
-    id: "newsletter",
-    category: "Emails",
-    title: "Weekly newsletter",
-    subtitle: "Email · Media",
-    badge: "Expert-led",
-    image: img("photo-1497032628192-86f99bcd76bc"),
-    imageAlt: "Redacción del newsletter semanal",
+    id: "gorra-volcanes",
+    category: "Gorras",
+    title: "Gorra Parque Los Volcanes",
+    subtitle: "Gorras · Trucker",
+    image: pximg(18843020),
+    imageAlt: "Gorra rosada con taza y libreta en una banca",
   },
   {
-    id: "pitch-deck",
-    category: "Presentations",
-    title: "Investor pitch deck",
-    subtitle: "Presentation · Startup",
-    badge: "Expert-led",
-    image: img("photo-1542744094-291d1f67b221"),
-    imageAlt: "Presentación ante inversionistas",
+    id: "bolson-playa",
+    category: "Bolsones",
+    title: "Bolsón playero El Cuco",
+    subtitle: "Bolsones · Lona",
+    image: pximg(9869067),
+    imageAlt: "Bolsón de lona color natural",
   },
   {
-    id: "keynote",
-    category: "Presentations",
-    title: "Keynote opener",
-    subtitle: "Presentation · Conference",
-    badge: "AI + expert",
-    image: img("photo-1475721027785-f74eccf877e2"),
-    imageAlt: "Apertura de conferencia en escenario",
+    id: "bolson-viajero",
+    category: "Bolsones",
+    title: "Bolsón viajero CCT",
+    subtitle: "Bolsones · Reforzado",
+    image: pximg(35685430),
+    imageAlt: "Bolsón de lona y cuero sobre piso de madera",
   },
   {
-    id: "launch-film",
-    category: "Videos",
-    title: "Product launch film",
-    subtitle: "Video · Launch",
-    badge: "Expert-led",
-    image: img("photo-1485846234645-a62644f84728"),
-    imageAlt: "Rodaje del video de lanzamiento",
+    id: "cartera-cuero",
+    category: "Carteras",
+    title: "Cartera de cuero artesanal",
+    subtitle: "Carteras · Cuero",
+    image: pximg(4452390),
+    imageAlt: "Cartera de cuero marrón sobre madera rústica",
   },
   {
-    id: "documentary",
-    category: "Videos",
-    title: "Brand documentary",
-    subtitle: "Video · Story",
-    badge: "AI + expert",
-    image: img("photo-1574717024653-61fd2cf4d44d"),
-    imageAlt: "Edición del documental de marca",
+    id: "cartera-tejida",
+    category: "Carteras",
+    title: "Cartera tejida Nahuizalco",
+    subtitle: "Carteras · Artesanal",
+    image: pximg(6444094),
+    imageAlt: "Carteras de cuero en estudio",
   },
   {
-    id: "campaign-kit",
-    category: "Social media",
-    title: "Launch campaign kit",
-    subtitle: "Social · Campaign",
-    badge: "AI + expert",
-    image: img("photo-1611926653459-09294b3142bf"),
-    imageAlt: "Piezas de la campaña de lanzamiento",
+    id: "taza-volcan",
+    category: "Tazas",
+    title: "Taza Volcán de Santa Ana",
+    subtitle: "Tazas · Cerámica",
+    image: pximg(4065909),
+    imageAlt: "Mano sosteniendo una taza de cerámica blanca",
   },
   {
-    id: "channel-identity",
-    category: "Social media",
-    title: "Channel identity",
-    subtitle: "Social · Video",
-    badge: "Expert-led",
-    image: img("photo-1611162616305-c69b3fa7fbe0"),
-    imageAlt: "Identidad del canal de video",
+    id: "taza-flores",
+    category: "Tazas",
+    title: "Taza Ruta de las Flores",
+    subtitle: "Tazas · Cerámica",
+    image: pximg(10279426),
+    imageAlt: "Taza de cerámica sobre superficie de mármol",
   },
   {
-    id: "coffee-brand",
-    category: "Branding",
-    title: "Coffee brand identity",
-    subtitle: "Branding · Retail",
-    badge: "Expert-led",
-    image: img("photo-1586717791821-3f44a563fa4c"),
-    imageAlt: "Identidad de marca de café",
+    id: "cafe-apaneca",
+    category: "Café",
+    title: "Café de altura Apaneca",
+    subtitle: "Café · Tueste medio",
+    image: pximg(28495600),
+    imageAlt: "Bolsa de café rodeada de granos tostados",
   },
   {
-    id: "studio-rebrand",
-    category: "Branding",
-    title: "Studio rebrand",
-    subtitle: "Branding · Agency",
-    badge: "AI + expert",
-    image: img("photo-1558655146-9f40138edfeb"),
-    imageAlt: "Rediseño de identidad del estudio",
+    id: "cafe-finca",
+    category: "Café",
+    title: "Café finca Santa Leticia",
+    subtitle: "Café · Tueste oscuro",
+    image: pximg(8234659),
+    imageAlt: "Empaque negro de café con granos",
   },
 ];
 
@@ -185,7 +166,7 @@ function PortfolioImage({ src, alt }: { src: string; alt: string }) {
       src={current}
       alt={alt}
       fill
-      sizes="(max-width: 640px) 85vw, 430px"
+      sizes="(max-width: 640px) 85vw, (max-width: 1024px) 320px, 400px"
       loading="lazy"
       onError={() => {
         if (current !== FALLBACK_IMAGE) setCurrent(FALLBACK_IMAGE);
@@ -281,14 +262,17 @@ export default function PortfolioSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Encabezado en dos columnas */}
         <div className="grid gap-8 lg:grid-cols-2 lg:items-end">
-          <h2
-            id="portafolio-titulo"
-            className="text-[44px] font-light leading-[1.05] tracking-[-0.02em] text-neutral-900 sm:text-[64px]"
-          >
-            Add the range
-            <br />
-            your team is missing.
-          </h2>
+          <div>
+            <p className="pill-negro">Our marketplace</p>
+            <h2
+              id="portafolio-titulo"
+              className="mt-6 text-[44px] font-light leading-[1.05] tracking-[-0.02em] text-neutral-900 sm:text-[64px]"
+            >
+              Add the range
+              <br />
+              your team is missing.
+            </h2>
+          </div>
           <div>
             <p className="max-w-[420px] text-base leading-relaxed text-neutral-500">
               One subscription, every creative skill. Senior designers and AI
@@ -301,13 +285,13 @@ export default function PortfolioSection() {
           </div>
         </div>
 
-        {/* Contenedor */}
-        <div className="mt-12 rounded-[32px] bg-[#F3F3F3] p-5 sm:mt-14">
+        {/* Contenido (sin fondo: la sección ya es blanca) */}
+        <div className="mt-12 sm:mt-14">
           {/* Barra superior: tabs + dato */}
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div
               role="tablist"
-              aria-label="Filtrar proyectos por tipo"
+              aria-label="Filtrar productos por categoría"
               className="relative flex w-fit max-w-full gap-1 overflow-x-auto rounded-[16px] bg-[#EAEAEA] p-[6px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               <span
@@ -374,7 +358,7 @@ export default function PortfolioSection() {
                 <article
                   key={`${activeTab}-${project.id}`}
                   data-card
-                  className={`group w-[85%] shrink-0 snap-start rounded-[24px] bg-white p-2 motion-safe:transition-all motion-safe:duration-[600ms] motion-safe:ease-out motion-safe:animate-[portfolio-in_300ms_ease-out] sm:w-[430px] xl:w-[calc((100%-(var(--cols)-1)*0.75rem)/var(--cols))] ${
+                  className={`group w-[85%] shrink-0 snap-start rounded-[24px] border border-[#EDEDED] bg-white p-2 motion-safe:transition-all motion-safe:duration-[600ms] motion-safe:ease-out motion-safe:animate-[portfolio-in_300ms_ease-out] sm:w-[320px] lg:w-[calc((100%-(var(--cols)-1)*0.75rem)/var(--cols))] ${
                     visible
                       ? "translate-y-0 opacity-100"
                       : "motion-safe:translate-y-6 motion-safe:opacity-0"
@@ -384,18 +368,13 @@ export default function PortfolioSection() {
                       visible && !settled ? `${index * STAGGER_MS}ms` : "0ms",
                   }}
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-[18px] bg-neutral-100">
+                  <div className="relative aspect-[16/9] overflow-hidden rounded-[18px] bg-neutral-100">
                     <PortfolioImage
                       src={project.image}
                       alt={project.imageAlt}
                     />
-                    <p className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-white/85 py-1.5 pl-2.5 pr-3 text-[13px] font-medium text-neutral-900 shadow-sm backdrop-blur">
-                      {project.badge === "Expert-led" ? (
-                        <UsersIcon className="size-3.5" />
-                      ) : (
-                        <SparklesIcon className="size-3.5" />
-                      )}
-                      {project.badge}
+                    <p className="absolute left-3 top-3 rounded-full bg-white/85 px-3 py-1.5 text-[13px] font-medium text-neutral-900 shadow-sm backdrop-blur">
+                      {project.category}
                     </p>
                   </div>
                   <div className="px-3 pb-2 pt-4">
