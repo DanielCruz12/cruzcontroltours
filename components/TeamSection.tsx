@@ -91,7 +91,10 @@ export default function TeamSection() {
 
           {/* Miembros apilados: el más largo define la altura (sin saltos)
               y el cambio es reveal + fundido. */}
-          <div className="relative mt-8 grid w-full sm:mt-10" aria-live="polite">
+          <div
+            className="relative mt-8 grid w-full sm:mt-10"
+            aria-live="polite"
+          >
             {testimonials.map((member, index) => {
               const isActive = index === active;
               return (
@@ -100,9 +103,7 @@ export default function TeamSection() {
                   inert={!isActive}
                   aria-hidden={!isActive}
                   className={`col-start-1 row-start-1 flex flex-col items-center transition-opacity ease-in-out ${
-                    isActive
-                      ? "opacity-100"
-                      : "pointer-events-none opacity-0"
+                    isActive ? "opacity-100" : "pointer-events-none opacity-0"
                   }`}
                   style={{ transitionDuration: `${FADE_MS}ms` }}
                 >
@@ -110,34 +111,12 @@ export default function TeamSection() {
                     key={active}
                     className="flex flex-col items-center motion-safe:animate-[testimonial-in_500ms_ease-out]"
                   >
-                    <span
-                      aria-hidden="true"
-                      className="font-serif text-7xl leading-none text-neutral-300"
-                    >
-                      &ldquo;
-                    </span>
                     <blockquote className="mt-2 max-w-3xl">
                       <p className="text-[28px] font-light leading-[1.1] tracking-[-0.02em] text-neutral-900 sm:text-[48px]">
                         {member.motto}
                       </p>
                     </blockquote>
                     <figcaption className="mt-8 flex flex-col items-center gap-2">
-                      {member.image ? (
-                        <Image
-                          src={member.image}
-                          alt={`Foto de ${member.name}`}
-                          width={56}
-                          height={56}
-                          className="size-14 rounded-full object-cover"
-                        />
-                      ) : (
-                        <span
-                          aria-hidden="true"
-                          className="grid size-14 place-items-center rounded-full bg-neutral-300 text-lg font-bold text-neutral-500"
-                        >
-                          {initialsOf(member.name)}
-                        </span>
-                      )}
                       <p className="mt-1 text-base font-bold text-neutral-900">
                         {member.name}
                       </p>

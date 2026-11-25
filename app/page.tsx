@@ -5,7 +5,6 @@ import CtaSection from "@/components/CtaSection";
 import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
 import GallerySection from "@/components/GallerySection";
-import GuidesSection from "@/components/GuidesSection";
 import LaborSocialSection from "@/components/LaborSocialSection";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -14,6 +13,7 @@ import PopularToursSection from "@/components/PopularToursSection";
 import PortfolioSection from "@/components/PortfolioSection";
 import TeamSection from "@/components/TeamSection";
 import TeamTimelineSection from "@/components/TeamTimelineSection";
+import ScrollVideoSection from "@/components/ScrollVideoSection";
 import ToursLoader from "@/components/ToursLoader";
 
 export default function Home() {
@@ -34,6 +34,7 @@ export default function Home() {
         <CapabilitiesSection />
         <TeamSection />
 
+        <ScrollVideoSection />
         <BlogSection />
         <PortfolioSection />
         <LaborSocialSection />

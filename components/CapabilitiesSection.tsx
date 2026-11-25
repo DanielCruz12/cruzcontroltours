@@ -122,12 +122,12 @@ export default function CapabilitiesSection() {
         {/* Tarjetas */}
         <div
           ref={gridRef}
-          className={`mt-12 grid gap-3 rounded-[32px] bg-[#F5F5F5] p-3 sm:mt-14 sm:grid-cols-2 ${gridColsClass(SITE_CONFIG.capabilitiesPageSize)}`}
+          className={`mt-12 flex snap-x snap-mandatory gap-3 overflow-x-auto rounded-[32px] bg-[#F5F5F5] p-3 [scrollbar-width:none] sm:mt-14 sm:grid sm:grid-cols-2 sm:overflow-visible ${gridColsClass(SITE_CONFIG.capabilitiesPageSize)} lg:gap-4 [&::-webkit-scrollbar]:hidden`}
         >
           {items.map((capability, index) => (
             <article
               key={capability.number}
-              className={`group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-charcoal/5 motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-out hover:shadow-lg hover:shadow-charcoal/10 ${
+              className={`group relative flex h-full w-[72vw] max-w-[270px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-charcoal/5 motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-out hover:shadow-lg hover:shadow-charcoal/10 sm:w-auto sm:max-w-none ${
                 visible
                   ? "translate-y-0 opacity-100"
                   : "motion-safe:translate-y-6 motion-safe:opacity-0"
@@ -137,7 +137,7 @@ export default function CapabilitiesSection() {
                   visible && !settled ? `${index * 100}ms` : "0ms",
               }}
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100 sm:aspect-[4/5]">
+              <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-100">
                 <CapabilityImage
                   src={capability.image}
                   alt={capability.imageAlt}
@@ -161,16 +161,6 @@ export default function CapabilitiesSection() {
                 <p className="line-clamp-2 text-[13px] leading-relaxed text-neutral-500">
                   {capability.description}
                 </p>
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {capability.chips.map((chip) => (
-                    <li
-                      key={chip}
-                      className="rounded-[8px] bg-neutral-100 px-2.5 py-1 text-[13px] text-neutral-600"
-                    >
-                      {chip}
-                    </li>
-                  ))}
-                </ul>
               </div>
             </article>
           ))}

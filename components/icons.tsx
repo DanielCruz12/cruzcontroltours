@@ -268,6 +268,43 @@ export function StarIcon(props: IconProps) {
   );
 }
 
+export function VolumeIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+    </Icon>
+  );
+}
+
+export function VolumeOffIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <path d="m23 9-6 6" />
+      <path d="m17 9 6 6" />
+    </Icon>
+  );
+}
+
+export function PlayIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <polygon points="6 3 20 12 6 21 6 3" />
+    </Icon>
+  );
+}
+
+export function PauseIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <rect x="6" y="4" width="4" height="16" />
+      <rect x="14" y="4" width="4" height="16" />
+    </Icon>
+  );
+}
+
 export function PhoneIcon(props: IconProps) {
   return (
     <Icon {...props}>

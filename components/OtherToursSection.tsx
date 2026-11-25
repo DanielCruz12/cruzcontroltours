@@ -66,7 +66,7 @@ export default function OtherToursSection() {
         {listStatus === "loading" || listStatus === "idle" ? (
           <ToursSkeleton count={4} />
         ) : (
-          <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0 xl:grid-cols-5">
+          <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0">
             {other.map((tour) => (
               <li
                 key={tour.id}

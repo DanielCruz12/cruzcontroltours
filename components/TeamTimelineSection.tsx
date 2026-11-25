@@ -385,7 +385,7 @@ export default function TeamTimelineSection() {
     <section
       ref={sectionRef}
       aria-labelledby="equipo-selector-titulo"
-      className="py-20 sm:py-28"
+      className="py-14 sm:py-28"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -396,7 +396,7 @@ export default function TeamTimelineSection() {
           <p className="pill-negro">Our team</p>
           <h2
             id="equipo-selector-titulo"
-            className="mt-4 text-[44px] font-light leading-[1.05] tracking-[-0.02em] text-neutral-900 sm:text-[56px]"
+            className="mt-4 text-4xl font-light leading-[1.05] tracking-[-0.02em] text-neutral-900 sm:text-[56px]"
           >
             The people behind your trip.
           </h2>
@@ -405,14 +405,14 @@ export default function TeamTimelineSection() {
             unforgettable experience.
           </p>
         </div>
-        <div className="rounded-[32px] p-4">
-          <div aria-live="polite" className="grid gap-4 lg:grid-cols-2">
+        <div className="rounded-[24px] p-3 sm:rounded-[32px] sm:p-4">
+          <div aria-live="polite" className="grid gap-3 sm:gap-4 lg:grid-cols-2">
             {/* Columna izquierda: foto + tarjeta + miniaturas */}
             <div>
               <div className="relative">
                 <div
                   ref={photoRef}
-                  className="relative aspect-[16/10] overflow-hidden rounded-[24px] bg-[#e3edef] lg:aspect-[4/3]"
+                  className="relative aspect-[4/3] overflow-hidden rounded-[24px] bg-[#e3edef]"
                 >
                   <div className="grid h-full w-full place-items-center">
                     <span
@@ -430,20 +430,20 @@ export default function TeamTimelineSection() {
                 </div>
 
                 {/* Tarjeta flotante glass */}
-                <div className="absolute inset-x-3 bottom-3 rounded-[24px] bg-white/70 p-5 shadow-sm backdrop-blur-[16px] sm:inset-x-4 sm:bottom-4">
+                <div className="absolute inset-x-3 bottom-3 rounded-[20px] bg-white/70 p-4 shadow-sm backdrop-blur-[16px] sm:inset-x-4 sm:bottom-4 sm:rounded-[24px] sm:p-5">
                   <div ref={cardTextRef}>
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="text-2xl font-bold text-neutral-900">
+                      <h3 className="text-xl font-bold text-neutral-900 sm:text-2xl">
                         {member.name}
                       </h3>
-                      <p className="flex shrink-0 items-center gap-1.5 rounded-full bg-white py-1.5 pl-1.5 pr-3 text-[13px] font-medium text-neutral-900 shadow-sm">
+                      <p className="flex shrink-0 items-center gap-1.5 rounded-full bg-white py-1.5 pl-1.5 pr-2.5 text-xs font-medium text-neutral-900 shadow-sm sm:pr-3 sm:text-[13px]">
                         <span className="grid size-5 place-items-center rounded-full bg-neutral-900 text-white">
                           <CheckIcon className="size-3" />
                         </span>
                         Verificado
                       </p>
                     </div>
-                    <p className="mt-1 text-[15px] text-neutral-500">
+                    <p className="mt-1 text-sm text-neutral-500 sm:text-[15px]">
                       {member.role} ·{" "}
                       {member.years === null
                         ? "trayectoria por confirmar"
@@ -453,7 +453,7 @@ export default function TeamTimelineSection() {
                       {member.chips.map((chip) => (
                         <li
                           key={chip}
-                          className="rounded-full bg-[#E9E9EB] px-3 py-1 text-[13px] text-neutral-600"
+                          className="rounded-full bg-[#E9E9EB] px-3 py-1 text-xs text-neutral-600 sm:text-[13px]"
                         >
                           {chip}
                         </li>
@@ -521,39 +521,20 @@ export default function TeamTimelineSection() {
             </div>
 
             {/* Columna derecha: timeline con las tareas de la persona */}
-            <div className="rounded-[24px] bg-white p-6 sm:p-8">
-              <div className="flex items-center justify-between gap-4">
-                <p className="flex items-center gap-2 text-base font-semibold text-neutral-900">
-                  Desempeño y cargo dentro de la empresa
-                </p>
-                <div className="flex" aria-hidden="true">
-                  {MEMBERS.slice(0, 3).map((item, index) => (
-                    <span
-                      key={item.id}
-                      className={`relative grid size-8 place-items-center overflow-hidden rounded-full bg-neutral-200 text-[11px] font-bold text-neutral-500 ring-2 ring-white ${
-                        index > 0 ? "-ml-2" : ""
-                      }`}
-                    >
-                      {initialsOf(item.name)}
-                      <MemberPhoto
-                        key={item.id}
-                        member={item}
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <div className="rounded-[24px] bg-white p-5 sm:p-8">
+              <p className="text-sm font-semibold text-neutral-900 sm:text-base">
+                Desempeño y cargo dentro de la empresa
+              </p>
               <div className="mt-4 border-t border-neutral-100" />
 
-              <ol ref={timelineRef} className="mt-6">
+              <ol ref={timelineRef} className="mt-5 sm:mt-6">
                 {steps.map((step, index) => {
                   const isLast = index === steps.length - 1;
                   return (
                     <li
                       key={step.title}
                       data-step
-                      className={`relative flex gap-4 ${isLast ? "" : "pb-8"}`}
+                      className={`relative flex gap-3 sm:gap-4 ${isLast ? "" : "pb-6 sm:pb-8"}`}
                     >
                       {/* Riel: círculo + conector */}
                       <span className="relative flex w-8 shrink-0 justify-center">
@@ -574,10 +555,10 @@ export default function TeamTimelineSection() {
 
                       {/* Contenido */}
                       <span className="min-w-0 flex-1">
-                        <span className="block text-[18px] font-semibold leading-snug text-neutral-900">
+                        <span className="block text-base font-semibold leading-snug text-neutral-900 sm:text-[18px]">
                           {step.title}
                         </span>
-                        <span className="mt-1 block text-[15px] leading-relaxed text-neutral-500">
+                        <span className="mt-1 block text-sm leading-relaxed text-neutral-500 sm:text-[15px]">
                           {step.desc}
                         </span>
                       </span>
