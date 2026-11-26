@@ -57,6 +57,14 @@
   html {
     zoom: 0.8;
   }
+
+  /* La sección del video expansivo necesita unidades de viewport exactas
+     (100vw/100svh/250vh) para cubrir la pantalla al 100%: el zoom raíz las
+     encogería al 80% y dejaría márgenes blancos. 1/0.8 = 1.25 lo cancela
+     solo dentro de la sección; en móvil no hay zoom raíz y no aplica. */
+  .video-zoom-reset {
+    zoom: 1.25;
+  }
 }
 
 html {

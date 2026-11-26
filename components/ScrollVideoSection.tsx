@@ -16,42 +16,21 @@ const VIDEO_SRC = "/videos/bg.mp4";
 const POSTER_SRC =
   "https://images.unsplash.com/photo-1701815843414-50779f1c3b78?q=80&w=1600&auto=format&fit=crop";
 
-/** Ancho inicial del marco (debe coincidir con las clases w-[80vw]/md:w-[50vw]). */
-const FRAME_WIDTH = { mobile: 0.8, desktop: 0.5 };
-/** Baja el video en desktop (debe coincidir con md:pt-[24vh]; en móvil va centrado). */
-const OFFSET_TOP_VH = 24;
-
-/**
- * Escala para que el marco (16:9) cubra el viewport al llegar al 100%.
- * Se calcula desde el CSS (no del DOM) para que siga siendo válida con
- * invalidateOnRefresh en cualquier progreso. El ×1.03 extra garantiza
- * borde a borde sin líneas de 1px por redondeo.
- */
-function coverScale(): number {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const frameWidth = (vw < 768 ? FRAME_WIDTH.mobile : FRAME_WIDTH.desktop) * vw;
-  const frameHeight = (frameWidth * 9) / 16;
-  // El centro vertical del marco baja por el padding-top del contenedor
-  // (solo desktop; en móvil va centrado).
-  const offsetVh = vw < 768 ? 0 : OFFSET_TOP_VH;
-  const centerY = ((100 + offsetVh) / 200) * vh;
-  const scaleH = vw / frameWidth;
-  const scaleV = Math.max(centerY, vh - centerY) / (frameHeight / 2);
-  return Math.max(scaleH, scaleV) * 1.03;
-}
+/** Marco inicial (debe coincidir con el style inline del marco). */
+const FRAME_START = { width: "60vw", height: "60svh", radius: 24 };
 
 /**
  * Sección de video que se expande con el scroll (ScrollTrigger + Lenis
- * global): 250vh con pin, el marco crece de 50% a fullscreen y el radio
- * baja de 24px a 0. Con prefers-reduced-motion no hay expansión: video
- * estático con botón de play.
+ * global): sección de 250vh con sticky de 100svh centrado (grid); el marco
+ * crece de 60vw×60svh (radio 24px) a 100vw×100svh (radio 0) en el primer
+ * 80% del recorrido, y el título + CTA se funden en el último 20%.
+ * Con prefers-reduced-motion no hay expansión: video estático con
+ * botón de play.
  */
 export default function ScrollVideoSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const endRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Se lee en el estado inicial (no en un efecto) para no disparar
@@ -95,28 +74,27 @@ export default function ScrollVideoSection() {
     };
   }, []);
 
-  // Expansión con scrub (solo transform + border-radius + opacidades).
+  // Expansión con scrub: el marco anima width/height/border-radius
+  // (sin aspect-ratio) y el overlay funde su opacidad al final.
   useEffect(() => {
     if (reduced) return;
     const section = sectionRef.current;
     const frame = frameRef.current;
-    const title = titleRef.current;
-    const end = endRef.current;
+    const overlay = overlayRef.current;
     const video = videoRef.current;
-    if (!section || !frame || !title || !end || !video) return;
+    if (!section || !frame || !overlay || !video) return;
 
     const ctx = gsap.context(() => {
-      // Estado inicial del contenido final (oculto hasta el ~70% del pin).
-      gsap.set(end, { autoAlpha: 0, y: 40, scale: 0.95 });
+      // Origen centrado: el marco crece simétricamente hacia los bordes.
+      gsap.set(frame, { transformOrigin: "50% 50%" });
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
           trigger: section,
-          // Empieza un poco antes del pin para que el crecimiento se note temprano.
-          start: "top 80%",
+          // La animación vive exactamente lo que dura el sticky.
+          start: "top top",
           end: "bottom bottom",
           scrub: true,
-          invalidateOnRefresh: true,
           onUpdate: (self) => {
             // Al llegar al 100%, si el usuario ya interactuó con la página,
             // se quita el mute automáticamente.
@@ -130,21 +108,30 @@ export default function ScrollVideoSection() {
           },
         },
       });
-      // El marco crece rápido al inicio (power1.out) y termina antes de la
-      // mitad; luego el fullscreen se sostiene un momento antes de soltar.
-      tl.to(
+      // El marco llega al 100% en el 80% del recorrido: cuando el sticky
+      // se libera y entra la siguiente sección ya está en fullscreen.
+      tl.fromTo(
         frame,
         {
-          scale: () => coverScale(),
+          width: FRAME_START.width,
+          height: FRAME_START.height,
+          borderRadius: FRAME_START.radius,
+        },
+        {
+          width: "100vw",
+          height: "100svh",
           borderRadius: 0,
-          duration: 0.55,
-          ease: "power1.out",
+          duration: 0.8,
         },
         0,
       );
-      tl.to(title, { opacity: 0, y: -80, scale: 1.4, duration: 0.25 }, 0);
-      tl.to(end, { autoAlpha: 1, y: 0, scale: 1, duration: 0.3 }, 0.6);
-      tl.to({}, { duration: 0.15 }, 0.9);
+      // Título + CTA centrados: fundido a 0 en el último 20%.
+      tl.fromTo(
+        overlay,
+        { autoAlpha: 1 },
+        { autoAlpha: 0, duration: 0.2 },
+        0.8,
+      );
     }, section);
 
     ScrollTrigger.refresh();
@@ -198,23 +185,37 @@ export default function ScrollVideoSection() {
     <section
       ref={sectionRef}
       aria-labelledby="video-titulo"
-      className={`relative bg-black ${reduced ? "py-20 sm:py-28" : "h-[250vh]"}`}
+      className={`relative m-0 bg-white p-0 ${reduced ? "py-20 sm:py-28" : "video-zoom-reset h-[250vh]"}`}
     >
       <div
         className={
           reduced
             ? "relative mx-auto flex max-w-5xl justify-center px-4 sm:px-6"
-            : "sticky top-0 flex h-screen items-center justify-center overflow-hidden md:pt-[24vh]"
+            : "sticky top-0 m-0 grid h-[100svh] w-full place-items-center overflow-hidden p-0"
         }
       >
-        {/* Marco del video: 80% móvil / 50% desktop, radio 24px */}
+        {/* Marco del video: 60vw×60svh con radio 24px (sin aspect-ratio).
+            El único overflow hidden del bloque vive aquí y en el sticky. */}
         <div
           ref={frameRef}
-          className="relative z-0 aspect-video w-[80vw] overflow-hidden rounded-[24px] bg-black ring-1 ring-white/10 md:w-[50vw]"
+          style={
+            reduced
+              ? undefined
+              : {
+                  width: FRAME_START.width,
+                  height: FRAME_START.height,
+                  borderRadius: FRAME_START.radius,
+                }
+          }
+          className={
+            reduced
+              ? "relative z-0 aspect-video w-full overflow-hidden rounded-[24px] bg-neutral-100 ring-1 ring-black/10"
+              : "relative z-0 overflow-hidden bg-neutral-100 ring-1 ring-black/10"
+          }
         >
           <video
             ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="block h-full w-full object-cover"
             src={VIDEO_SRC}
             poster={POSTER_SRC}
             autoPlay={!reduced}
@@ -226,38 +227,35 @@ export default function ScrollVideoSection() {
           >
             {/* Sin <track>: el clip no tiene voz ni diálogos. */}
           </video>
-        </div>
-
-        {/* Título sobre el video (se desvanece y sube al crecer) */}
-        <div
-          ref={titleRef}
-          className={`pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-6 ${reduced ? "" : "md:pt-[24vh]"}`}
-        >
-          <h2
-            id="video-titulo"
-            className="text-center text-3xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl"
-          >
-            El Salvador te espera
-          </h2>
-        </div>
-
-        {/* Contenido final: entra con fade-up al llegar al 100% */}
-        {!reduced && (
+          {/* Overlay fijo para legibilidad del título. */}
           <div
-            ref={endRef}
-            className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center px-6 pb-24 text-center sm:pb-16"
-          >
-            <p className="text-2xl font-bold text-white drop-shadow-md sm:text-4xl">
-              ¿Listo para vivirlo?
-            </p>
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{ backgroundColor: "rgba(0,0,0,.25)" }}
+          />
+        </div>
+
+        {/* Título + CTA centrados sobre el video (funden al final).
+            El contenedor no captura clics; solo el botón es clicable. */}
+        <div
+          ref={overlayRef}
+          className="pointer-events-none absolute inset-0 z-10 grid place-items-center px-6"
+        >
+          <div className="flex flex-col items-center text-center">
+            <h2
+              id="video-titulo"
+              className="text-3xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-5xl"
+            >
+              El Salvador te espera
+            </h2>
             <Link
               href="/tours"
-              className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-neutral-900 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="pointer-events-auto mt-5 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-neutral-900 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Explorar tours
             </Link>
           </div>
-        )}
+        </div>
 
         {/* Botón de sonido */}
         <button
@@ -291,21 +289,6 @@ export default function ScrollVideoSection() {
           </button>
         )}
       </div>
-
-      {/* Movimiento reducido: CTA estático bajo el video */}
-      {reduced && (
-        <div className="mx-auto mt-8 flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
-          <p className="text-2xl font-bold text-white sm:text-4xl">
-            ¿Listo para vivirlo?
-          </p>
-          <Link
-            href="/tours"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-neutral-900 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            Explorar tours
-          </Link>
-        </div>
-      )}
     </section>
   );
 }
