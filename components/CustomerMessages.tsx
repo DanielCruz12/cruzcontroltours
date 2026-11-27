@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MailIcon, PhoneIcon, TrashIcon } from "./icons";
+import { CakeIcon, MailIcon, PhoneIcon, TrashIcon } from "./icons";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchCustomers, removeCustomer } from "@/lib/store/customersSlice";
 import type { Customer } from "@/lib/api/customers";
@@ -15,6 +15,19 @@ function formatDate(value: string): string {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+  });
+}
+
+/** "AAAA-MM-DD" -> fecha local (evita que el huso horario la mueva un día). */
+function formatBirthDate(value: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+  if (!match) return value;
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("es-SV", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
   });
 }
 
@@ -88,6 +101,21 @@ function MessageCard({
           <PhoneIcon className="size-3.5" />
           {customer.telefono}
         </a>
+        {customer.telefonoSecundario && (
+          <a
+            href={`tel:${customer.telefonoSecundario}`}
+            className="inline-flex items-center gap-1.5 font-semibold text-neutral-900 hover:underline"
+          >
+            <PhoneIcon className="size-3.5" />
+            {customer.telefonoSecundario}
+          </a>
+        )}
+        {customer.fechaNacimiento && (
+          <span className="inline-flex items-center gap-1.5 font-semibold text-neutral-900">
+            <CakeIcon className="size-3.5" />
+            {formatBirthDate(customer.fechaNacimiento)}
+          </span>
+        )}
       </div>
 
       {customer.mensaje ? (

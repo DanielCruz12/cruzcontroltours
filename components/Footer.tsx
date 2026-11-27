@@ -1,8 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { MailIcon, MapPinIcon, PhoneIcon } from "./icons";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  MailIcon,
+  MapPinIcon,
+  PhoneIcon,
+  TikTokIcon,
+} from "./icons";
 
-const DESTINATIONS = ["El Salvador", "Nicaragua", "Honduras", "Guatemala"];
+const DESTINATIONS = ["El Salvador", "Nicaragua", "", "Guatemala"];
+
+const INSTAGRAM_URL = "https://www.instagram.com/cruzcontroltours.sv/";
+const FACEBOOK_URL = "https://www.facebook.com/cruzcontroltours.es";
+const TIKTOK_URL = "https://www.tiktok.com/@cruzcontroltourssv";
 
 const WHATSAPP_URL = "https://wa.me/50360503161";
 const MAPS_URL =
@@ -35,7 +46,7 @@ export default function Footer() {
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-white">
               Destinos
             </h3>
-            <ul className="mt-2 grid grid-cols-2 gap-x-5 gap-y-1.5 lg:mt-3 lg:grid-cols-1 lg:gap-y-2.5">
+            <ul className="mt-2 grid grid-cols-2 gap-x-5 gap-y-1.5 lg:mt-3 lg:grid-cols-1 lg:gap-y-1.5">
               {DESTINATIONS.map((destination) => (
                 <li key={destination}>
                   <Link
@@ -90,9 +101,9 @@ export default function Footer() {
               Horario: Lun–Sáb | 8:00 AM – 6:00 PM
             </p>
 
-            {/*   <div className="mt-4 flex items-center gap-2">
+            <div className="mt-4 flex items-center gap-2">
               <a
-                href="https://www.instagram.com/"
+                href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram de Cruz Control Tours"
@@ -101,7 +112,7 @@ export default function Footer() {
                 <InstagramIcon className="size-4" />
               </a>
               <a
-                href="https://www.facebook.com/"
+                href={FACEBOOK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook de Cruz Control Tours"
@@ -109,7 +120,16 @@ export default function Footer() {
               >
                 <FacebookIcon className="size-4" />
               </a>
-            </div> */}
+              <a
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok de Cruz Control Tours"
+                className="grid size-8 place-items-center rounded-full bg-white/10 text-sky transition-colors hover:bg-sky-light/25"
+              >
+                <TikTokIcon className="size-4" />
+              </a>
+            </div>
           </div>
 
           {/* Contacto */}
@@ -149,6 +169,15 @@ export default function Footer() {
                 >
                   cruzcontroltours@gmail.com
                 </a>
+              </li>
+              <li>
+                <img
+                  src="/qr-code.jpeg"
+                  alt="Código QR de Cruz Control Tours"
+                  width={210}
+                  height={210}
+                  className="rounded-lg bg-white object-contain"
+                />
               </li>
             </ul>
           </div>

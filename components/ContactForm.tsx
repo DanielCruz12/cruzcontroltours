@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { CheckIcon, MailIcon, PhoneIcon, SendIcon, UsersIcon } from "./icons";
+import {
+  CalendarIcon,
+  CheckIcon,
+  MailIcon,
+  PhoneIcon,
+  SendIcon,
+  UsersIcon,
+} from "./icons";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   createCustomer,
@@ -9,14 +16,64 @@ import {
 } from "@/lib/store/customersSlice";
 
 // Límites iguales a los del backend (customerSchema en customer-routes.ts).
-const MAX = { nombre: 200, telefono: 50, correo: 255, mensaje: 2000 } as const;
+const MAX = {
+  nombre: 200,
+  telefono: 50,
+  telefonoSecundario: 50,
+  correo: 255,
+  mensaje: 2000,
+} as const;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-type Fields = { nombre: string; telefono: string; correo: string; mensaje: string };
+function todayISO(): string {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
+const TODAY = todayISO();
+
+type Fields = {
+  nombre: string;
+  telefono: string;
+  telefonoSecundario: string;
+  fechaNacimiento: string;
+  correo: string;
+  mensaje: string;
+};
 type FieldErrors = Partial<Record<keyof Fields, string>>;
 
-const EMPTY: Fields = { nombre: "", telefono: "", correo: "", mensaje: "" };
+const EMPTY: Fields = {
+  nombre: "",
+  telefono: "",
+  telefonoSecundario: "",
+  fechaNacimiento: "",
+  correo: "",
+  mensaje: "",
+};
+
+function validateFechaNacimiento(value: string): string | null {
+  if (!value) return null;
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!match) return "Usa el formato AAAA-MM-DD.";
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(year, month - 1, day);
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  )
+    return "Revisa la fecha de nacimiento.";
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (date.getTime() > today.getTime())
+    return "La fecha de nacimiento no puede ser futura.";
+  return null;
+}
 
 function validate(values: Fields): FieldErrors {
   const errors: FieldErrors = {};
@@ -26,6 +83,10 @@ function validate(values: Fields): FieldErrors {
   if (!values.telefono.trim()) errors.telefono = "Déjanos un teléfono o WhatsApp.";
   else if (values.telefono.trim().length > MAX.telefono)
     errors.telefono = `Máximo ${MAX.telefono} caracteres.`;
+  if (values.telefonoSecundario.trim().length > MAX.telefonoSecundario)
+    errors.telefonoSecundario = `Máximo ${MAX.telefonoSecundario} caracteres.`;
+  const fechaError = validateFechaNacimiento(values.fechaNacimiento);
+  if (fechaError) errors.fechaNacimiento = fechaError;
   if (!values.correo.trim()) errors.correo = "Déjanos tu correo.";
   else if (values.correo.trim().length > MAX.correo)
     errors.correo = `Máximo ${MAX.correo} caracteres.`;
@@ -74,6 +135,8 @@ export default function ContactForm() {
         createCustomer({
           nombre: values.nombre.trim(),
           telefono: values.telefono.trim(),
+          telefonoSecundario: values.telefonoSecundario.trim() || undefined,
+          fechaNacimiento: values.fechaNacimiento || undefined,
           correo: values.correo.trim(),
           mensaje: values.mensaje.trim() || undefined,
         }),
@@ -170,6 +233,69 @@ export default function ContactForm() {
           {errors.telefono && (
             <p id="contacto-telefono-error" role="alert" className={errorClasses}>
               {errors.telefono}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="contacto-telefono-secundario" className={labelClasses}>
+            <PhoneIcon className="size-3.5 text-sky" />
+            Teléfono secundario
+          </label>
+          <input
+            id="contacto-telefono-secundario"
+            type="tel"
+            autoComplete="tel"
+            placeholder="+503 0000 0000"
+            maxLength={MAX.telefonoSecundario}
+            value={values.telefonoSecundario}
+            onChange={set("telefonoSecundario")}
+            aria-invalid={Boolean(errors.telefonoSecundario)}
+            aria-describedby={
+              errors.telefonoSecundario
+                ? "contacto-telefono-secundario-error"
+                : undefined
+            }
+            className={fieldClasses}
+          />
+          {errors.telefonoSecundario && (
+            <p
+              id="contacto-telefono-secundario-error"
+              role="alert"
+              className={errorClasses}
+            >
+              {errors.telefonoSecundario}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="contacto-fecha-nacimiento" className={labelClasses}>
+            <CalendarIcon className="size-3.5 text-sky" />
+            Fecha de nacimiento
+          </label>
+          <input
+            id="contacto-fecha-nacimiento"
+            type="date"
+            autoComplete="bday"
+            max={TODAY}
+            value={values.fechaNacimiento}
+            onChange={set("fechaNacimiento")}
+            aria-invalid={Boolean(errors.fechaNacimiento)}
+            aria-describedby={
+              errors.fechaNacimiento
+                ? "contacto-fecha-nacimiento-error"
+                : undefined
+            }
+            className={fieldClasses}
+          />
+          {errors.fechaNacimiento && (
+            <p
+              id="contacto-fecha-nacimiento-error"
+              role="alert"
+              className={errorClasses}
+            >
+              {errors.fechaNacimiento}
             </p>
           )}
         </div>

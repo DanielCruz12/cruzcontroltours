@@ -18,6 +18,7 @@ const NAV_LINKS = [
   { href: "/", label: "Inicio" },
   { href: "/#tours", label: "Destinos" },
   { href: "/tours", label: "Tours" },
+  { href: "/galeria", label: "Galería" },
   { href: "/#nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
